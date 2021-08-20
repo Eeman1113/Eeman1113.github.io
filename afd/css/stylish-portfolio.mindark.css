@@ -36,7 +36,7 @@
   
   .neonTextb {
     color: #fff;
-    animation: pulsate 0.11s ease-in-out infinite alternate;   
+    
     text-shadow:
       0 0 7px #fff,
       0 0 10px #fff,
