@@ -3,7 +3,7 @@ html,body{
 }
 
 body{
-	background: #3f3f3f;
+	background: #070707;
 	margin:0;
 	padding:0;
 	position: relative;
@@ -21,7 +21,7 @@ body{
 #scene{
 	height:100%;
 	position: absolute;
-	background: #2f2f2f;
+	background: #000000;
 }
 
 #gameOver{
@@ -63,7 +63,7 @@ body{
 #preview{
 	width:80px;
 	height:80px;
-	background: #2f2f2f;
+	background: #030303;
 	margin:10px auto;
 }
 
