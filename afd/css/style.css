@@ -591,7 +591,7 @@ section{
     margin-top: 2rem;
     padding:0 1rem;
     padding-top: 2.5rem;
-    font-size: 2rem;
+    font-size: smaller;
     color:var(--light-color);
     text-align: center;
 }
