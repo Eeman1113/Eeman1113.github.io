@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Dall-E API Just got launched. Here is how to use it.</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Dall-E API Just got launched. Here is how to use it.</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+So, I am expecting that if you clicked on this article you most probably know what Dall-E is and If you don’t check out this article to get…
+</section>
+<section data-field="body" class="e-content">
+<section name="0184" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="b0fe" id="b0fe" class="graf graf--h3 graf--leading graf--title">Dall-E API Just got launched. Here is how to use it.</h3><p name="f32c" id="f32c" class="graf graf--p graf-after--h3">So, I am expecting that if you clicked on this article you most probably know what Dall-E is and If you don’t check out this <a href="https://medium.com/@eeman.majumder/openai-gave-me-access-to-dall-e-2-and-here-is-my-opinion-9dd9cc72b6ae" data-href="https://medium.com/@eeman.majumder/openai-gave-me-access-to-dall-e-2-and-here-is-my-opinion-9dd9cc72b6ae" class="markup--anchor markup--p-anchor" target="_blank">article</a> to get an idea of it.</p><p name="ff30" id="ff30" class="graf graf--p graf-after--p">So, if you are already wish listed in the Dall-E webpage this email might be lingering somewhere in your inbox.</p><figure name="210a" id="210a" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*ATuoHS7PWRu__RdenbWuoA.png" data-width="2880" data-height="1800" data-is-featured="true" src="https://cdn-images-1.medium.com/max/800/1*ATuoHS7PWRu__RdenbWuoA.png"></figure><p name="5ad6" id="5ad6" class="graf graf--p graf-after--figure">And the gist of the email is that. Dall-E is now available as an API now. which means now you can integrate Dall-E in your coding projects with just a few lines of code and an API key.</p><p name="34c9" id="34c9" class="graf graf--p graf-after--p">Lets see how to setup Dall-E in your program.</p><p name="879f" id="879f" class="graf graf--p graf-after--p">So, I am doing this on google colab as it is the easiest to share and very easy to use for almost everyone with any system.</p><p name="f7d4" id="f7d4" class="graf graf--p graf-after--p">So as all programs lets start with the installs :</p><figure name="88fa" id="88fa" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/35ce81aaa7dceed1a739461fb20aa9a4.js"></script><figcaption class="imageCaption">for colab</figcaption></figure><figure name="f206" id="f206" class="graf graf--figure graf--iframe graf-after--figure"><script src="https://gist.github.com/Eeman1113/e3cf3ea200e184e8e988a8751930f4f3.js"></script><figcaption class="imageCaption">for local system</figcaption></figure><p name="96a7" id="96a7" class="graf graf--p graf-after--figure">Now lets import openAI in our program:</p><figure name="fef5" id="fef5" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/2c13e84d30ba3c82fa4cd0f43efabb74.js"></script></figure><p name="3fb1" id="3fb1" class="graf graf--p graf-after--figure">Now lets get the prompt from the user for our generation:</p><figure name="fe22" id="fe22" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/126df432e18b678f0a06d13eafe0f06e.js"></script></figure><figure name="c65c" id="c65c" class="graf graf--figure graf-after--figure"><img class="graf-image" data-image-id="1*gKtWUe0vXtAAcH_l-vdBqA.png" data-width="1394" data-height="236" src="https://cdn-images-1.medium.com/max/800/1*gKtWUe0vXtAAcH_l-vdBqA.png"><figcaption class="imageCaption">It will look like this in colab</figcaption></figure><p name="cfdd" id="cfdd" class="graf graf--p graf-after--figure">Now lets add the openai API key:</p><figure name="8ca6" id="8ca6" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/fa1298fcbce0cb4dcf107c85d7351c8b.js"></script></figure><p name="b78a" id="b78a" class="graf graf--p graf-after--figure">Now you can directly use the code from the API documentation:</p><p name="bb91" id="bb91" class="graf graf--p graf-after--p">For generation:</p><figure name="70ed" id="70ed" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/f48f661208abb40532e4032441f177c4.js"></script></figure><figure name="4338" id="4338" class="graf graf--figure graf-after--figure"><img class="graf-image" data-image-id="1*WIMVVt_xi2gvjxPfBTawIw.png" data-width="1520" data-height="1112" src="https://cdn-images-1.medium.com/max/800/1*WIMVVt_xi2gvjxPfBTawIw.png"><figcaption class="imageCaption"><a href="https://beta.openai.com/docs/guides/images/usage" data-href="https://beta.openai.com/docs/guides/images/usage" class="markup--anchor markup--figure-anchor" rel="noopener" target="_blank">API</a></figcaption></figure><p name="220c" id="220c" class="graf graf--p graf-after--figure">For Editing:</p><figure name="eaa4" id="eaa4" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/404ba0434f77532aa795006936fa43f2.js"></script></figure><figure name="1554" id="1554" class="graf graf--figure graf-after--figure"><img class="graf-image" data-image-id="1*ffVxKE_BlT_9kEYXwqKOXg.png" data-width="1520" data-height="796" src="https://cdn-images-1.medium.com/max/800/1*ffVxKE_BlT_9kEYXwqKOXg.png"><figcaption class="imageCaption"><a href="https://beta.openai.com/docs/guides/images/usage" data-href="https://beta.openai.com/docs/guides/images/usage" class="markup--anchor markup--figure-anchor" rel="noopener" target="_blank">API</a></figcaption></figure><p name="5879" id="5879" class="graf graf--p graf-after--figure">For Variations:</p><figure name="6fc6" id="6fc6" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/2b7356c2fe8a5fe8a9da336fb31dcf8d.js"></script></figure><figure name="0b51" id="0b51" class="graf graf--figure graf-after--figure"><img class="graf-image" data-image-id="1*k50Rx9yO9SYzNOaOOV6V4g.png" data-width="1526" data-height="626" src="https://cdn-images-1.medium.com/max/800/1*k50Rx9yO9SYzNOaOOV6V4g.png"><figcaption class="imageCaption"><a href="https://beta.openai.com/docs/guides/images/usage" data-href="https://beta.openai.com/docs/guides/images/usage" class="markup--anchor markup--figure-anchor" rel="noopener" target="_blank">API</a></figcaption></figure><p name="7ca1" id="7ca1" class="graf graf--p graf-after--figure">And now you are ready to create fun stuff with this.</p><p name="2473" id="2473" class="graf graf--p graf-after--p">For me honestly was waiting for the API for a while. I love being able to integrate such powerful models into my projects.</p><p name="ec48" id="ec48" class="graf graf--p graf-after--p">The API will get better with time so stay tuned.</p><p name="340e" id="340e" class="graf graf--p graf-after--p">For my github go here:</p><div name="2b67" id="2b67" class="graf graf--mixtapeEmbed graf-after--p"><a href="https://github.com/Eeman1113" data-href="https://github.com/Eeman1113" class="markup--anchor markup--mixtapeEmbed-anchor" title="https://github.com/Eeman1113"><strong class="markup--strong markup--mixtapeEmbed-strong">Eeman1113 </strong>github.com</a><a href="https://github.com/Eeman1113" class="js-mixtapeImage mixtapeImage u-ignoreBlock" data-media-id="156170b2813a04eaee065c1bc49b2241" data-thumbnail-img-id="0*Uk2Syrwa_OCS5_3z" style="background-image: url(https://cdn-images-1.medium.com/fit/c/160/160/0*Uk2Syrwa_OCS5_3z);"></a></div><p name="7c9f" id="7c9f" class="graf graf--p graf-after--mixtapeEmbed">For trying out the code yourself go here:</p><div name="01c9" id="01c9" class="graf graf--mixtapeEmbed graf-after--p"><a href="https://colab.research.google.com/drive/1gvFrRWf8hxO-CTNgMl_Ac6J0bMI1nuc-?usp=sharing" data-href="https://colab.research.google.com/drive/1gvFrRWf8hxO-CTNgMl_Ac6J0bMI1nuc-?usp=sharing" class="markup--anchor markup--mixtapeEmbed-anchor" title="https://colab.research.google.com/drive/1gvFrRWf8hxO-CTNgMl_Ac6J0bMI1nuc-?usp=sharing"><strong class="markup--strong markup--mixtapeEmbed-strong">Google Colaboratory</strong></a><a href="https://colab.research.google.com/drive/1gvFrRWf8hxO-CTNgMl_Ac6J0bMI1nuc-?usp=sharing" class="js-mixtapeImage mixtapeImage u-ignoreBlock" data-media-id="8b58877f22043fb8fc97dcf9a0b83586" data-thumbnail-img-id="0*N7Iw6qm5oQzAB6e5" style="background-image: url(https://cdn-images-1.medium.com/fit/c/160/160/0*N7Iw6qm5oQzAB6e5);"></a></div><p name="c293" id="c293" class="graf graf--p graf-after--mixtapeEmbed">For my day to day AIML updates check me out on twitter:</p><div name="bc1e" id="bc1e" class="graf graf--mixtapeEmbed graf-after--p"><a href="https://twitter.com/EemanMajumder" data-href="https://twitter.com/EemanMajumder" class="markup--anchor markup--mixtapeEmbed-anchor" title="https://twitter.com/EemanMajumder">twitter.com</a><a href="https://twitter.com/EemanMajumder" class="js-mixtapeImage mixtapeImage u-ignoreBlock" data-media-id="26ea21e5530caee3bdb713c31da6898a" data-thumbnail-img-id="0*KZSVK6GnrV_11hes" style="background-image: url(https://cdn-images-1.medium.com/fit/c/160/160/0*KZSVK6GnrV_11hes);"></a></div><p name="7086" id="7086" class="graf graf--p graf-after--mixtapeEmbed graf--trailing">Thanks For Reading 😁, See you guys next week(soon) 👋🏼</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@eeman.majumder" class="p-author h-card">Eeman Majumder</a> on <a href="https://medium.com/p/afdffc2f3a9"><time class="dt-published" datetime="2022-11-13T08:49:25.269Z">November 13, 2022</time></a>.</p><p><a href="https://medium.com/@eeman.majumder/dall-e-api-just-got-launched-here-is-how-to-use-it-afdffc2f3a9" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on August 6, 2024.</p></footer></article></body></html>

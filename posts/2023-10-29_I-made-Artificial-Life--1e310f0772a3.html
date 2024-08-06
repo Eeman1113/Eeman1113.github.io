@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>I made Artificial Life.</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">I made Artificial Life.</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+So, recently I have been dumbstruck by the idea of artificially created life forms. No, these are not biological life forms as you might…
+</section>
+<section data-field="body" class="e-content">
+<section name="b8b5" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="c6ae" id="c6ae" class="graf graf--h3 graf--leading graf--title">I made Artificial Life.</h3><figure name="47b7" id="47b7" class="graf graf--figure graf-after--h3"><img class="graf-image" data-image-id="1*NYKU3oDM-RN3s0F5uRCdAQ.png" data-width="1024" data-height="1024" data-is-featured="true" src="https://cdn-images-1.medium.com/max/800/1*NYKU3oDM-RN3s0F5uRCdAQ.png"><figcaption class="imageCaption">Dall-E 2</figcaption></figure><p name="b526" id="b526" class="graf graf--p graf-after--figure">So, recently I have been dumbstruck by the idea of <strong class="markup--strong markup--p-strong">artificially created life</strong> forms. No, these are not biological life forms as you might think. These are more like simulations that act like organisms due to there environment and set of rules in that environments.</p><p name="6ae4" id="6ae4" class="graf graf--p graf-after--p">Lets get started. So in my dive in this topic I realised to start this topic one of the most basic way to simulate life is <strong class="markup--strong markup--p-strong">“</strong><a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life" data-href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank"><strong class="markup--strong markup--p-strong">Conway’s Game of Life</strong></a><strong class="markup--strong markup--p-strong">”.</strong></p><p name="ecf5" id="ecf5" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">What this idea basically says is there are three rules in the world of this concept:</strong></p><ol class="postList"><li name="677f" id="677f" class="graf graf--li graf-after--p"><strong class="markup--strong markup--li-strong">Any live cell with two or three live neighbours survives.</strong></li><li name="22f5" id="22f5" class="graf graf--li graf-after--li"><strong class="markup--strong markup--li-strong">Any dead cell with three live neighbours becomes a live cell.</strong></li><li name="a1b9" id="a1b9" class="graf graf--li graf-after--li"><strong class="markup--strong markup--li-strong">All other live cells die in the next generation. Similarly, all other dead cells stay dead.</strong></li></ol><p name="5f7c" id="5f7c" class="graf graf--p graf-after--li">All cells follow this 3 rules and then they are simulated.</p><h4 name="686f" id="686f" class="graf graf--h4 graf-after--p">There are many organisms that are observed in this. Some of them are the following:</h4><figure name="66c6" id="66c6" class="graf graf--figure graf-after--h4"><img class="graf-image" data-image-id="1*QMTY9CzZxOjL3_KIrx-EjA.gif" data-width="480" data-height="438" src="https://cdn-images-1.medium.com/max/800/1*QMTY9CzZxOjL3_KIrx-EjA.gif"></figure><h3 name="3b5b" id="3b5b" class="graf graf--h3 graf-after--figure">So, Lets get to coding this thing:</h3><p name="e88a" id="e88a" class="graf graf--p graf-after--h3">Firstly lets get all the necessary imports out of the way:</p><figure name="22b3" id="22b3" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/00539c07c7497d006bab5a5ce68cf5e6.js"></script></figure><p name="7695" id="7695" class="graf graf--p graf-after--figure">After that lets add some prerequisites and initialise the pygame env:</p><figure name="912e" id="912e" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/955e12ff0be1cd83b44024be9e0cfe5e.js"></script></figure><p name="2fcb" id="2fcb" class="graf graf--p graf-after--figure">Now lets make a draw grid funtion to draw the grid:</p><figure name="b13c" id="b13c" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/722895b49638e85f8883e197d494dcd6.js"></script></figure><p name="11eb" id="11eb" class="graf graf--p graf-after--figure">When we exicute the above funtion it should look like this:</p><figure name="ea1b" id="ea1b" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*rVsL355heE0GbgBb4cLW3A.png" data-width="1824" data-height="1880" src="https://cdn-images-1.medium.com/max/800/1*rVsL355heE0GbgBb4cLW3A.png"><figcaption class="imageCaption">Its black grids on black background you can change colours to show the grid</figcaption></figure><p name="eebd" id="eebd" class="graf graf--p graf-after--figure">Lets code a random function to generate random positions for the initial cells:</p><figure name="f686" id="f686" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/4fc8b44fcda01ee5a0e625f22458f3fd.js"></script></figure><p name="ac1e" id="ac1e" class="graf graf--p graf-after--figure">Lets now code a adjust grid function:</p><figure name="50ab" id="50ab" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/19c3f34b330a961efc49696ccbe218b1.js"></script></figure><p name="1273" id="1273" class="graf graf--p graf-after--figure">Now we need to check how many neighbours are around each of the cells according to which we will reproduce or kill cells which can be done via the following function:</p><figure name="d7ac" id="d7ac" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/3a07d5662278d2c0faa75d87c96abf9b.js"></script></figure><p name="7cdc" id="7cdc" class="graf graf--p graf-after--figure">Now lets bring everything together using the main() funtion. It will pause and play the simulation using the &lt;tab&gt; key and generate random cells using the &lt;g&gt; key. It will also add and delete cells based on where the mouse clicks in the grid.</p><figure name="3c70" id="3c70" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/3f490a7ba0f20a47574f27306efcc085.js"></script></figure><p name="8743" id="8743" class="graf graf--p graf-after--figure">After this is done lets run the main function:</p><figure name="4b6f" id="4b6f" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/ad4755175787331634af06a64eed1220.js"></script></figure><p name="fa95" id="fa95" class="graf graf--p graf-after--figure">Now our code is done!! we can simulate life now.</p><p name="0aad" id="0aad" class="graf graf--p graf-after--p">Lets see some outputs:</p><figure name="8955" id="8955" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*GAZNv-zeqwbmzDhipIRx5g.gif" data-width="314" data-height="310" src="https://cdn-images-1.medium.com/max/800/1*GAZNv-zeqwbmzDhipIRx5g.gif"><figcaption class="imageCaption">Sooo coooollll</figcaption></figure><p name="a732" id="a732" class="graf graf--p graf-after--figure">So, in the output above we generated random cells in random postions we can observe many organisms based on the above chart given in the article.</p><p name="e395" id="e395" class="graf graf--p graf-after--p">So, this article will be followed soon by the implementation of Lenia: Artificial Life forms so stay tuneedd for that.</p><p name="f7ff" id="f7ff" class="graf graf--p graf-after--p">Here is a spoiler:</p><figure name="35f8" id="35f8" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*ONm0lzT-757gqJnMBx0TAQ.gif" data-width="378" data-height="378" src="https://cdn-images-1.medium.com/max/800/1*ONm0lzT-757gqJnMBx0TAQ.gif"></figure><p name="84cb" id="84cb" class="graf graf--p graf-after--figure"><a href="https://medium.com/@eeman.majumder" data-href="https://medium.com/@eeman.majumder" class="markup--anchor markup--p-anchor" target="_blank"><strong class="markup--strong markup--p-strong">If you like the article a follow would help me alot.</strong></a></p><p name="2679" id="2679" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">Thanks alot for reading my weird nerd stuff.</strong></p><p name="ccf7" id="ccf7" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">I appreciate you guys alot.</strong></p><p name="b196" id="b196" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">For the code go here:</strong></p><div name="68e7" id="68e7" class="graf graf--mixtapeEmbed graf-after--p"><a href="https://github.com/Eeman1113/Artificial_Life" data-href="https://github.com/Eeman1113/Artificial_Life" class="markup--anchor markup--mixtapeEmbed-anchor" title="https://github.com/Eeman1113/Artificial_Life"><strong class="markup--strong markup--mixtapeEmbed-strong">GitHub - Eeman1113/Artificial_Life</strong><br><em class="markup--em markup--mixtapeEmbed-em">Contribute to Eeman1113/Artificial_Life development by creating an account on GitHub.</em>github.com</a><a href="https://github.com/Eeman1113/Artificial_Life" class="js-mixtapeImage mixtapeImage mixtapeImage--empty u-ignoreBlock" data-media-id="23d7ca6cc93bbbac5c2c6c60b20bb9d8"></a></div><p name="a4ad" id="a4ad" class="graf graf--p graf-after--mixtapeEmbed"><strong class="markup--strong markup--p-strong">For More About Me Go Here:</strong></p><p name="0b07" id="0b07" class="graf graf--p graf-after--p"><a href="https://www.linkedin.com/in/eeman-majumder-2184331a2/" data-href="https://www.linkedin.com/in/eeman-majumder-2184331a2/" class="markup--anchor markup--p-anchor" rel="nofollow noopener" target="_blank">https://www.linkedin.com/in/eeman-majumder-2184331a2/</a></p><p name="023c" id="023c" class="graf graf--p graf-after--p graf--trailing"><strong class="markup--strong markup--p-strong">Thanks for reading 😁, See ya guys very soon👋🏼</strong></p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@eeman.majumder" class="p-author h-card">Eeman Majumder</a> on <a href="https://medium.com/p/1e310f0772a3"><time class="dt-published" datetime="2023-10-29T17:49:02.946Z">October 29, 2023</time></a>.</p><p><a href="https://medium.com/@eeman.majumder/i-made-artificial-life-using-ai-1e310f0772a3" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on August 6, 2024.</p></footer></article></body></html>

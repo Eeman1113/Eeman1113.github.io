@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Making an AI to do my English Assignments for me using PyTorch.</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Making an AI to do my English Assignments for me using PyTorch.</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+Honestly who likes to write essays they are long they need loads of research and framing them is never fun. So, one day I thought lets make…
+</section>
+<section data-field="body" class="e-content">
+<section name="f449" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="351f" id="351f" class="graf graf--h3 graf--leading graf--title">Making an AI to do my English Assignments for me using PyTorch.</h3><p name="3112" id="3112" class="graf graf--p graf-after--h3">Honestly who likes to write essays they are long they need loads of research and framing them is never fun. So, one day I thought lets make a work around.So, I made an AI to do my work for me.</p><p name="c3ef" id="c3ef" class="graf graf--p graf-after--p">Without delay lets get started hehe😁</p><p name="4d71" id="4d71" class="graf graf--p graf-after--p">Firstly you will need a PyTorch build. Here is my build below:</p><figure name="77aa" id="77aa" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*Bi_d9pH-BJa1rlUChwThwA.png" data-width="1632" data-height="644" src="https://cdn-images-1.medium.com/max/800/1*Bi_d9pH-BJa1rlUChwThwA.png"></figure><p name="0310" id="0310" class="graf graf--p graf-after--figure">After PyTorch is done installing. Start installing ‘transformers’ using the following command:</p><pre name="6bde" id="6bde" class="graf graf--pre graf-after--p">pip install transformers</pre><p name="aa6a" id="aa6a" class="graf graf--p graf-after--pre">Now all the imports are done.</p><p name="069e" id="069e" class="graf graf--p graf-after--p">Lets get started with the main code, Lets start with importing the pre-trained model:</p><figure name="b0cd" id="b0cd" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/e16d9ca58174f5a3cb69ed21d7454f37.js"></script></figure><p name="3c08" id="3c08" class="graf graf--p graf-after--figure">Now lets load in the model:</p><figure name="9aa1" id="9aa1" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/455aa51cda428e41af433ff95e880316.js"></script></figure><p name="ac33" id="ac33" class="graf graf--p graf-after--figure">here for the model, instead of using <code class="markup--code markup--p-code">EleutherAI/gpt-neo-2.7B</code>, you can replace the 2.7B with 1.3B or 125M, so it will run faster on your computer.</p><p name="ffcd" id="ffcd" class="graf graf--p graf-after--p">Finally the last step using the model.</p><figure name="90ea" id="90ea" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/3413c6db94fce40feffbe8ff3dac1d23.js"></script></figure><p name="c483" id="c483" class="graf graf--p graf-after--figure">you can specify the max length if you want to.</p><p name="450d" id="450d" class="graf graf--p graf-after--p">With that our code is over yeah literally 6 lines of code.</p><p name="af96" id="af96" class="graf graf--p graf-after--p">Lets see some fun outputs:</p><figure name="d327" id="d327" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*RijoYI9geFeGyVpgSyy-mQ.png" data-width="2880" data-height="1800" src="https://cdn-images-1.medium.com/max/800/1*RijoYI9geFeGyVpgSyy-mQ.png"><figcaption class="imageCaption">Downloading the 9 gb model data 🥲</figcaption></figure><figure name="557d" id="557d" class="graf graf--figure graf-after--figure"><img class="graf-image" data-image-id="1*wB5JJk7gtQQ1e0o8Rtys9w.png" data-width="2880" data-height="1800" src="https://cdn-images-1.medium.com/max/800/1*wB5JJk7gtQQ1e0o8Rtys9w.png"><figcaption class="imageCaption">Its done finally 🥲</figcaption></figure><figure name="ee33" id="ee33" class="graf graf--figure graf-after--figure"><img class="graf-image" data-image-id="1*36d4t9OIYukXz66RMUFDOw.png" data-width="1550" data-height="214" src="https://cdn-images-1.medium.com/max/800/1*36d4t9OIYukXz66RMUFDOw.png"><figcaption class="imageCaption">Did I mention use a beefy computer please or a M1 processor</figcaption></figure><figure name="d925" id="d925" class="graf graf--figure graf-after--figure"><img class="graf-image" data-image-id="1*nSpDg9yrDv8ltYLsdomm2A.png" data-width="2880" data-height="1800" data-is-featured="true" src="https://cdn-images-1.medium.com/max/800/1*nSpDg9yrDv8ltYLsdomm2A.png"><figcaption class="imageCaption">and there is the output</figcaption></figure><pre name="04bd" id="04bd" class="graf graf--pre graf-after--figure">Setting `pad_token_id` to `eos_token_id`:50256 for open-end generation:</pre><pre name="413e" id="413e" class="graf graf--pre graf-after--pre">Bob the builder the famous builder, the man who had built the world’s first skyscraper in 1885; and that it was the architect who invented the modern elevator—the world’s first underground transportation system.<br><br></pre><p name="70f7" id="70f7" class="graf graf--p graf-after--pre">So, as you can see its pretty good at its stuff.</p><p name="5b27" id="5b27" class="graf graf--p graf-after--p">If you liked it a follow will be appreciated.</p><p name="fb27" id="fb27" class="graf graf--p graf-after--p">This project was executed on Google Colaboratory check the code out:</p><div name="1602" id="1602" class="graf graf--mixtapeEmbed graf-after--p"><a href="https://colab.research.google.com/drive/1n9HLfpXjYPARpfGBObvM9rIAA5WH5mRE#scrollTo=9qt_YZsduf5E" data-href="https://colab.research.google.com/drive/1n9HLfpXjYPARpfGBObvM9rIAA5WH5mRE#scrollTo=9qt_YZsduf5E" class="markup--anchor markup--mixtapeEmbed-anchor" title="https://colab.research.google.com/drive/1n9HLfpXjYPARpfGBObvM9rIAA5WH5mRE#scrollTo=9qt_YZsduf5E"><strong class="markup--strong markup--mixtapeEmbed-strong">Making_an_AI_write_my_essays_without_pay</strong><br>colab.research.google.com</a><a href="https://colab.research.google.com/drive/1n9HLfpXjYPARpfGBObvM9rIAA5WH5mRE#scrollTo=9qt_YZsduf5E" class="js-mixtapeImage mixtapeImage u-ignoreBlock" data-media-id="2d6d4f71b6084b770b1127fbb45439cf" data-thumbnail-img-id="0*5lLNHgCx5dB1EfdU" style="background-image: url(https://cdn-images-1.medium.com/fit/c/160/160/0*5lLNHgCx5dB1EfdU);"></a></div><p name="a0a9" id="a0a9" class="graf graf--p graf-after--mixtapeEmbed">If you wanna make your very own AI/Chatbot made with TensorFlow read this article by me:</p><div name="31d4" id="31d4" class="graf graf--mixtapeEmbed graf-after--p"><a href="https://medium.com/@eeman.majumder/how-to-make-an-advanced-intelligent-chatbot-using-tensorflow-8f7097f16096" data-href="https://medium.com/@eeman.majumder/how-to-make-an-advanced-intelligent-chatbot-using-tensorflow-8f7097f16096" class="markup--anchor markup--mixtapeEmbed-anchor" title="https://medium.com/@eeman.majumder/how-to-make-an-advanced-intelligent-chatbot-using-tensorflow-8f7097f16096"><strong class="markup--strong markup--mixtapeEmbed-strong">How to make an advanced intelligent chatbot using tensorflow.</strong><br><em class="markup--em markup--mixtapeEmbed-em">Firstly lets get started with the imports:-</em>medium.com</a><a href="https://medium.com/@eeman.majumder/how-to-make-an-advanced-intelligent-chatbot-using-tensorflow-8f7097f16096" class="js-mixtapeImage mixtapeImage u-ignoreBlock" data-media-id="9041a18cd0175d0b1246520424bf8a0d" data-thumbnail-img-id="1*X22QAwCOUGmMNfVdJT8Jxw.png" style="background-image: url(https://cdn-images-1.medium.com/fit/c/160/160/1*X22QAwCOUGmMNfVdJT8Jxw.png);"></a></div><p name="3f3f" id="3f3f" class="graf graf--p graf-after--mixtapeEmbed">For more stuff check out my GitHub:</p><div name="638c" id="638c" class="graf graf--mixtapeEmbed graf-after--p"><a href="https://github.com/Eeman1113" data-href="https://github.com/Eeman1113" class="markup--anchor markup--mixtapeEmbed-anchor" title="https://github.com/Eeman1113"><strong class="markup--strong markup--mixtapeEmbed-strong">Eeman1113 - Overview</strong><br><em class="markup--em markup--mixtapeEmbed-em">You can&#39;t perform that action at this time. You signed in with another tab or window. You signed out in another tab or…</em>github.com</a><a href="https://github.com/Eeman1113" class="js-mixtapeImage mixtapeImage u-ignoreBlock" data-media-id="156170b2813a04eaee065c1bc49b2241" data-thumbnail-img-id="0*7ly2CqYOs0NeymP-" style="background-image: url(https://cdn-images-1.medium.com/fit/c/160/160/0*7ly2CqYOs0NeymP-);"></a></div><p name="5d0d" id="5d0d" class="graf graf--p graf-after--mixtapeEmbed">For my day to day AIML research updates follow me in twitter:</p><figure name="0276" id="0276" class="graf graf--figure graf--iframe graf-after--p"><blockquote class="twitter-tweet"><a href="https://twitter.com/EemanMajumder/status/1483659722024972289"></a></blockquote><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></figure><p name="9f4e" id="9f4e" class="graf graf--p graf-after--figure graf--trailing">Thanks for reading 😁,See you guys next week.</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@eeman.majumder" class="p-author h-card">Eeman Majumder</a> on <a href="https://medium.com/p/cae79c8187c4"><time class="dt-published" datetime="2022-02-24T18:32:42.510Z">February 24, 2022</time></a>.</p><p><a href="https://medium.com/@eeman.majumder/making-an-ai-to-do-my-english-assignments-for-me-using-pytorch-cae79c8187c4" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on August 6, 2024.</p></footer></article></body></html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>I bought back black and white pictures to life with AI.</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">I bought back black and white pictures to life with AI.</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+So, I have this photo of my great grand mother. Its very old and in black and white. I wanted to see it in colour so I decided to write…
+</section>
+<section data-field="body" class="e-content">
+<section name="0bf6" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="77a2" id="77a2" class="graf graf--h3 graf--leading graf--title">I bought back black and white pictures to life with AI.</h3><figure name="da4f" id="da4f" class="graf graf--figure graf-after--h3"><img class="graf-image" data-image-id="1*w3gO03p1-1BbQQLwaT7HoA.png" data-width="520" data-height="292" data-is-featured="true" src="https://cdn-images-1.medium.com/max/800/1*w3gO03p1-1BbQQLwaT7HoA.png"><figcaption class="imageCaption">Image by my AI</figcaption></figure><p name="05f9" id="05f9" class="graf graf--p graf-after--figure">So, I have this photo of my great grand mother. Its very old and in black and white. I wanted to see it in colour so I decided to write this article and make an AI that can change Black and White images to colour images.</p><p name="7ba2" id="7ba2" class="graf graf--p graf-after--p">So, I started with some reasearch. I found many models for this purpose but one that stood out in particular was <a href="https://github.com/jantic/DeOldify" data-href="https://github.com/jantic/DeOldify" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">deoldify</a>. It was an amazing AI model made by a guy named<a href="https://github.com/jantic" data-href="https://github.com/jantic" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank"> jantic</a>. I decided to use this model.</p><p name="e67e" id="e67e" class="graf graf--p graf-after--p">Now lets start with the code. First the installs:</p><figure name="9b04" id="9b04" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/9d808aaa7177fe61dd30a35d69839ba6.js"></script></figure><p name="6a93" id="6a93" class="graf graf--p graf-after--figure">Then lets get started with the setup:</p><figure name="ed64" id="ed64" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/e170653c17d8564925974cc7f4febc03.js"></script></figure><p name="5936" id="5936" class="graf graf--p graf-after--figure">Lets Install the colab requirements as we are on google colab:</p><figure name="6406" id="6406" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/633b98ed2344f70b8e4cd3a33f3f79ff.js"></script></figure><p name="d600" id="d600" class="graf graf--p graf-after--figure">Lets make the imports:</p><figure name="78df" id="78df" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/b2eac4fde790b7f291a18dda4545dcaa.js"></script></figure><p name="6b56" id="6b56" class="graf graf--p graf-after--figure">Lets get model:</p><figure name="4379" id="4379" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/3e33b9b120992033e4cb446d805479c2.js"></script></figure><p name="7576" id="7576" class="graf graf--p graf-after--figure">Lets get the watermark:</p><figure name="578a" id="578a" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/b336a305e408b96b1107e374f952c5de.js"></script></figure><p name="f419" id="f419" class="graf graf--p graf-after--figure">Lets setup the image colouriser:</p><figure name="5889" id="5889" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/3811c6e685483be7974df3b5a386c72e.js"></script></figure><p name="e587" id="e587" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">Now let me add some instructions:</strong></p><p name="85fb" id="85fb" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">source_url: </strong>Type in a url to a direct link of an image. Usually that means they’ll end in .png, .jpg, etc. NOTE: If you want to use your own image, upload it first to a site like Imgur.</p><p name="0c53" id="0c53" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">render_factor: </strong>The default value of 35 has been carefully chosen and should work -ok- for most scenarios (but probably won’t be the -best-). This determines resolution at which the color portion of the image is rendered. Lower resolution will render faster, and colors also tend to look more vibrant. Older and lower quality images in particular will generally benefit by lowering the render factor. Higher render factors are often better for higher quality images, but the colors may get slightly washed out.</p><p name="df7a" id="df7a" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">watermarked: </strong>Selected by default, this places a watermark icon of a palette at the bottom left corner of the image. This is intended to be a standard way to convey to others viewing the image that it is colorized by AI. We want to help promote this as a standard, especially as the technology continues to improve and the distinction between real and fake becomes harder to discern. This palette watermark practice was initiated and lead by the company MyHeritage in the MyHeritage In Color feature (which uses a newer version of DeOldify than what you’re using here).</p><p name="fbea" id="fbea" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">How to Download a Copy: </strong>Simply right click on the displayed image and click “Save image as…”! Pro Tips You can evaluate how well the image is rendered at each render_factor by using the code at the bottom (that cell under “See how well render_factor values perform on a frame here”).</p><p name="fdf9" id="fdf9" class="graf graf--p graf-after--p">Now lets get the above inputs and render the coloured images:</p><figure name="7290" id="7290" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/30fe91baa9b12eac2d68920a250800d5.js"></script></figure><p name="cf6e" id="cf6e" class="graf graf--p graf-after--figure">And with that the code is done. Let&#39;s see some amazing outputs:</p><figure name="aea8" id="aea8" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*Qs5ewT8_nVJcxHhRM-j30g.png" data-width="1130" data-height="647" src="https://cdn-images-1.medium.com/max/800/1*Qs5ewT8_nVJcxHhRM-j30g.png"><figcaption class="imageCaption">Gandhi</figcaption></figure><figure name="49d7" id="49d7" class="graf graf--figure graf-after--figure"><img class="graf-image" data-image-id="1*lbMJjTr_vurE0oeCxLuxdg.png" data-width="1130" data-height="697" src="https://cdn-images-1.medium.com/max/800/1*lbMJjTr_vurE0oeCxLuxdg.png"><figcaption class="imageCaption">Some doctor</figcaption></figure><figure name="2bbc" id="2bbc" class="graf graf--figure graf-after--figure"><img class="graf-image" data-image-id="1*t3NHhBU8iqDT69GNEcmsfA.png" data-width="4520" data-height="1200" src="https://cdn-images-1.medium.com/max/800/1*t3NHhBU8iqDT69GNEcmsfA.png"><figcaption class="imageCaption">Einstein’s iconic tongue photo</figcaption></figure><figure name="09ac" id="09ac" class="graf graf--figure graf-after--figure"><img class="graf-image" data-image-id="1*LKYSKv01d4-OXGjeyTMtlA.png" data-width="1130" data-height="585" src="https://cdn-images-1.medium.com/max/800/1*LKYSKv01d4-OXGjeyTMtlA.png"><figcaption class="imageCaption">I dont support this just thought it was funny af</figcaption></figure><figure name="a18e" id="a18e" class="graf graf--figure graf-after--figure"><img class="graf-image" data-image-id="1*tltjhvVFN60oB36b7YGD8Q.png" data-width="1130" data-height="738" src="https://cdn-images-1.medium.com/max/800/1*tltjhvVFN60oB36b7YGD8Q.png"><figcaption class="imageCaption">random pic</figcaption></figure><figure name="cb25" id="cb25" class="graf graf--figure graf-after--figure"><img class="graf-image" data-image-id="1*v2vzoblZyWAnfShi7ILWHA.png" data-width="1130" data-height="681" src="https://cdn-images-1.medium.com/max/800/1*v2vzoblZyWAnfShi7ILWHA.png"><figcaption class="imageCaption">random pic</figcaption></figure><p name="dc28" id="dc28" class="graf graf--p graf-after--figure">Look at these amazing transformations ahhhh I love AI</p><p name="e331" id="e331" class="graf graf--p graf-after--p"><a href="https://medium.com/@eeman.majumder" data-href="https://medium.com/@eeman.majumder" class="markup--anchor markup--p-anchor" target="_blank"><strong class="markup--strong markup--p-strong">If you liked this article please follow me on medium.</strong></a></p><p name="3d0c" id="3d0c" class="graf graf--p graf-after--p">for the colab notebook go here:</p><div name="2bd0" id="2bd0" class="graf graf--mixtapeEmbed graf-after--p"><a href="https://colab.research.google.com/drive/18LQUurLy81asXUY6hCU_04vY4_BRkfbb?usp=sharing" data-href="https://colab.research.google.com/drive/18LQUurLy81asXUY6hCU_04vY4_BRkfbb?usp=sharing" class="markup--anchor markup--mixtapeEmbed-anchor" title="https://colab.research.google.com/drive/18LQUurLy81asXUY6hCU_04vY4_BRkfbb?usp=sharing"><strong class="markup--strong markup--mixtapeEmbed-strong">Oldtonew.py</strong><br><em class="markup--em markup--mixtapeEmbed-em">Eeman_Majumder</em>colab.research.google.com</a><a href="https://colab.research.google.com/drive/18LQUurLy81asXUY6hCU_04vY4_BRkfbb?usp=sharing" class="js-mixtapeImage mixtapeImage u-ignoreBlock" data-media-id="ecaacbc0a58c0188f59808cc3a3f066f" data-thumbnail-img-id="0*YIox4wKdPUlKRAgc" style="background-image: url(https://cdn-images-1.medium.com/fit/c/160/160/0*YIox4wKdPUlKRAgc);"></a></div><p name="c179" id="c179" class="graf graf--p graf-after--mixtapeEmbed">For more stuff check out my github:</p><div name="81ea" id="81ea" class="graf graf--mixtapeEmbed graf-after--p"><a href="https://github.com/Eeman1113/Black-and-white-to-colour-photos" data-href="https://github.com/Eeman1113/Black-and-white-to-colour-photos" class="markup--anchor markup--mixtapeEmbed-anchor" title="https://github.com/Eeman1113/Black-and-white-to-colour-photos"><strong class="markup--strong markup--mixtapeEmbed-strong">GitHub - Eeman1113/Black-and-white-to-colour-photos</strong><br><em class="markup--em markup--mixtapeEmbed-em">You can&#39;t perform that action at this time. You signed in with another tab or window. You signed out in another tab or…</em>github.com</a><a href="https://github.com/Eeman1113/Black-and-white-to-colour-photos" class="js-mixtapeImage mixtapeImage u-ignoreBlock" data-media-id="6b15bbd5de6323919385458f5a74d0e1" data-thumbnail-img-id="0*JmsAdjWon7i8TRrm" style="background-image: url(https://cdn-images-1.medium.com/fit/c/160/160/0*JmsAdjWon7i8TRrm);"></a></div><p name="1730" id="1730" class="graf graf--p graf-after--mixtapeEmbed">For my day to day AIML research updates follow me on twitter:</p><figure name="470a" id="470a" class="graf graf--figure graf--iframe graf-after--p"><blockquote class="twitter-tweet"><a href="https://twitter.com/EemanMajumder/status/1531983212959870976"></a></blockquote><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></figure><p name="d0e0" id="d0e0" class="graf graf--p graf-after--figure graf--trailing">Thanks for reading 😁, See ya guys next week 👋🏼</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@eeman.majumder" class="p-author h-card">Eeman Majumder</a> on <a href="https://medium.com/p/2b995773e234"><time class="dt-published" datetime="2022-06-08T10:00:03.328Z">June 8, 2022</time></a>.</p><p><a href="https://medium.com/@eeman.majumder/i-bought-back-black-and-white-pictures-to-life-with-ai-2b995773e234" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on August 6, 2024.</p></footer></article></body></html>

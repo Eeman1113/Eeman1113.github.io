@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Writing an AI to suggest what to make everyday for meals(common problem in Asian-households).</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Writing an AI to suggest what to make everyday for meals(common problem in Asian-households).</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+I am an Indian. Usually my mom cooks for me sometimes I cook too and the common discussion we have everyday is “what should I make today?”…
+</section>
+<section data-field="body" class="e-content">
+<section name="c099" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="fec6" id="fec6" class="graf graf--h3 graf--leading graf--title">Writing an AI to suggest what to make everyday for meals(common problem in Asian-households).</h3><p name="94b9" id="94b9" class="graf graf--p graf-after--h3">I am an Indian. Usually my mom cooks for me sometimes I cook too and the common discussion we have everyday is “what should I make today?” and then after hours of discussion we come to the conclusion an still not satisfied with it. As you can already tell its a big problem. <strong class="markup--strong markup--p-strong">So, I made and AI to automate this for me.</strong></p><p name="6dac" id="6dac" class="graf graf--p graf-after--p">And trust me weather is a big decider on what should be made on that day.</p><p name="51dd" id="51dd" class="graf graf--p graf-after--p">First lets look at how this would work:</p><figure name="622d" id="622d" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*Fw49RRdE04_QfZ9WCJIUog.jpeg" data-width="1280" data-height="1810" src="https://cdn-images-1.medium.com/max/800/1*Fw49RRdE04_QfZ9WCJIUog.jpeg"><figcaption class="imageCaption">simplest form I can explain this in</figcaption></figure><p name="c621" id="c621" class="graf graf--p graf-after--figure">So firstly lets start with the weather detection model. Lets import the libraries:</p><figure name="2582" id="2582" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/089d050abd2028b61a26dc76a72740a7.js"></script></figure><p name="6f43" id="6f43" class="graf graf--p graf-after--figure">Lets get the open source dataset now:</p><figure name="12e2" id="12e2" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/cae0f37fef5973e1e6ed6c7c999f7928.js"></script></figure><p name="d5c4" id="d5c4" class="graf graf--p graf-after--figure">For knowing your city’s weather use pandas:</p><figure name="0be0" id="0be0" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/6cb53ecdb8a024048100069f96113818.js"></script></figure><p name="293e" id="293e" class="graf graf--p graf-after--figure">Now let&#39;s clean the dataset and get it ready for the model.</p><p name="0e36" id="0e36" class="graf graf--p graf-after--p">Lets see the data of Kolkata from 1743–2020, and lets identify the NaN and non NaN values and plot them in a pie chart:</p><figure name="ede2" id="ede2" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/b3eedbc2c805b52ce9628971cd7f3571.js"></script></figure><p name="9521" id="9521" class="graf graf--p graf-after--figure">As they are not a consistent part of the dataset, Let’s fill the missing values with the previous ones:</p><figure name="e85f" id="e85f" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/36ea9f5fabd399c07b9ef2a3fff9fbf9.js"></script></figure><p name="d9fc" id="d9fc" class="graf graf--p graf-after--figure">The ‘dt’ column identifies the year and the month. For the next operations, it is handier to convert this column into a datetime object and to explicitly identify the year and the month in two different columns. We can do that by using the following lines:</p><figure name="cb8f" id="cb8f" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/a381f981a1b57d49aabb9feb682339b0.js"></script></figure><p name="8dfd" id="8dfd" class="graf graf--p graf-after--figure">Using this clean dataset lets make a point graph just for fun:</p><figure name="68cb" id="68cb" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/351c5b92deb650a66af21553f691a725.js"></script></figure><p name="a0c9" id="a0c9" class="graf graf--p graf-after--figure">Now lets make 3 functions to make plotting better:</p><figure name="adf6" id="adf6" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/7569d5198e628843feb9545df1bc82a4.js"></script></figure><ul class="postList"><li name="dd21" id="dd21" class="graf graf--li graf-after--figure"><strong class="markup--strong markup--li-strong">get_timeseries(start_year,end_year) </strong>extract the portion of the dataset between the two years</li><li name="a5da" id="a5da" class="graf graf--li graf-after--li"><strong class="markup--strong markup--li-strong">plot_timeseries(start_year,end_year) </strong>plots the timeseries extracted in get_timeseries in a readable way</li><li name="8aa1" id="8aa1" class="graf graf--li graf-after--li"><strong class="markup--strong markup--li-strong">plot_from_data</strong>(<strong class="markup--strong markup--li-strong">data, time, display_options) </strong>plots the data (AverageTemperature) wrt the time (dt) in a readable way. The display options permit to display the ticks, change the colors, set the label .</li></ul><p name="2e29" id="2e29" class="graf graf--p graf-after--li">Now we can make plots like this:</p><figure name="2796" id="2796" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/3cd47d09df73cad00acd3af80470bcf3.js"></script></figure><p name="01a0" id="01a0" class="graf graf--p graf-after--figure">When we use ARIMA models, we should be considering stationary time series. In order to check if the timeseries we are considering is stationary, we can check the correlation and autocorrelation plots:</p><figure name="fff6" id="fff6" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/37bcb8e8dba8f6e65a20ce9ca87f341f.js"></script></figure><p name="6658" id="6658" class="graf graf--p graf-after--figure">Now let&#39;s get started with the machine learning algorithm.</p><p name="433c" id="433c" class="graf graf--p graf-after--p">Performing the training:</p><figure name="3030" id="3030" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/0c610f338b5cffcab6e99b83cf3014f5.js"></script></figure><p name="3866" id="3866" class="graf graf--p graf-after--figure">Plotting the split:</p><figure name="16a5" id="16a5" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/0154cdd1d97e56458b676689f4dfcda3.js"></script></figure><p name="f01b" id="f01b" class="graf graf--p graf-after--figure">Implementing the ARIMA models:</p><figure name="b193" id="b193" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/d9cf4bc7f42be8fe73ce2e967ac9eb1e.js"></script></figure><p name="f7cf" id="f7cf" class="graf graf--p graf-after--figure">Getting the best model:</p><figure name="f858" id="f858" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/93a401c46fc81bbdbdf710f17c5bf4e0.js"></script></figure><p name="c3ee" id="c3ee" class="graf graf--p graf-after--figure">Now that we have the best model trained.Lets get started with the forecasting:</p><figure name="5661" id="5661" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/bdb4a74d8afe45086e8b0fca842d21e9.js"></script></figure><p name="d09d" id="d09d" class="graf graf--p graf-after--figure">Now finally we have the forecast of our area that too it can work offline. Now let&#39;s get started with the main part the food suggestion part.</p><p name="57ed" id="57ed" class="graf graf--p graf-after--p">For that first we have to make our own dataset as there is no data set for food list in India and for making that we have to webscrape tables from wikipedia and turn them into datasets. It can be done by the following web-scraping code:</p><figure name="8b89" id="8b89" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/6b5a4704951ce6ca4116181da05309ac.js"></script></figure><p name="9a40" id="9a40" class="graf graf--p graf-after--figure">By the code the following dataset is obtained:</p><figure name="b10f" id="b10f" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/956bf82ac46e7e3472520f5d370d7eea.js"></script></figure><p name="71d2" id="71d2" class="graf graf--p graf-after--figure">Now this point on its just if and elif .</p><p name="6421" id="6421" class="graf graf--p graf-after--p">Lets do the code:</p><figure name="9c68" id="9c68" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/0fd75c2b3c1029d071feef53deeca4fe.js"></script></figure><p name="69fe" id="69fe" class="graf graf--p graf-after--figure">And the code is done and just like that we have a food suggester which works on predicted weather.</p><p name="6905" id="6905" class="graf graf--p graf-after--p">Lets see the output:</p><figure name="99ed" id="99ed" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*_z_Jm9ENxknFD6N9puf72w.png" data-width="2880" data-height="1800" data-is-featured="true" src="https://cdn-images-1.medium.com/max/800/1*_z_Jm9ENxknFD6N9puf72w.png"><figcaption class="imageCaption">Haq Maas *for now using a random generator as i don&#39;t want to download the full dataset</figcaption></figure><p name="1592" id="1592" class="graf graf--p graf-after--figure">Thanks for reading😁</p><p name="4a63" id="4a63" class="graf graf--p graf-after--p">A follow is appreciated.</p><p name="4575" id="4575" class="graf graf--p graf-after--p">Check out my GitHub for more code stuff:</p><div name="3e39" id="3e39" class="graf graf--mixtapeEmbed graf-after--p"><a href="https://github.com/Eeman1113" data-href="https://github.com/Eeman1113" class="markup--anchor markup--mixtapeEmbed-anchor" title="https://github.com/Eeman1113"><strong class="markup--strong markup--mixtapeEmbed-strong">Eeman1113 - Overview</strong><br><em class="markup--em markup--mixtapeEmbed-em">You can&#39;t perform that action at this time. You signed in with another tab or window. You signed out in another tab or…</em>github.com</a><a href="https://github.com/Eeman1113" class="js-mixtapeImage mixtapeImage u-ignoreBlock" data-media-id="156170b2813a04eaee065c1bc49b2241" data-thumbnail-img-id="0*llrOZhr86xHtTw_x" style="background-image: url(https://cdn-images-1.medium.com/fit/c/160/160/0*llrOZhr86xHtTw_x);"></a></div><p name="9588" id="9588" class="graf graf--p graf-after--mixtapeEmbed">For my day to day updates on my AIML research follow me on twitter:</p><figure name="48cf" id="48cf" class="graf graf--figure graf--iframe graf-after--p"><blockquote class="twitter-tweet"><a href="https://twitter.com/EemanMajumder/status/1500437880891908108"></a></blockquote><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></figure><p name="3bc0" id="3bc0" class="graf graf--p graf-after--figure graf--trailing">See ya guys next week 😁.</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@eeman.majumder" class="p-author h-card">Eeman Majumder</a> on <a href="https://medium.com/p/15f7ea7bd62f"><time class="dt-published" datetime="2022-03-06T12:50:54.728Z">March 6, 2022</time></a>.</p><p><a href="https://medium.com/@eeman.majumder/writing-an-ai-to-suggest-what-to-make-everyday-for-meals-common-problem-in-asian-households-15f7ea7bd62f" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on August 6, 2024.</p></footer></article></body></html>

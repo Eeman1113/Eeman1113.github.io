@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Making an AI to enhance images with 0% loss rate using the ESRGAN model</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Making an AI to enhance images with 0% loss rate using the ESRGAN model</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+So, In my last article I made an AI to generate art using CLIP and GPT-3 check it out here:
+</section>
+<section data-field="body" class="e-content">
+<section name="89ae" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="aad1" id="aad1" class="graf graf--h3 graf--leading graf--title">Making an AI to enhance images with 0% loss rate using the ESRGAN model</h3><p name="6579" id="6579" class="graf graf--p graf-after--h3">So, In my last article I made an AI to generate art using CLIP and GPT-3 check it out here:</p><div name="3539" id="3539" class="graf graf--mixtapeEmbed graf-after--p"><a href="https://medium.com/@eeman.majumder/making-an-ai-to-make-beautiful-art-using-gpt-3-clip-and-the-cc12m-dataset-144677848e96" data-href="https://medium.com/@eeman.majumder/making-an-ai-to-make-beautiful-art-using-gpt-3-clip-and-the-cc12m-dataset-144677848e96" class="markup--anchor markup--mixtapeEmbed-anchor" title="https://medium.com/@eeman.majumder/making-an-ai-to-make-beautiful-art-using-gpt-3-clip-and-the-cc12m-dataset-144677848e96"><strong class="markup--strong markup--mixtapeEmbed-strong">Making an AI to make beautiful Art using GPT-3, CLIP and the CC12M Dataset.</strong><br><em class="markup--em markup--mixtapeEmbed-em">So, my best friend is very talented in drawing and making art in over all. So, last time we were talking about a…</em>medium.com</a><a href="https://medium.com/@eeman.majumder/making-an-ai-to-make-beautiful-art-using-gpt-3-clip-and-the-cc12m-dataset-144677848e96" class="js-mixtapeImage mixtapeImage u-ignoreBlock" data-media-id="b92fb1cfc84217e4e2d5ca30d33bd523" data-thumbnail-img-id="1*ubaSs8Z_F16Fo6txZa7LLQ.png" style="background-image: url(https://cdn-images-1.medium.com/fit/c/160/160/1*ubaSs8Z_F16Fo6txZa7LLQ.png);"></a></div><p name="4e03" id="4e03" class="graf graf--p graf-after--mixtapeEmbed">It generated beautiful Art but not exactly the most crisp images. So I thought lets make an AI for it. And here we are.</p><p name="4311" id="4311" class="graf graf--p graf-after--p">So, upon some research I found a model called <a href="https://esrgan.readthedocs.io/en/latest/" data-href="https://esrgan.readthedocs.io/en/latest/" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank"><strong class="markup--strong markup--p-strong">ESRGAN (</strong> <strong class="markup--strong markup--p-strong">Enhanced Super-Resolution Generative Adversarial Networks )</strong></a><strong class="markup--strong markup--p-strong">.</strong> Its a super cool model used to enhance images to “super resolution”.</p><figure name="c965" id="c965" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*oWvPez3v_iFI3XeVHWM4Yg.png" data-width="1180" data-height="371" src="https://cdn-images-1.medium.com/max/800/1*oWvPez3v_iFI3XeVHWM4Yg.png"><figcaption class="imageCaption"><a href="https://esrgan.readthedocs.io/en/latest/" data-href="https://esrgan.readthedocs.io/en/latest/" class="markup--anchor markup--figure-anchor" rel="noopener" target="_blank">The architecture of ESRGAN</a></figcaption></figure><p name="8541" id="8541" class="graf graf--p graf-after--figure">Its working is pretty simple you can check it out in there very detailed article: <a href="https://esrgan.readthedocs.io/en/latest/" data-href="https://esrgan.readthedocs.io/en/latest/" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">Here</a>.</p><p name="c262" id="c262" class="graf graf--p graf-after--p">So, without any delay let&#39;s start the code and<strong class="markup--strong markup--p-strong"> Google Colab with Chrome is needed to run this code and in GPU runtime mode.</strong></p><p name="165b" id="165b" class="graf graf--p graf-after--p">Lets start by downloading the required libraries:</p><figure name="425c" id="425c" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/1beb202e5e2ad7e5c303d3a440a8142f.js"></script></figure><p name="fedb" id="fedb" class="graf graf--p graf-after--figure">Lets make the image uploading option and adding it to the cloud for processing:</p><figure name="8fba" id="8fba" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/b492aa8fe0f2b2158690e9fa528c263c.js"></script></figure><figure name="fc25" id="fc25" class="graf graf--figure graf-after--figure"><img class="graf-image" data-image-id="1*XcAKk6JVaDcPSXIL197Kjw.png" data-width="2864" data-height="1806" src="https://cdn-images-1.medium.com/max/800/1*XcAKk6JVaDcPSXIL197Kjw.png"><figcaption class="imageCaption">The code above will make this beautiful option to either drag and drop or click and upload your image</figcaption></figure><p name="ce96" id="ce96" class="graf graf--p graf-after--figure">The image we will be running ESRGAn today is this:</p><figure name="a4fc" id="a4fc" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*olDO3Gy-gGMtRcnSx1269A.png" data-width="512" data-height="256" src="https://cdn-images-1.medium.com/max/800/1*olDO3Gy-gGMtRcnSx1269A.png"><figcaption class="imageCaption">This is an Art generated by my AI called “cyber dystopia”</figcaption></figure><p name="2c48" id="2c48" class="graf graf--p graf-after--figure">As you can see the Generated art is quite hazy so to fix that lets run this through ESRGAN.</p><p name="1104" id="1104" class="graf graf--p graf-after--p">Now lets run ESRGAN on the uploaded image:</p><figure name="8968" id="8968" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/4964d6236bdfad3a2e52de78d6b1b5d8.js"></script></figure><p name="d5e1" id="d5e1" class="graf graf--p graf-after--figure">Now it all done lets see the result in an before and after format using this code block:(Optional not necessary for the code)</p><figure name="b42e" id="b42e" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/5513bc90792f0a19abc898fa020b07ad.js"></script></figure><p name="2b1c" id="2b1c" class="graf graf--p graf-after--figure">The Output is phenominal:</p><p name="9fd8" id="9fd8" class="graf graf--p graf-after--p">As you can see for your self the output image is much sharper and higher quality.</p><figure name="e7ab" id="e7ab" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*-eWoMECBQ451FFulDO6BUw.png" data-width="1409" data-height="349" src="https://cdn-images-1.medium.com/max/800/1*-eWoMECBQ451FFulDO6BUw.png"></figure><p name="da71" id="da71" class="graf graf--p graf-after--figure">And there is absolutely no loss in the image quality instead there is an increase in the quality:</p><figure name="6d78" id="6d78" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*M0xIcnINYi7ywikIHxHwcw.png" data-width="534" data-height="178" src="https://cdn-images-1.medium.com/max/800/1*M0xIcnINYi7ywikIHxHwcw.png"><figcaption class="imageCaption">Before Adding to ESRGAN</figcaption></figure><figure name="7543" id="7543" class="graf graf--figure graf-after--figure"><img class="graf-image" data-image-id="1*6ZYMMgOn15I7uDLzenUF5A.png" data-width="520" data-height="98" src="https://cdn-images-1.medium.com/max/800/1*6ZYMMgOn15I7uDLzenUF5A.png"><figcaption class="imageCaption">Before adding to ESRGAN</figcaption></figure><figure name="c82c" id="c82c" class="graf graf--figure graf-after--figure"><img class="graf-image" data-image-id="1*YpdYFSxFXkG6PC6L165TCw.png" data-width="530" data-height="150" src="https://cdn-images-1.medium.com/max/800/1*YpdYFSxFXkG6PC6L165TCw.png"><figcaption class="imageCaption">After Adding to ESRGAN</figcaption></figure><figure name="ced5" id="ced5" class="graf graf--figure graf-after--figure"><img class="graf-image" data-image-id="1*GXfJeDfDMnMbo3n1pf0qvQ.png" data-width="526" data-height="112" src="https://cdn-images-1.medium.com/max/800/1*GXfJeDfDMnMbo3n1pf0qvQ.png"><figcaption class="imageCaption">After Adding to ESRGAN</figcaption></figure><p name="b4ea" id="b4ea" class="graf graf--p graf-after--figure">For downloading the generated image just add this code block:</p><figure name="288a" id="288a" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/a75569c53af212dab77a4a198f2a0849.js"></script><figcaption class="imageCaption">Use this in Chrome</figcaption></figure><p name="4a97" id="4a97" class="graf graf--p graf-after--figure">And with that the code is done.</p><p name="15b9" id="15b9" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">If you liked this article a follow in medium is appreciated 😁</strong></p><p name="88a5" id="88a5" class="graf graf--p graf-after--p">For the Code here is the notebook:</p><div name="24b4" id="24b4" class="graf graf--mixtapeEmbed graf-after--p"><a href="https://colab.research.google.com/drive/1yXdCK2INTctao_wvdlw1uP9j72y4AKK_?usp=sharing" data-href="https://colab.research.google.com/drive/1yXdCK2INTctao_wvdlw1uP9j72y4AKK_?usp=sharing" class="markup--anchor markup--mixtapeEmbed-anchor" title="https://colab.research.google.com/drive/1yXdCK2INTctao_wvdlw1uP9j72y4AKK_?usp=sharing"><strong class="markup--strong markup--mixtapeEmbed-strong">ESRGAN_Faster</strong><br><em class="markup--em markup--mixtapeEmbed-em">By_Eeman_Majumder</em>colab.research.google.com</a><a href="https://colab.research.google.com/drive/1yXdCK2INTctao_wvdlw1uP9j72y4AKK_?usp=sharing" class="js-mixtapeImage mixtapeImage u-ignoreBlock" data-media-id="ea63a846500e61bc315e05abce770ec1" data-thumbnail-img-id="0*O8Q37GLQrPNXNiyr" style="background-image: url(https://cdn-images-1.medium.com/fit/c/160/160/0*O8Q37GLQrPNXNiyr);"></a></div><p name="5afa" id="5afa" class="graf graf--p graf-after--mixtapeEmbed">For more check out my GitHub:</p><div name="4576" id="4576" class="graf graf--mixtapeEmbed graf-after--p"><a href="https://github.com/Eeman1113" data-href="https://github.com/Eeman1113" class="markup--anchor markup--mixtapeEmbed-anchor" title="https://github.com/Eeman1113"><strong class="markup--strong markup--mixtapeEmbed-strong">Eeman1113 - Overview</strong><br><em class="markup--em markup--mixtapeEmbed-em">You can&#39;t perform that action at this time. You signed in with another tab or window. You signed out in another tab or…</em>github.com</a><a href="https://github.com/Eeman1113" class="js-mixtapeImage mixtapeImage u-ignoreBlock" data-media-id="156170b2813a04eaee065c1bc49b2241" data-thumbnail-img-id="0*JKmk56rU5403xIjc" style="background-image: url(https://cdn-images-1.medium.com/fit/c/160/160/0*JKmk56rU5403xIjc);"></a></div><p name="963b" id="963b" class="graf graf--p graf-after--mixtapeEmbed">Follow me on Twitter for my day to day AIML research updates:</p><figure name="ed96" id="ed96" class="graf graf--figure graf--iframe graf-after--p"><blockquote class="twitter-tweet"><a href="https://twitter.com/EemanMajumder/status/1503408716774731779"></a></blockquote><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></figure><p name="7831" id="7831" class="graf graf--p graf-after--figure graf--trailing">Thanks for reading 😁, See ya guys next week👋🏼.</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@eeman.majumder" class="p-author h-card">Eeman Majumder</a> on <a href="https://medium.com/p/6ac91e77820c"><time class="dt-published" datetime="2022-03-25T18:32:40.222Z">March 25, 2022</time></a>.</p><p><a href="https://medium.com/@eeman.majumder/making-an-ai-to-enhance-with-images-0-loss-rate-using-the-esrgan-model-6ac91e77820c" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on August 6, 2024.</p></footer></article></body></html>
