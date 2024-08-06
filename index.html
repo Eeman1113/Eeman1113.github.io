@@ -49,12 +49,14 @@
             padding: 10px 20px;
             text-decoration: none;
             border-radius: 5px;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
             font-weight: 500;
             cursor: pointer;
         }
         .button:hover {
             background-color: #555;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
         }
         .profile-image {
             width: 100%;
@@ -72,8 +74,6 @@
             border-bottom: 1px solid #eee;
         }
         .article-title {
-            color: black;
-            text-decoration: none;
             font-size: 1.2em;
             margin: 0 0 10px 0;
             font-weight: 600;
@@ -83,6 +83,7 @@
             color: black;
             z-index: 2;
             text-decoration: none;
+            display: inline-block;
         }
         .article-preview {
             font-size: 0.9em;
@@ -106,6 +107,12 @@
             border-radius: 20px;
             font-size: 0.9em;
             font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .topic:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
         }
         .faq {
             margin-top: 40px;
