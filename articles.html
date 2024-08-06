@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eeman's Articles - Medium Adventures</title>
-    <script src="https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/font.min.js"></script>
+    <title>Article List</title>
     <style>
         body {
             font-family: 'Geist Mono Medium', sans-serif;
@@ -21,6 +20,7 @@
             background-color: white;
             padding: 40px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
         }
         .header {
             display: flex;
@@ -51,199 +51,245 @@
             background-color: #555;
         }
         .article-list {
-            color: black;
-            text-decoration: none;
             list-style-type: none;
             padding: 0;
         }
         .article-item {
-            color: black;
             margin-bottom: 20px;
-            padding-bottom: 20px;
+            padding: 20px;
             border-bottom: 1px solid #eee;
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            background-color: white;
+            transition: all 0.3s ease;
         }
-        .article-title {
-            color: black;
-            text-decoration: none; /* Removes underline from links */
-            font-size: 1.2em;
-            margin: 0 0 10px 0;
-            font-weight: 600;
+        .article-item::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, black 50%, white 50%);
+            background-size: 200% 100%;
+            background-position: right;
+            transition: background-position 0.3s ease;
+            z-index: 1;
+            border-radius: 10px;
+        }
+        .article-item:hover::before {
+            background-position: left;
         }
         .article-title a {
-            color: black; /* Ensures the link text is black */
-            text-decoration: none; /* Removes underline from links */
+            position: relative;
+            color: black;
+            z-index: 2;
+            transition: color 0.3s ease;
+            text-decoration: none;
         }
         .article-preview {
-            font-size: 0.9em;
-            color: #666;
-            margin: 0;
+            position: relative;
+            z-index: 2;
+            color: black;
+            transition: color 0.3s ease;
+        }
+        .article-item:hover .article-title a, .article-item:hover .article-preview {
+            color: white !important;
+        }
+        .button {
+            display: inline-block;
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #555;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header class="header">
-            <div class="logo">EA</div>
+        <div class="header">
+            <div class="logo">EM</div>
             <a href="index.html" class="button">Back to Home</a>
-        </header>
+        </div>
         <h1>All Articles</h1>
         <ul class="article-list">
             <li class="article-item">
                 <h3 class="article-title"><a href="./posts/2022-05-14_Making-a-Deep-Learning-Chandler-Bing-AI--from-f-r-i-e-n-d-s-Part-1-5cd2af606ffe.html">Making a Deep Learning Chandler Bing AI from F.R.I.E.N.D.S (Part 1)</a></h3>
+                <p class="article-preview">Explore the journey of creating a deep learning AI to mimic Chandler Bing's personality and dialogue from F.R.I.E.N.D.S.</p>
             </li>
             <li class="article-item">
                 <h3 class="article-title"><a href="./posts/2022-04-15_AI-to-explain-complex-things-to-a-second-grader-using-GPT-3--ab28872bdce9.html">AI to Explain Complex Things to a Second Grader Using GPT-3</a></h3>
+                <p class="article-preview">Learn how to leverage GPT-3 to simplify complex subjects for young students in an engaging way.</p>
             </li>
             <li class="article-item">
                 <h3 class="article-title"><a href="./posts/2023-02-05_An-AI-that-can-make-music--2760fad13efa.html">An AI That Can Make Music</a></h3>
+                <p class="article-preview">Discover the capabilities of an AI that composes original music, pushing the boundaries of creativity and technology.</p>
             </li>
             <li class="article-item">
                 <h3 class="article-title"><a href="./posts/2022-12-15_ChatGPT-what-is-it-and-how-does-it-work-exactly--62e7010524d3.html" >ChatGPT: What Is It and How Does It Work Exactly?</a></h3>
+                <p class="article-preview">A comprehensive guide to understanding ChatGPT, its functionality, and its applications in various fields.</p>
             </li>
             <li class="article-item">
                 <h3 class="article-title"><a href="./posts/2022-11-13_Dall-E-API-Just-got-launched--Here-is-how-to-use-it--afdffc2f3a9.html">DALL-E API Just Got Launched: Here Is How to Use It</a></h3>
+                <p class="article-preview">Step-by-step instructions on how to use the newly launched DALL-E API to generate stunning images from text prompts.</p>
             </li>
             <li class="article-item">
                 <h3 class="article-title"><a href="./posts/2022-02-03_How-to-add-emotion-recognition-to-your-AI-Chatbot-4acd325b14ef.html">How to Add Emotion Recognition to Your AI Chatbot</a></h3>
+                <p class="article-preview">Enhance your AI chatbot with emotion recognition capabilities to improve user interactions and responses.</p>
             </li>
             <li class="article-item">
                 <h3 class="article-title"><a href="./posts/2022-02-12_How-to-add-Facial-Detection-and-Facial-Recognition-in-your-AI-Chatbot--52705a71e34.html">How to Add Facial Detection and Facial Recognition in Your AI Chatbot</a></h3>
+                <p class="article-preview">Learn how to integrate facial detection and recognition features into your AI chatbot for enhanced security and personalization.</p>
             </li>
             <li class="article-item">
                 <h3 class="article-title"><a href="./posts/2022-01-28_How-to-Add-googling-skills-in-your-AI-chatbot-b236bcf2c412.html">How to Add Googling Skills in Your AI Chatbot</a></h3>
+                <p class="article-preview">Discover how to equip your AI chatbot with the ability to search the web, providing users with accurate and up-to-date information.</p>
             </li>
             <li class="article-item">
                 <h3 class="article-title"><a href="./posts/2022-01-24_How-to-add-hearing-speech-recognition-in-your-AI-chatbot--5007b281b828.html">How to Add Hearing (Speech Recognition) in Your AI Chatbot</a></h3>
+                <p class="article-preview">A guide to implementing speech recognition in your AI chatbot to facilitate natural and efficient user communication.</p>
             </li>
             <li class="article-item">
                 <h3 class="article-title"><a href="./posts/2022-01-23_How-to-add-voice-to-any-chatbot-AI--b7582f03c64f.html">How to Add Voice to Any Chatbot AI</a></h3>
+                <p class="article-preview">Step-by-step instructions on adding voice capabilities to your AI chatbot for a more interactive user experience.</p>
             </li>
             <li class="article-item">
                 <h3 class="article-title"><a href="./posts/draft_I-am-a-bookworm-and-this-is-how-I-learned-ML--a7ec771cabb5.html">I Am a Bookworm and This Is How I Learned ML</a></h3>
+                <p class="article-preview">A personal journey of a book lover who mastered machine learning through self-study and perseverance.</p>
             </li>
             <li class="article-item">
                 <h3 class="article-title"><a href="./posts/2022-06-08_I-bought-back-black-and-white-pictures-to-life-with-AI--2b995773e234.html">I Brought Black and White Pictures to Life with AI</a></h3>
+                <p class="article-preview">Learn how to use AI to colorize old black and white photos, bringing them back to life with vibrant colors.</p>
             </li>
             <li class="article-item">
                 <h3 class="article-title"><a href="./posts/2022-04-16_I-have-the-most-perfect-thing-for-you--I-made-an-AI-to-explain-complex-stuff-to-second-graders--4ed2678b9e21.html">I Have the Most Perfect Thing for You: I Made an AI to Explain Complex Stuff to Second Graders</a></h3>
+                <p class="article-preview">An in-depth look at creating an AI designed to simplify complex topics for young learners.</p>
             </li>
             <li class="article-item">
                 <h3 class="article-title"><a href="./posts/draft_I-made-AI-Dungeon-but-better--4f5791c68353.html">I Made AI Dungeon But Better</a></h3>
+                <p class="article-preview">A new and improved version of AI Dungeon, offering a more immersive and engaging storytelling experience.</p>
             </li>
             <li class="article-item">
                 <h3 class="article-title"><a href="./posts/2022-10-24_I-made-an-AI-that-can-study-for-me--7c9329c54dae.html">I Made an AI That Can Study for Me</a></h3>
+                <p class="article-preview">Explore the development of an AI that can study and prepare notes, making studying more efficient.</p>
             </li>
             <li class="article-item">
                 <h3 class="article-title"><a href="./posts/2023-11-12_I-made-an-AI-that-gives-me-validation--ff124935617e.html">I Made an AI That Gives Me Validation</a></h3>
+                <p class="article-preview">Discover the journey of creating an AI that provides positive reinforcement and validation to boost confidence.</p>
             </li>
             <li class="article-item">
                 <h3 class="article-title"><a href="./posts/2023-03-06_I-made-an-AI-that-writes-exams-for-me--8a6c3a85965a.html">I Made an AI That Writes Exams for Me</a></h3>
+                <p class="article-preview">Learn how an AI was developed to take exams, showcasing the potential of automated testing systems.</p>
             </li>
             <li class="article-item">
                 <h3 class="article-title"><a href="./posts/2022-04-29_I-made-an-AI-to-convert-Complex-Python-Codes-to-Simple-English--c0e709db0149.html">I Made an AI to Convert Complex Python Codes to Simple English</a></h3>
+                <p class="article-preview">Transform intricate Python code into easy-to-understand English using a custom-built AI tool.</p>
             </li>
             <li class="article-item">
                 <h3 class="article-title"><a href="./posts/2022-04-08_Making-an-AI-to-create-beautiful-artistic-animations--Part-2-Intermediate-Method-using-VQGAN-CLIP--1638d54589c8.html">Making an AI to Create Beautiful Artistic Animations: Part 2 (Intermediate Method using VQGAN+CLIP)</a></h3>
+                <p class="article-preview">An intermediate guide to creating stunning artistic animations using VQGAN and CLIP technologies.</p>
             </li>
-            <li class="article-item">
-                <h3 class="article-title"><a href="./posts/2022-08-08_I-made-an-deep-learning-AI-that-can-generate-sentences-from-words--aa656d2a8c7a.html">I Made a Deep Learning AI That Can Generate Sentences from Words</a></h3>
-            </li>
-            <li class="article-item">
-                <h3 class="article-title"><a href="./posts/2023-11-28_I-made-an-AI-to-give-my-quizzes-for-me--bfd73b90de5b.html">I Made an AI to Give My Quizzes for Me</a></h3>
-            </li>
-            <li class="article-item">
-                <h3 class="article-title"><a href="./posts/2022-07-15_I-made-an-AI-to-make-weird-Spotify-playlists--f39d05b09216.html">I Made an AI to Make Weird Spotify Playlists</a></h3>
-            </li>
-            <li class="article-item">
-                <h3 class="article-title"><a href="./posts/2022-07-28_I-made-an-AI-to-rate-my-AI-projects--5e146d255d5c.html">I Made an AI to Rate My AI Projects</a></h3>
-            </li>
-            <li class="article-item">
-                <h3 class="article-title"><a href="./posts/2022-09-17_I-made-an-AI-to-send-you-newspapers-from-a-randomly-made-up-world---1-4--71881711b28b.html">I Made an AI to Send You Newspapers from a Randomly Made Up World (1/4)</a></h3>
-            </li>
-            <li class="article-item">
-                <h3 class="article-title"><a href="./posts/2023-10-29_I-made-Artificial-Life--1e310f0772a3.html">I Made Artificial Life</a></h3>
-            </li>
-            <li class="article-item">
-                <h3 class="article-title"><a href="./posts/draft_I-was-bored-by-making-AIs-in-python--So--I-made-my-own-programming-language--3113d11a7c49.html">I Was Bored by Making AIs in Python, So I Made My Own Programming Language</a></h3>
-            </li>
-            <li class="article-item">
-                <h3 class="article-title"><a href="./posts/2022-09-23_Letting-an-AI-generate-my-face-based-on-my-friends-description--7f43863db223.html">Letting an AI Generate My Face Based on My Friends' Description</a></h3>
-            </li>
-            <li class="article-item">
-                <h3 class="article-title"><a href="./posts/2022-02-24_Making-an-AI-to-do-my-English-Assignments-for-me-using-PyTorch--cae79c8187c4.html">Making an AI to Do My English Assignments for Me Using PyTorch</a></h3>
-            </li>
-            <li class="article-item">
-                <h3 class="article-title"><a href="./posts/2022-03-25_Making-an-AI-to-enhance-images-with-0--loss-rate-using-the-ESRGAN-model-6ac91e77820c.html">Making an AI to Enhance Images with 0% Loss Rate Using the ESRGAN Model</a></h3>
-            </li>
-            <li class="article-item">
-                <h3 class="article-title"><a href="./posts/2022-03-16_Making-an-AI-to-make-beautiful-Art-using-GPT-3--CLIP-and-the-CC12M-Dataset--144677848e96.html">Making an AI to Make Beautiful Art Using GPT-3, CLIP, and the CC12M Dataset</a></h3>
-            </li>
-            <li class="article-item">
-                <h3 class="article-title"><a href="./posts/2022-08-21_Making-an-AI-to-write-articles-for-me--547e485df389.html">Making an AI to Write Articles for Me</a></h3>
-            </li>
-            <li class="article-item">
-                <h3 class="article-title"><a href="./posts/2022-03-10_Making-an-AI-to-write-Anime-stories-for-me-using-Deep-Learning--93b50941bb7d.html">Making an AI to Write Anime Stories for Me Using Deep Learning</a></h3>
-            </li>
-            <li class="article-item">
-                <h3 class="article-title"><a href="./posts/2022-07-25_Manuscripts-ai---What-is-it-and-how-is-it-gonna-change-the-world-of-writing--ede655e16077.html">Manuscripts.ai: What Is It and How Is It Going to Change the World of Writing?</a></h3>
-            </li>
-            <li class="article-item">
-                <h3 class="article-title"><a href="./posts/2022-06-17_OpenAI-gave-me-access-to-DALL-E-2-and-here-is-my-opinion--9dd9cc72b6ae.html">OpenAI Gave Me Access to DALL-E 2 and Here Is My Opinion</a></h3>
-            </li>
-            <li class="article-item">
-                <h3 class="article-title"><a href="./posts/2022-02-18_Teaching-your-AI---Chatbot-to-recognise-hand-gesture-using-OpenCv--TensorFlow-and-MediaPipe--3603b582093a.html">Teaching Your AI Chatbot to Recognize Hand Gestures Using OpenCV, TensorFlow, and MediaPipe</a></h3>
-            </li>
-            <li class="article-item">
-                <h3 class="article-title"><a href="./posts/2022-05-01_Thanks-a-lot-I-really-appreciate-it----658ee6d0fe02.html">Thanks a Lot, I Really Appreciate It!</a></h3>
-            </li>
-            <li class="article-item">
-                <h3 class="article-title"><a href="./posts/2022-08-14_This-Article-Was-Written-By-An-AI--8b1fa678573d.html">This Article Was Written By An AI</a></h3>
-            </li>
-            <li class="article-item">
-                <h3 class="article-title"><a href="./posts/2022-10-06_We-made-an-AI-to-Manage-Street-Dogs-4be366219b35.html">We Made an AI to Manage Street Dogs</a></h3>
-            </li>
-            <li class="article-item">
-                <h3 class="article-title"><a href="./posts/2022-07-10_What-is-Data-Science-and-How-to-get-into-it--55ec991f60e7.html">What Is Data Science and How to Get Into It</a></h3>
-            </li>
-            <li class="article-item">
-                <h3 class="article-title"><a href="./posts/2023-01-01_Will-AI-take-over-the-world--a-technical-approach--83a75d878387.html">Will AI Take Over the World? A Technical Approach</a></h3>
-            </li>
-            <li class="article-item">
-                <h3 class="article-title"><a href="./posts/2022-03-06_Writing-an-AI-to-suggest-what-to-make-everyday-for-meals-common-problem-in-Asian-households---15f7ea7bd62f.html">Writing an AI to Suggest What to Make Everyday for Meals: Common Problem in Asian Households</a></h3>
-            </li>
-            
-            <!-- <li class="article-item">
-                <h3 class="article-title">Making An RL AI to Break the Mario Speed Run World Record</h3>
-                <p class="article-preview">Discover how I used reinforcement learning to create an AI capable of breaking speed run records in Mario.</p>
-            </li>
-            <li class="article-item">
-                <h3 class="article-title">How To Make An Advanced Intelligent Chatbot Using TensorFlow</h3>
-                <p class="article-preview">Learn the steps to create a sophisticated chatbot using TensorFlow and natural language processing techniques.</p>
-            </li>
-            <li class="article-item">
-                <h3 class="article-title">I Made An AI To Chat With My Friends Without Them Noticing</h3>
-                <p class="article-preview">Explore the ethical implications and technical challenges of creating an AI that can mimic human conversation.</p>
-            </li>
-            <li class="article-item">
-                <h3 class="article-title">The Future of AI: Predictions and Possibilities</h3>
-                <p class="article-preview">A deep dive into the potential future developments in AI and their impact on various industries.</p>
-            </li>
-            <li class="article-item">
-                <h3 class="article-title">Understanding Neural Networks: A Beginner's Guide</h3>
-                <p class="article-preview">An accessible introduction to neural networks, explaining key concepts and their applications.</p>
-            </li>
-            <li class="article-item">
-                <h3 class="article-title">Optimizing Machine Learning Models for Production</h3>
-                <p class="article-preview">Best practices and techniques for deploying efficient and scalable machine learning models in production environments.</p>
-            </li>
-            <li class="article-item">
-                <h3 class="article-title">Ethics in AI: Navigating the Gray Areas</h3>
-                <p class="article-preview">A thoughtful exploration of ethical considerations in AI development and deployment.</p>
-            </li>
-            <li class="article-item">
-                <h3 class="article-title">Data Visualization Techniques for Machine Learning</h3>
-                <p class="article-preview">Effective methods for visualizing complex data and machine learning results to gain insights and communicate findings.</p>
-            </li> -->
+            <ul class="article-list">
+                <li class="article-item">
+                    <h3 class="article-title"><a href="./posts/2022-08-08_I-made-an-deep-learning-AI-that-can-generate-sentences-from-words--aa656d2a8c7a.html">I Made a Deep Learning AI That Can Generate Sentences from Words</a></h3>
+                    <p class="article-preview">Explore how deep learning can be used to create an AI system capable of generating coherent sentences from given words.</p>
+                </li>
+                <li class="article-item">
+                    <h3 class="article-title"><a href="./posts/2023-11-28_I-made-an-AI-to-give-my-quizzes-for-me--bfd73b90de5b.html">I Made an AI to Give My Quizzes for Me</a></h3>
+                    <p class="article-preview">Discover the process of creating an AI-powered quiz generator and its potential applications in education.</p>
+                </li>
+                <li class="article-item">
+                    <h3 class="article-title"><a href="./posts/2022-07-15_I-made-an-AI-to-make-weird-Spotify-playlists--f39d05b09216.html">I Made an AI to Make Weird Spotify Playlists</a></h3>
+                    <p class="article-preview">Learn about an AI system designed to create unconventional and interesting Spotify playlists using machine learning algorithms.</p>
+                </li>
+                <li class="article-item">
+                    <h3 class="article-title"><a href="./posts/2022-07-28_I-made-an-AI-to-rate-my-AI-projects--5e146d255d5c.html">I Made an AI to Rate My AI Projects</a></h3>
+                    <p class="article-preview">Explore the development of a meta-AI system that evaluates and rates other AI projects, providing insights into AI assessment.</p>
+                </li>
+                <li class="article-item">
+                    <h3 class="article-title"><a href="./posts/2022-09-17_I-made-an-AI-to-send-you-newspapers-from-a-randomly-made-up-world---1-4--71881711b28b.html">I Made an AI to Send You Newspapers from a Randomly Made Up World (1/4)</a></h3>
+                    <p class="article-preview">Discover the first part of a series on creating an AI that generates fictional newspapers from imaginary worlds.</p>
+                </li>
+                <li class="article-item">
+                    <h3 class="article-title"><a href="./posts/2023-10-29_I-made-Artificial-Life--1e310f0772a3.html">I Made Artificial Life</a></h3>
+                    <p class="article-preview">Explore the fascinating world of artificial life simulations and the process of creating digital organisms.</p>
+                </li>
+                <li class="article-item">
+                    <h3 class="article-title"><a href="./posts/draft_I-was-bored-by-making-AIs-in-python--So--I-made-my-own-programming-language--3113d11a7c49.html">I Was Bored by Making AIs in Python, So I Made My Own Programming Language</a></h3>
+                    <p class="article-preview">Follow the journey of creating a custom programming language designed specifically for AI development.</p>
+                </li>
+                <li class="article-item">
+                    <h3 class="article-title"><a href="./posts/2022-09-23_Letting-an-AI-generate-my-face-based-on-my-friends-description--7f43863db223.html">Letting an AI Generate My Face Based on My Friends' Description</a></h3>
+                    <p class="article-preview">Experience the results of using AI image generation to create a portrait based on textual descriptions from friends.</p>
+                </li>
+                <li class="article-item">
+                    <h3 class="article-title"><a href="./posts/2022-02-24_Making-an-AI-to-do-my-English-Assignments-for-me-using-PyTorch--cae79c8187c4.html">Making an AI to Do My English Assignments for Me Using PyTorch</a></h3>
+                    <p class="article-preview">Learn about the development of an AI system using PyTorch to assist with English language assignments.</p>
+                </li>
+                <li class="article-item">
+                    <h3 class="article-title"><a href="./posts/2022-03-25_Making-an-AI-to-enhance-images-with-0--loss-rate-using-the-ESRGAN-model-6ac91e77820c.html">Making an AI to Enhance Images with 0% Loss Rate Using the ESRGAN Model</a></h3>
+                    <p class="article-preview">Discover the process of implementing the ESRGAN model to create an AI that enhances images without quality loss.</p>
+                </li>
+                <li class="article-item">
+                    <h3 class="article-title"><a href="./posts/2022-03-16_Making-an-AI-to-make-beautiful-Art-using-GPT-3--CLIP-and-the-CC12M-Dataset--144677848e96.html">Making an AI to Make Beautiful Art Using GPT-3, CLIP, and the CC12M Dataset</a></h3>
+                    <p class="article-preview">Explore the combination of GPT-3, CLIP, and the CC12M dataset to create an AI system capable of generating artistic images.</p>
+                </li>
+                <li class="article-item">
+                    <h3 class="article-title"><a href="./posts/2022-08-21_Making-an-AI-to-write-articles-for-me--547e485df389.html">Making an AI to Write Articles for Me</a></h3>
+                    <p class="article-preview">Learn about the development of an AI-powered article writing assistant and its potential impact on content creation.</p>
+                </li>
+                <li class="article-item">
+                    <h3 class="article-title"><a href="./posts/2022-03-10_Making-an-AI-to-write-Anime-stories-for-me-using-Deep-Learning--93b50941bb7d.html">Making an AI to Write Anime Stories for Me Using Deep Learning</a></h3>
+                    <p class="article-preview">Discover how deep learning techniques can be applied to create an AI system that generates anime-style stories.</p>
+                </li>
+                <li class="article-item">
+                    <h3 class="article-title"><a href="./posts/2022-07-25_Manuscripts-ai---What-is-it-and-how-is-it-gonna-change-the-world-of-writing--ede655e16077.html">Manuscripts.ai: What Is It and How Is It Going to Change the World of Writing?</a></h3>
+                    <p class="article-preview">Explore the potential of Manuscripts.ai and its impact on the future of writing and content creation.</p>
+                </li>
+                <li class="article-item">
+                    <h3 class="article-title"><a href="./posts/2022-06-17_OpenAI-gave-me-access-to-DALL-E-2-and-here-is-my-opinion--9dd9cc72b6ae.html">OpenAI Gave Me Access to DALL-E 2 and Here Is My Opinion</a></h3>
+                    <p class="article-preview">Get a firsthand account of using DALL-E 2, OpenAI's advanced image generation AI, and its capabilities.</p>
+                </li>
+                <li class="article-item">
+                    <h3 class="article-title"><a href="./posts/2022-02-18_Teaching-your-AI---Chatbot-to-recognise-hand-gesture-using-OpenCv--TensorFlow-and-MediaPipe--3603b582093a.html">Teaching Your AI Chatbot to Recognize Hand Gestures Using OpenCV, TensorFlow, and MediaPipe</a></h3>
+                    <p class="article-preview">Learn how to integrate hand gesture recognition into an AI chatbot using popular computer vision and machine learning libraries.</p>
+                </li>
+                <li class="article-item">
+                    <h3 class="article-title"><a href="./posts/2022-05-01_Thanks-a-lot-I-really-appreciate-it----658ee6d0fe02.html">Thanks a Lot, I Really Appreciate It!</a></h3>
+                    <p class="article-preview">A heartfelt expression of gratitude, possibly related to AI or technology contributions.</p>
+                </li>
+                <li class="article-item">
+                    <h3 class="article-title"><a href="./posts/2022-08-14_This-Article-Was-Written-By-An-AI--8b1fa678573d.html">This Article Was Written By An AI</a></h3>
+                    <p class="article-preview">Explore an article generated entirely by an AI system, showcasing the capabilities of AI in content creation.</p>
+                </li>
+                <li class="article-item">
+                    <h3 class="article-title"><a href="./posts/2022-10-06_We-made-an-AI-to-Manage-Street-Dogs-4be366219b35.html">We Made an AI to Manage Street Dogs</a></h3>
+                    <p class="article-preview">Discover an innovative AI solution designed to help manage and care for street dog populations.</p>
+                </li>
+                <li class="article-item">
+                    <h3 class="article-title"><a href="./posts/2022-07-10_What-is-Data-Science-and-How-to-get-into-it--55ec991f60e7.html">What Is Data Science and How to Get Into It</a></h3>
+                    <p class="article-preview">An introductory guide to data science, explaining its concepts and providing advice on how to start a career in the field.</p>
+                </li>
+                <li class="article-item">
+                    <h3 class="article-title"><a href="./posts/2023-01-01_Will-AI-take-over-the-world--a-technical-approach--83a75d878387.html">Will AI Take Over the World? A Technical Approach</a></h3>
+                    <p class="article-preview">A technical analysis of the potential for AI to significantly impact or "take over" various aspects of society and technology.</p>
+                </li>
+                <li class="article-item">
+                    <h3 class="article-title"><a href="./posts/2022-03-06_Writing-an-AI-to-suggest-what-to-make-everyday-for-meals-common-problem-in-Asian-households---15f7ea7bd62f.html">Writing an AI to Suggest What to Make Everyday for Meals: Common Problem in Asian Households</a></h3>
+                    <p class="article-preview">Explore the development of an AI system designed to provide meal suggestions, addressing a common challenge in Asian households.</p>
+                </li>
+            </ul>
+
         </ul>
     </div>
 </body>
