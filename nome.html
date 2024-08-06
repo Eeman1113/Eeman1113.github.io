@@ -1,189 +1,162 @@
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eeman's Medium Adventures</title>
-    <script src="https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/font.min.js"></script>
     <style>
         body {
-            font-family: 'Geist Mono Medium', sans-serif;
-            background-color: #f5f5f5;
-            color: #333;
-            line-height: 1.6;
+            font-family: Arial, sans-serif;
+            background-color: #4CAF50;
             margin: 0;
             padding: 20px;
             box-sizing: border-box;
         }
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background-color: white;
-            padding: 40px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 40px;
-        }
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-        }
-        .main-content {
             display: grid;
             grid-template-columns: 2fr 1fr;
-            gap: 40px;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .card {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.8);
+        }
+        .main-card {
+            background-color: #E0B0FF;
+        }
+        .profile-card {
+            background-color: #333;
+            color: white;
+        }
+        .articles-card {
+            background-color: #FFB347;
+        }
+        .topics-card {
+            background-color: #FF69B4;
         }
         h1, h2 {
             margin-top: 0;
-            font-weight: 600;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        a {
+            color: #333;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
         }
         .button {
             display: inline-block;
             background-color: #333;
             color: white;
-            padding: 10px 20px;
+            padding: 8px 16px;
+            border-radius: 20px;
             text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-            font-weight: 500;
-            cursor: pointer;
+            font-size: 0.9em;
+            border: 2px solid #333;
+            transition: all 0.3s ease;
         }
         .button:hover {
-            background-color: #555;
-        }
-        .profile-image {
-            width: 100%;
-            border-radius: 50%;
-            aspect-ratio: 1 / 1;
-            object-fit: cover;
-        }
-        .article-list {
-            list-style-type: none;
-            padding: 0;
-        }
-        .article-item {
-            margin-bottom: 20px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #eee;
-        }
-        .article-title {
-            font-size: 1.2em;
-            margin: 0 0 10px 0;
-            font-weight: 600;
-        }
-        .article-preview {
-            font-size: 0.9em;
-            color: #666;
-            margin: 0;
-        }
-        .read-more {
-            text-align: center;
-            margin-top: 20px;
+            background-color: white;
+            color: #333;
         }
         .topics {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 20px;
+            gap: 12px;
         }
         .topic {
-            background-color: #f0f0f0;
+            background-color: white;
             color: #333;
-            padding: 5px 10px;
+            padding: 8px 16px;
             border-radius: 20px;
             font-size: 0.9em;
-            font-weight: 500;
-        }
-        .faq {
-            margin-top: 40px;
-        }
-        .faq h2 {
-            margin-bottom: 20px;
-        }
-        .faq-item {
-            margin-bottom: 10px;
-        }
-        .faq-question {
-            cursor: pointer;
-            font-weight: 600;
-        }
-        .faq-answer {
-            display: none;
-            margin-top: 5px;
-            padding-left: 20px;
+            box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.8);
+            display: inline-block;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header class="header">
-            <div class="logo">EM</div>
-            <a href="#" class="button">Contact</a>
-        </header>
-        <div class="main-content">
-            <div class="content">
-                <h1>Eeman's Medium Adventures</h1>
-                <p>AIIIIIIIIIIIIII OVERLOADSSSSSS MEDIUMMMMMMM YAYYAYAYAAYAAY</p>
-                <p>AI enthusiast | Data Scientist | Writer</p>
-                <h2>Popular Articles</h2>
-                <ul class="article-list">
-                    <li class="article-item">
-                        <h3 class="article-title">Making An RL AI to Break the Mario Speed Run World Record</h3>
-                        <p class="article-preview">Discover how I used reinforcement learning to create an AI capable of breaking speed run records in Mario.</p>
-                    </li>
-                    <li class="article-item">
-                        <h3 class="article-title">How To Make An Advanced Intelligent Chatbot Using TensorFlow</h3>
-                        <p class="article-preview">Learn the steps to create a sophisticated chatbot using TensorFlow and natural language processing techniques.</p>
-                    </li>
-                    <li class="article-item">
-                        <h3 class="article-title">I Made An AI To Chat With My Friends Without Them Noticing</h3>
-                        <p class="article-preview">Explore the ethical implications and technical challenges of creating an AI that can mimic human conversation.</p>
-                    </li>
-                </ul>
-                <div class="read-more">
-                    <a href="./articles.html" class="button">Read More Articles</a>
-                </div>
-            </div>
-            <div class="sidebar">
-                <img src="./image/for_med.png" alt="Eeman's profile picture" class="profile-image">
-                <h2>What's keeping me busy?</h2>
-                <div class="topics">
-                    <span class="topic">AI</span>
-                    <span class="topic">Machine Learning</span>
-                    <span class="topic">Python</span>
-                    <span class="topic">TensorFlow</span>
-                    <span class="topic">NLP</span>
-                    <span class="topic">Data Science</span>
-                </div>
+        <div class="card main-card">
+            <h1>Eeman's Medium Adventures</h1>
+            <p>AI enthusiast | Data Scientist | Writer</p>
+            <p>Located in 🌍</p>
+            <a href="./nome.html" class="button">See what I do →</a>
+        </div>
+        <div class="card profile-card">
+            <img src="./image/for_med.png" alt="Eeman's profile picture" style="width:100%; border-radius:50%;">
+        </div>
+        <div class="card articles-card">
+            <h2>Popular Articles</h2>
+            <ul>
+                <li><a href="./posts/2022-05-14_Making-a-Deep-Learning-Chandler-Bing-AI--from-f-r-i-e-n-d-s-Part-1-5cd2af606ffe.html">Making a Deep Learning Chandler Bing AI from F.R.I.E.N.D.S (Part 1)</a></li>
+                <li><a href="./posts/2022-04-15_AI-to-explain-complex-things-to-a-second-grader-using-GPT-3--ab28872bdce9.html">AI to Explain Complex Things to a Second Grader Using GPT-3</a></li>
+                <li><a href="./posts/2023-02-05_An-AI-that-can-make-music--2760fad13efa.html">An AI That Can Make Music</a></li>
+                <li><a href="./posts/2022-12-15_ChatGPT-what-is-it-and-how-does-it-work-exactly--62e7010524d3.html">ChatGPT: What Is It and How Does It Work Exactly?</a></li>
+                <li><a href="./posts/2022-11-13_Dall-E-API-Just-got-launched--Here-is-how-to-use-it--afdffc2f3a9.html">DALL-E API Just Got Launched: Here Is How to Use It</a></li>
+                <li><a href="./posts/2022-02-03_How-to-add-emotion-recognition-to-your-AI-Chatbot-4acd325b14ef.html">How to Add Emotion Recognition to Your AI Chatbot</a></li>
+                <li><a href="./posts/2022-02-12_How-to-add-Facial-Detection-and-Facial-Recognition-in-your-AI-Chatbot--52705a71e34.html">How to Add Facial Detection and Facial Recognition in Your AI Chatbot</a></li>
+                <li><a href="./posts/2022-01-28_How-to-Add-googling-skills-in-your-AI-chatbot-b236bcf2c412.html">How to Add Googling Skills in Your AI Chatbot</a></li>
+                <li><a href="./posts/2022-01-24_How-to-add-hearing-speech-recognition-in-your-AI-chatbot--5007b281b828.html">How to Add Hearing (Speech Recognition) in Your AI Chatbot</a></li>
+                <li><a href="./posts/2022-01-23_How-to-add-voice-to-any-chatbot-AI--b7582f03c64f.html">How to Add Voice to Any Chatbot AI</a></li>
+                <li><a href="./posts/draft_I-am-a-bookworm-and-this-is-how-I-learned-ML--a7ec771cabb5.html">I Am a Bookworm and This Is How I Learned ML</a></li>
+                <li><a href="./posts/2022-06-08_I-bought-back-black-and-white-pictures-to-life-with-AI--2b995773e234.html">I Brought Black and White Pictures to Life with AI</a></li>
+                <li><a href="./posts/2022-04-16_I-have-the-most-perfect-thing-for-you--I-made-an-AI-to-explain-complex-stuff-to-second-graders--4ed2678b9e21.html">I Have the Most Perfect Thing for You: I Made an AI to Explain Complex Stuff to Second Graders</a></li>
+                <li><a href="./posts/draft_I-made-AI-Dungeon-but-better--4f5791c68353.html">I Made AI Dungeon But Better</a></li>
+                <li><a href="./posts/2022-10-24_I-made-an-AI-that-can-study-for-me--7c9329c54dae.html">I Made an AI That Can Study for Me</a></li>
+                <li><a href="./posts/2023-11-12_I-made-an-AI-that-gives-me-validation--ff124935617e.html">I Made an AI That Gives Me Validation</a></li>
+                <li><a href="./posts/2023-03-06_I-made-an-AI-that-writes-exams-for-me--8a6c3a85965a.html">I Made an AI That Writes Exams for Me</a></li>
+                <li><a href="./posts/2022-04-29_I-made-an-AI-to-convert-Complex-Python-Codes-to-Simple-English--c0e709db0149.html">I Made an AI to Convert Complex Python Codes to Simple English</a></li>
+                <li><a href="./posts/2022-04-08_Making-an-AI-to-create-beautiful-artistic-animations--Part-2-Intermediate-Method-using-VQGAN-CLIP--1638d54589c8.html">Making an AI to Create Beautiful Artistic Animations: Part 2 (Intermediate Method using VQGAN+CLIP)</a></li>
+                <li><a href="./posts/2022-08-08_I-made-an-deep-learning-AI-that-can-generate-sentences-from-words--aa656d2a8c7a.html">I Made a Deep Learning AI That Can Generate Sentences from Words</a></li>
+                <li><a href="./posts/2023-11-28_I-made-an-AI-to-give-my-quizzes-for-me--bfd73b90de5b.html">I Made an AI to Give My Quizzes for Me</a></li>
+                <li><a href="./posts/2022-07-15_I-made-an-AI-to-make-weird-Spotify-playlists--f39d05b09216.html">I Made an AI to Make Weird Spotify Playlists</a></li>
+                <li><a href="./posts/2022-07-28_I-made-an-AI-to-rate-my-AI-projects--5e146d255d5c.html">I Made an AI to Rate My AI Projects</a></li>
+                <li><a href="./posts/2022-09-17_I-made-an-AI-to-send-you-newspapers-from-a-randomly-made-up-world---1-4--71881711b28b.html">I Made an AI to Send You Newspapers from a Randomly Made Up World (1/4)</a></li>
+                <li><a href="./posts/2023-10-29_I-made-Artificial-Life--1e310f0772a3.html">I Made Artificial Life</a></li>
+                <li><a href="./posts/draft_I-was-bored-by-making-AIs-in-python--So--I-made-my-own-programming-language--3113d11a7c49.html">I Was Bored by Making AIs in Python, So I Made My Own Programming Language</a></li>
+                <li><a href="./posts/2022-09-23_Letting-an-AI-generate-my-face-based-on-my-friends-description--7f43863db223.html">Letting an AI Generate My Face Based on My Friends' Description</a></li>
+                <li><a href="./posts/2022-02-24_Making-an-AI-to-do-my-English-Assignments-for-me-using-PyTorch--cae79c8187c4.html">Making an AI to Do My English Assignments for Me Using PyTorch</a></li>
+                <li><a href="./posts/2022-03-25_Making-an-AI-to-enhance-images-with-0--loss-rate-using-the-ESRGAN-model-6ac91e77820c.html">Making an AI to Enhance Images with 0% Loss Rate Using the ESRGAN Model</a></li>
+                <li><a href="./posts/2022-03-16_Making-an-AI-to-make-beautiful-Art-using-GPT-3--CLIP-and-the-CC12M-Dataset--144677848e96.html">Making an AI to Make Beautiful Art Using GPT-3, CLIP, and the CC12M Dataset</a></li>
+                <li><a href="./posts/2022-08-21_Making-an-AI-to-write-articles-for-me--547e485df389.html">Making an AI to Write Articles for Me</a></li>
+                <li><a href="./posts/2022-03-10_Making-an-AI-to-write-Anime-stories-for-me-using-Deep-Learning--93b50941bb7d.html">Making an AI to Write Anime Stories for Me Using Deep Learning</a></li>
+                <li><a href="./posts/2022-07-25_Manuscripts-ai---What-is-it-and-how-is-it-gonna-change-the-world-of-writing--ede655e16077.html">Manuscripts.ai: What Is It and How Is It Going to Change the World of Writing?</a></li>
+                <li><a href="./posts/2022-06-17_OpenAI-gave-me-access-to-DALL-E-2-and-here-is-my-opinion--9dd9cc72b6ae.html">OpenAI Gave Me Access to DALL-E 2 and Here Is My Opinion</a></li>
+                <li><a href="./posts/2022-02-18_Teaching-your-AI---Chatbot-to-recognise-hand-gesture-using-OpenCv--TensorFlow-and-MediaPipe--3603b582093a.html">Teaching Your AI Chatbot to Recognize Hand Gestures Using OpenCV, TensorFlow, and MediaPipe</a></li>
+                <li><a href="./posts/2022-05-01_Thanks-a-lot-I-really-appreciate-it----658ee6d0fe02.html">Thanks a Lot, I Really Appreciate It!</a></li>
+                <li><a href="./posts/2022-08-14_This-Article-Was-Written-By-An-AI--8b1fa678573d.html">This Article Was Written By An AI</a></li>
+                <li><a href="./posts/2022-10-06_We-made-an-AI-to-Manage-Street-Dogs-4be366219b35.html">We Made an AI to Manage Street Dogs</a></li>
+                <li><a href="./posts/2022-07-10_What-is-Data-Science-and-How-to-get-into-it--55ec991f60e7.html">What Is Data Science and How to Get Into It</a></li>
+                <li><a href="./posts/2023-01-01_Will-AI-take-over-the-world--a-technical-approach--83a75d878387.html">Will AI Take Over the World? A Technical Approach</a></li>
+                <li><a href="./posts/2022-03-06_Writing-an-AI-to-suggest-what-to-make-everyday-for-meals-common-problem-in-Asian-households---15f7ea7bd62f.html">Writing an AI to Suggest What to Make Everyday for Meals: Common Problem in Asian Households</a></li>
+            </ul>
+        </div>
+        <div class="card topics-card">
+            <h2>What's keeping me busy?</h2>
+            <div class="topics">
+                <span class="topic">AI</span>
+                <span class="topic">Machine Learning</span>
+                <span class="topic">Python</span>
+                <span class="topic">TensorFlow</span>
+                <span class="topic">NLP</span>
+                <span class="topic">Data Science</span>
             </div>
         </div>
-        <!-- <div class="faq">
-            <h2>Frequently Asked Questions</h2>
-            <div class="faq-item">
-                <div class="faq-question">What topics do you write about?</div>
-                <div class="faq-answer">I primarily write about AI, machine learning, data science, and their practical applications in various fields.</div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question">How often do you publish new articles?</div>
-                <div class="faq-answer">I aim to publish new articles every week, covering the latest developments in AI and data science.</div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question">Can I request a specific topic for you to write about?</div>
-                <div class="faq-answer">Absolutely! I'm always open to suggestions and requests from my readers. Feel free to reach out with your ideas.</div>
-            </div>
-        </div> -->
     </div>
-    <script>
-        document.querySelectorAll('.faq-question').forEach(question => {
-            question.addEventListener('click', () => {
-                const answer = question.nextElementSibling;
-                answer.style.display = answer.style.display === 'block' ? 'none' : 'block';
-            });
-        });
-    </script>
 </body>
 </html>
