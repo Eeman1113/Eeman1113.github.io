@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>Teaching your AI / Chatbot to recognise hand gesture using OpenCv, TensorFlow and MediaPipe.</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">Teaching your AI / Chatbot to recognise hand gesture using OpenCv, TensorFlow and MediaPipe.</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+Ever want your AI to interact with deaf people or fist bump you when you want. Well actually is very easy to do like in about 25 lines of…
+</section>
+<section data-field="body" class="e-content">
+<section name="c630" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="eb0f" id="eb0f" class="graf graf--h3 graf--leading graf--title">Teaching your AI / Chatbot to recognise hand gesture using OpenCv, TensorFlow and MediaPipe.</h3><p name="f858" id="f858" class="graf graf--p graf-after--h3">Ever want your AI to interact with deaf people or fist bump you when you want. Well actually is very easy to do like in about 25 lines of code it can be done.</p><p name="fe23" id="fe23" class="graf graf--p graf-after--p">For Staters you will need a Deep learnig based AI/Chatbot. If you don&#39;t have one setup read my article on how to make one:</p><div name="fcff" id="fcff" class="graf graf--mixtapeEmbed graf-after--p"><a href="https://medium.com/@eeman.majumder/how-to-make-an-advanced-intelligent-chatbot-using-tensorflow-8f7097f16096" data-href="https://medium.com/@eeman.majumder/how-to-make-an-advanced-intelligent-chatbot-using-tensorflow-8f7097f16096" class="markup--anchor markup--mixtapeEmbed-anchor" title="https://medium.com/@eeman.majumder/how-to-make-an-advanced-intelligent-chatbot-using-tensorflow-8f7097f16096"><strong class="markup--strong markup--mixtapeEmbed-strong">How to make an advanced intelligent chatbot using tensorflow.</strong><br><em class="markup--em markup--mixtapeEmbed-em">Firstly lets get started with the imports:-</em>medium.com</a><a href="https://medium.com/@eeman.majumder/how-to-make-an-advanced-intelligent-chatbot-using-tensorflow-8f7097f16096" class="js-mixtapeImage mixtapeImage u-ignoreBlock" data-media-id="d9fdf137bf3068c4a916be221b60a54a" data-thumbnail-img-id="1*X22QAwCOUGmMNfVdJT8Jxw.png" style="background-image: url(https://cdn-images-1.medium.com/fit/c/160/160/1*X22QAwCOUGmMNfVdJT8Jxw.png);"></a></div><p name="9862" id="9862" class="graf graf--p graf-after--mixtapeEmbed">After that&#39;s setup, lets get through some theory. Blah! I Know it&#39;s boring I will keep it small.</p><p name="ca9d" id="ca9d" class="graf graf--p graf-after--p">Basically we will use media pipe to detect hand and the hand points. It will give exactly a total of 21 keypoints they are:</p><figure name="3e4b" id="3e4b" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*fiIDAETXh0gNEyGBjTAL6g.jpeg" data-width="1440" data-height="537" src="https://cdn-images-1.medium.com/max/800/1*fiIDAETXh0gNEyGBjTAL6g.jpeg"></figure><p name="6f48" id="6f48" class="graf graf--p graf-after--figure">Theory part over. Phew!</p><h4 name="99f9" id="99f9" class="graf graf--h4 graf-after--p"><strong class="markup--strong markup--h4-strong">Stuff needed for this project:</strong></h4><p name="3d5f" id="3d5f" class="graf graf--p graf-after--h4">1. Python — 3.x (we used Python 3.8.8 in this project)<br>2. OpenCV — 4.5</p><ul class="postList"><li name="4f4c" id="4f4c" class="graf graf--li graf-after--p">Run “pip install opencv-python” to install OpenCV.</li></ul><p name="5b3c" id="5b3c" class="graf graf--p graf-after--li">3. MediaPipe — 0.8.5</p><ul class="postList"><li name="ce16" id="ce16" class="graf graf--li graf-after--p">Run “pip install mediapipe” to install MediaPipe.</li></ul><p name="13f2" id="13f2" class="graf graf--p graf-after--li">4. Tensorflow — 2.5.0</p><ul class="postList"><li name="9109" id="9109" class="graf graf--li graf-after--p">Run “pip install tensorflow” to install the tensorflow module.</li></ul><p name="4fb1" id="4fb1" class="graf graf--p graf-after--li">5. Numpy — 1.19.3</p><p name="fc9e" id="fc9e" class="graf graf--p graf-after--p">Lets start with the imports:</p><figure name="2995" id="2995" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/0f5d91023ae681920005ec5d357df804.js"></script></figure><p name="fec3" id="fec3" class="graf graf--p graf-after--figure">Initialising MediaPipe:</p><figure name="a4f6" id="a4f6" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/3707f8e22f24846bb86d0c86a210adf0.js"></script></figure><p name="c9a4" id="c9a4" class="graf graf--p graf-after--figure">Mp.solution.hands module performs the hand recognition algorithm. So we create the object and store it in mpHands.</p><p name="b400" id="b400" class="graf graf--p graf-after--p">Initialising TensorFlow:</p><figure name="7bad" id="7bad" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/6aaab6c7fc1280149bc169afb9c13e82.js"></script></figure><p name="0a15" id="0a15" class="graf graf--p graf-after--figure">Lets read frames from a webcam input using OpenCV:</p><figure name="faf2" id="faf2" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/bc58d81e743260c30723b390d993ebda.js"></script></figure><p name="cf5e" id="cf5e" class="graf graf--p graf-after--figure">Now, actually getting to hand detection and keypoints finding:</p><figure name="1923" id="1923" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/02be878597571abbea0d898c3ffb2355.js"></script></figure><p name="091f" id="091f" class="graf graf--p graf-after--figure">Now our code can successfully detect hand keypoints:</p><figure name="5a33" id="5a33" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*Y_43QMudDw8EJ5IywfxFaA.png" data-width="510" data-height="658" src="https://cdn-images-1.medium.com/max/800/1*Y_43QMudDw8EJ5IywfxFaA.png"><figcaption class="imageCaption">Output image</figcaption></figure><p name="0035" id="0035" class="graf graf--p graf-after--figure">Now lets add the hand gesture detection part:</p><figure name="be1f" id="be1f" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/4a10a01aca6d9d049ed7bba4a226f302.js"></script></figure><p name="b868" id="b868" class="graf graf--p graf-after--figure">And just like that the code is done!</p><p name="6630" id="6630" class="graf graf--p graf-after--p">Now let&#39;s make this into function and import it to our AI/Chatbot called DEW.</p><p name="4670" id="4670" class="graf graf--p graf-after--p">For making it a function:</p><figure name="fbe3" id="fbe3" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/07af336142f8a3a710e5854d09c6bccd.js"></script></figure><p name="10c0" id="10c0" class="graf graf--p graf-after--figure">Adding it to DEW:</p><figure name="7c55" id="7c55" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/7ea6452ea8d9bf8a229c171d0e082559.js"></script></figure><p name="b526" id="b526" class="graf graf--p graf-after--figure">The Output:</p><figure name="6b35" id="6b35" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*TKOJo5wCrVV7dH1pZ3Rh0g.png" data-width="2880" data-height="1800" data-is-featured="true" src="https://cdn-images-1.medium.com/max/800/1*TKOJo5wCrVV7dH1pZ3Rh0g.png"></figure><figure name="208f" id="208f" class="graf graf--figure graf-after--figure"><img class="graf-image" data-image-id="1*UaoJR_TxWrvAV4fQ8VZ8JQ.gif" data-width="559" data-height="459" src="https://cdn-images-1.medium.com/max/800/1*UaoJR_TxWrvAV4fQ8VZ8JQ.gif"></figure><p name="5b17" id="5b17" class="graf graf--p graf-after--figure">If you liked the article a follow is appreciated.</p><p name="a850" id="a850" class="graf graf--p graf-after--p">For more check out my GitHub:</p><div name="a17a" id="a17a" class="graf graf--mixtapeEmbed graf-after--p"><a href="https://github.com/Eeman1113" data-href="https://github.com/Eeman1113" class="markup--anchor markup--mixtapeEmbed-anchor" title="https://github.com/Eeman1113"><strong class="markup--strong markup--mixtapeEmbed-strong">Eeman1113 - Overview</strong><br><em class="markup--em markup--mixtapeEmbed-em">You can&#39;t perform that action at this time. You signed in with another tab or window. You signed out in another tab or…</em>github.com</a><a href="https://github.com/Eeman1113" class="js-mixtapeImage mixtapeImage u-ignoreBlock" data-media-id="156170b2813a04eaee065c1bc49b2241" data-thumbnail-img-id="0*0spXqmSV-I7beH0n" style="background-image: url(https://cdn-images-1.medium.com/fit/c/160/160/0*0spXqmSV-I7beH0n);"></a></div><p name="5348" id="5348" class="graf graf--p graf-after--mixtapeEmbed">For the day to day updates of my AIML research follow me on twitter:</p><figure name="9eab" id="9eab" class="graf graf--figure graf--iframe graf-after--p"><blockquote class="twitter-tweet"><a href="https://twitter.com/EemanMajumder/status/1483659722024972289"></a></blockquote><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></figure><p name="eebd" id="eebd" class="graf graf--p graf-after--figure">Thanks for reading 😁</p><p name="fcbb" id="fcbb" class="graf graf--p graf-after--p graf--trailing">See ya next week.</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@eeman.majumder" class="p-author h-card">Eeman Majumder</a> on <a href="https://medium.com/p/3603b582093a"><time class="dt-published" datetime="2022-02-18T05:10:57.474Z">February 18, 2022</time></a>.</p><p><a href="https://medium.com/@eeman.majumder/teaching-your-ai-chatbot-to-recognise-hand-gesture-using-opencv-tensorflow-and-mediapipe-3603b582093a" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on August 6, 2024.</p></footer></article></body></html>

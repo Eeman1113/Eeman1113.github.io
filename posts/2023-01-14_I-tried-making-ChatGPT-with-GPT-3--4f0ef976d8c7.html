@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>I tried making ChatGPT with GPT-3.</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">I tried making ChatGPT with GPT-3.</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+So, playing with ChatGPT is alot of fun but for me coding it will be more fun. So, here we are.
+</section>
+<section data-field="body" class="e-content">
+<section name="ad5b" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="e787" id="e787" class="graf graf--h3 graf--leading graf--title">I tried making ChatGPT with GPT-3.</h3><figure name="8c70" id="8c70" class="graf graf--figure graf-after--h3"><img class="graf-image" data-image-id="1*hdUzHL3LXCu2eYJofPEp1g.png" data-width="1024" data-height="1024" data-is-featured="true" src="https://cdn-images-1.medium.com/max/800/1*hdUzHL3LXCu2eYJofPEp1g.png"></figure><p name="346d" id="346d" class="graf graf--p graf-after--figure">So, playing with ChatGPT is alot of fun but for me coding it will be more fun. So, here we are.</p><p name="837d" id="837d" class="graf graf--p graf-after--p">To understand what we need to do we need to know a key difference between ChatGPT and GPT3 i.e ChatGPT remembers what prompt it received and what answer it gave where GPT-3 doesn&#39;t, each of its generations are completely unrelated to its past generation.</p><h3 name="b86f" id="b86f" class="graf graf--h3 graf-after--p">What do we have to do?</h3><ul class="postList"><li name="488a" id="488a" class="graf graf--li graf-after--h3">Make GPT-3 aware of its past generations and prompts</li><li name="212a" id="212a" class="graf graf--li graf-after--li">Make the code fast</li><li name="96d7" id="96d7" class="graf graf--li graf-after--li">Make it so that it doesn’t exceed the accepted prompt length</li></ul><p name="0c9f" id="0c9f" class="graf graf--p graf-after--li">For making GPT-3 aware of its past prompts and generations we gotta think of an pseudo code here is what I thought of :</p><figure name="c999" id="c999" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/b9b8260ff19a730c496017bc6e7e331a.js"></script></figure><p name="2be5" id="2be5" class="graf graf--p graf-after--figure">Now let us get started with the code. Like any other code involving openAI stuff we start by installing the openai lib:</p><figure name="3fe2" id="3fe2" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/5ee8d66919838c2fa839a95f6dfeb2ba.js"></script></figure><p name="fc70" id="fc70" class="graf graf--p graf-after--figure">Now import the lib to your python code:</p><figure name="9905" id="9905" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/8ed2c8e5f8f18b673f5e1ff85571d020.js"></script></figure><p name="7a12" id="7a12" class="graf graf--p graf-after--figure">Lets start by taking the initial input:</p><figure name="f3b7" id="f3b7" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/4511e280afc7e5728899a459e70f9ca9.js"></script></figure><p name="78ea" id="78ea" class="graf graf--p graf-after--figure">Start the loop for a value:</p><figure name="b739" id="b739" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/b3e6a4a4aea363e393ef2e974c8fd481.js"></script></figure><p name="5f8f" id="5f8f" class="graf graf--p graf-after--figure">Now run the GPT-3 API:</p><figure name="f26d" id="f26d" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/b7e43ecbc790d631635c7d329b3fde11.js"></script></figure><p name="6206" id="6206" class="graf graf--p graf-after--figure">Store the response in a variable and print the response generated:</p><figure name="baaf" id="baaf" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/1885283d58fe468a2f7b30a93b36ad87.js"></script></figure><p name="2854" id="2854" class="graf graf--p graf-after--figure">Now we need to make a variable to store the info it generated and tell the AI later what it did a step before:</p><figure name="56e2" id="56e2" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/33f60de3aee8762962dbfaeb307a581c.js"></script></figure><p name="172a" id="172a" class="graf graf--p graf-after--figure">look at the variable</p><blockquote name="bd48" id="bd48" class="graf graf--blockquote graf-after--p">input_two=”This was your last prompt: “+input_one+”. This was the response you gave to the prompt: “+response.choices[0].text+” remember this and answer the prompt given: “</blockquote><p name="bc36" id="bc36" class="graf graf--p graf-after--blockquote">This is the variable that makes all the difference it reminds the AI of the past generations it made along with the questions it was asked.</p><p name="386e" id="386e" class="graf graf--p graf-after--p">Now the code is done!!</p><p name="faf6" id="faf6" class="graf graf--p graf-after--p">Lets look at some outputs:</p><figure name="7c46" id="7c46" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*daLRXn2kR8OSQUadF-S10Q.png" data-width="2308" data-height="656" src="https://cdn-images-1.medium.com/max/800/1*daLRXn2kR8OSQUadF-S10Q.png"></figure><p name="9cb8" id="9cb8" class="graf graf--p graf-after--figure">well that seems to remember the things it has said before. A little code clean up and a proper UI can solve the issues observed.</p><p name="1238" id="1238" class="graf graf--p graf-after--p"><a href="https://medium.com/@eeman.majumder" data-href="https://medium.com/@eeman.majumder" class="markup--anchor markup--p-anchor" target="_blank">If you liked this article a follow will be awesome</a></p><p name="483e" id="483e" class="graf graf--p graf-after--p">For my projects go to github:</p><div name="235e" id="235e" class="graf graf--mixtapeEmbed graf-after--p"><a href="https://github.com/Eeman1113?tab=repositories" data-href="https://github.com/Eeman1113?tab=repositories" class="markup--anchor markup--mixtapeEmbed-anchor" title="https://github.com/Eeman1113?tab=repositories"><strong class="markup--strong markup--mixtapeEmbed-strong">Eeman1113 </strong>github.com</a><a href="https://github.com/Eeman1113?tab=repositories" class="js-mixtapeImage mixtapeImage u-ignoreBlock" data-media-id="9ca1f5f43cdb2f3afd9aa19c92229389" data-thumbnail-img-id="0*gZMVgvTDZrg_NExt" style="background-image: url(https://cdn-images-1.medium.com/fit/c/160/160/0*gZMVgvTDZrg_NExt);"></a></div><p name="7f0e" id="7f0e" class="graf graf--p graf-after--mixtapeEmbed">For my day to day AIML research follow me on twitter:</p><figure name="9c09" id="9c09" class="graf graf--figure graf--iframe graf-after--p"><blockquote class="twitter-tweet"><a href="https://twitter.com/EemanMajumder/status/1612782887568560128?s=20&amp;t=Fx4uCTDR3SjAa-dDzluFvA"></a></blockquote><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></figure><p name="c4e5" id="c4e5" class="graf graf--p graf-after--figure graf--trailing">Thanks for reading 😁, see you guys next week 👋🏼</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@eeman.majumder" class="p-author h-card">Eeman Majumder</a> on <a href="https://medium.com/p/4f0ef976d8c7"><time class="dt-published" datetime="2023-01-14T13:45:30.464Z">January 14, 2023</time></a>.</p><p><a href="https://medium.com/@eeman.majumder/i-tried-making-chatgpt-with-gpt-3-4f0ef976d8c7" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on August 6, 2024.</p></footer></article></body></html>

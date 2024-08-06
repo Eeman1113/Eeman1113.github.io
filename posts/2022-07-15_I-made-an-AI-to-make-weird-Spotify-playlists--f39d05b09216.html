@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>I made an AI to make weird Spotify playlists.</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">I made an AI to make weird Spotify playlists.</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+So, the other day my college roomate showed me a very wierd twitter profile
+</section>
+<section data-field="body" class="e-content">
+<section name="8f98" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="29cf" id="29cf" class="graf graf--h3 graf--leading graf--title">I made an AI to make weird Spotify playlists.</h3><p name="01d3" id="01d3" class="graf graf--p graf-after--h3">So, the other day my college roomate showed me a very wierd twitter profile</p><figure name="c33c" id="c33c" class="graf graf--figure graf--iframe graf-after--p"><blockquote class="twitter-tweet"><a href="https://twitter.com/SpotifyWeird/status/1542131578255687681"></a></blockquote><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></figure><p name="6744" id="6744" class="graf graf--p graf-after--figure">and then my mind was like. I can make an AI for this and here we are.</p><p name="baeb" id="baeb" class="graf graf--p graf-after--p">So, I started some research and found out that the spotify API is free and I got into it.</p><figure name="dcf9" id="dcf9" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*7vBT19sb9ta_nqpxwSfF6g.png" data-width="2872" data-height="1812" src="https://cdn-images-1.medium.com/max/800/1*7vBT19sb9ta_nqpxwSfF6g.png"></figure><p name="568b" id="568b" class="graf graf--p graf-after--figure">Then I made a new app for this project:</p><figure name="01a1" id="01a1" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*i4n-mdM_wTjqqOdgwYi4ZQ.png" data-width="2872" data-height="1812" src="https://cdn-images-1.medium.com/max/800/1*i4n-mdM_wTjqqOdgwYi4ZQ.png"></figure><p name="7815" id="7815" class="graf graf--p graf-after--figure">now its done. I have developer access now lets make the AI now.</p><p name="02b4" id="02b4" class="graf graf--p graf-after--p">Lets first get the prompt from the user:</p><figure name="6489" id="6489" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/96ae1c8ee6096553ae1242b7dc55a092.js"></script></figure><p name="ae3e" id="ae3e" class="graf graf--p graf-after--figure">Now lets use GPT-2 generate text using the prompt give by the user:</p><figure name="ab5d" id="ab5d" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/bd152f5c8ecf89c9bec43cb3fc8e2bf0.js"></script></figure><figure name="db34" id="db34" class="graf graf--figure graf-after--figure"><img class="graf-image" data-image-id="1*vsKAXPlAn4rJCF5CzdoHIQ.png" data-width="2872" data-height="1812" src="https://cdn-images-1.medium.com/max/800/1*vsKAXPlAn4rJCF5CzdoHIQ.png"><figcaption class="imageCaption">Lamo XD</figcaption></figure><p name="2ebe" id="2ebe" class="graf graf--p graf-after--figure">Now lets clean the output we got a bit:</p><figure name="ebf1" id="ebf1" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/5de8ad70b5d2475fa844c712931f0c23.js"></script></figure><figure name="32e9" id="32e9" class="graf graf--figure graf-after--figure"><img class="graf-image" data-image-id="1*7wXN2KB8w_vqChtJLxd1Xg.png" data-width="2430" data-height="128" src="https://cdn-images-1.medium.com/max/800/1*7wXN2KB8w_vqChtJLxd1Xg.png"></figure><p name="06e2" id="06e2" class="graf graf--p graf-after--figure">Now lets add Spotify and start making playlists:</p><p name="a353" id="a353" class="graf graf--p graf-after--p">Lets first get our OAuth token:</p><figure name="7fb3" id="7fb3" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/d5505c41decc9d19749485e23f59e22a.js"></script></figure><p name="236d" id="236d" class="graf graf--p graf-after--figure">and so Spotify API is shit 🙂. So, try running the code 2 times it will work once for sure.</p><p name="23fa" id="23fa" class="graf graf--p graf-after--p">Now lets make a new playlist named the input given by the user:</p><figure name="e6c2" id="e6c2" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/934ced46650b0a3a1507e0757be5d4e2.js"></script></figure><figure name="abd7" id="abd7" class="graf graf--figure graf-after--figure"><img class="graf-image" data-image-id="1*SiozjsxLbvyiKCwExCWFFA.png" data-width="3104" data-height="1812" src="https://cdn-images-1.medium.com/max/800/1*SiozjsxLbvyiKCwExCWFFA.png"><figcaption class="imageCaption">Its made</figcaption></figure><p name="deb5" id="deb5" class="graf graf--p graf-after--figure">Now lets search up the words generated by the AI and add it to the playlist</p><figure name="9a59" id="9a59" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/1e6975750c6fcc9284154aa3423baaba.js"></script></figure><figure name="505d" id="505d" class="graf graf--figure graf-after--figure"><img class="graf-image" data-image-id="1*zdBpwmvwPoIJMbGHXHHdMA.png" data-width="3104" data-height="1812" data-is-featured="true" src="https://cdn-images-1.medium.com/max/800/1*zdBpwmvwPoIJMbGHXHHdMA.png"><figcaption class="imageCaption">Its done!</figcaption></figure><p name="532a" id="532a" class="graf graf--p graf-after--figure">And its done now we have an AI that can generate weird Spotify playlist.</p><p name="79c8" id="79c8" class="graf graf--p graf-after--p">The intensity of the sentences can be changed by your will in the GPT-2 fine tuning.</p><p name="b876" id="b876" class="graf graf--p graf-after--p"><a href="https://medium.com/@eeman.majumder" data-href="https://medium.com/@eeman.majumder" class="markup--anchor markup--p-anchor" target="_blank"><strong class="markup--strong markup--p-strong">If you liked the article, Follow me on medium</strong></a></p><p name="8434" id="8434" class="graf graf--p graf-after--p">For the code go here:</p><div name="b706" id="b706" class="graf graf--mixtapeEmbed graf-after--p"><a href="https://github.com/Eeman1113/AI-to-make-wierd-spotify-playlists-" data-href="https://github.com/Eeman1113/AI-to-make-wierd-spotify-playlists-" class="markup--anchor markup--mixtapeEmbed-anchor" title="https://github.com/Eeman1113/AI-to-make-wierd-spotify-playlists-"><strong class="markup--strong markup--mixtapeEmbed-strong">GitHub - Eeman1113/AI-to-make-wierd-spotify-playlists-</strong><br><em class="markup--em markup--mixtapeEmbed-em">You can&#39;t perform that action at this time. You signed in with another tab or window. You signed out in another tab or…</em>github.com</a><a href="https://github.com/Eeman1113/AI-to-make-wierd-spotify-playlists-" class="js-mixtapeImage mixtapeImage u-ignoreBlock" data-media-id="09621d61a20545fdf4ab799e5c8717b7" data-thumbnail-img-id="0*Z0YkLu0RsNeRCW1Y" style="background-image: url(https://cdn-images-1.medium.com/fit/c/160/160/0*Z0YkLu0RsNeRCW1Y);"></a></div><p name="51c7" id="51c7" class="graf graf--p graf-after--mixtapeEmbed">For my day to day AIML updates follow me on twitter:</p><figure name="3eee" id="3eee" class="graf graf--figure graf--iframe graf-after--p"><blockquote class="twitter-tweet"><a href="https://twitter.com/EemanMajumder/status/1545830112356335621"></a></blockquote><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></figure><p name="670c" id="670c" class="graf graf--p graf-after--figure graf--trailing">Thanks for reading😁, see ya guys next week 👋🏼</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@eeman.majumder" class="p-author h-card">Eeman Majumder</a> on <a href="https://medium.com/p/f39d05b09216"><time class="dt-published" datetime="2022-07-15T06:10:58.054Z">July 15, 2022</time></a>.</p><p><a href="https://medium.com/@eeman.majumder/i-made-an-ai-to-make-weird-spotify-playlists-f39d05b09216" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on August 6, 2024.</p></footer></article></body></html>

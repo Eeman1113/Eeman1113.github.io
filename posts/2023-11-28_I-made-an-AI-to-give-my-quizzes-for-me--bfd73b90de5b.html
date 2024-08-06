@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>I made an AI to give my quizzes for me.</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">I made an AI to give my quizzes for me.</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+DALL E
+</section>
+<section data-field="body" class="e-content">
+<section name="5616" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="1146" id="1146" class="graf graf--h3 graf--leading graf--title">I made an AI to give my quizzes for me.</h3><figure name="a5da" id="a5da" class="graf graf--figure graf-after--h3"><img class="graf-image" data-image-id="1*H5fXvba-x0wkOOl73Rsjzg.png" data-width="1024" data-height="1024" data-is-featured="true" src="https://cdn-images-1.medium.com/max/800/1*H5fXvba-x0wkOOl73Rsjzg.png"><figcaption class="imageCaption">DALL E</figcaption></figure><p name="feb0" id="feb0" class="graf graf--p graf-after--figure">So, Picture this: it’s the night before a deadline, and you’re faced with an extensive Google Form that requires your insights. The questions seem endless, and your fingers ache at the thought of typing out lengthy responses. What if I told you there’s an AI study buddy ready to step in and tackle those questions for you? Welcome to the world of “FILL_ME_UP 記入” — where OpenAI’s GPT-3.5-turbo meets the magic of Streamlit to make your academic life a breeze! 🎓✨</p><h3 name="776a" id="776a" class="graf graf--h3 graf-after--p">The Quest for Effortless Responses</h3><p name="bd66" id="bd66" class="graf graf--p graf-after--h3">We’ve all been there — faced with a form that feels more like an expedition than a questionnaire. “FILL_ME_UP 記入” is the brainchild of a collaboration between Streamlit’s simplicity and the linguistic prowess of GPT-3.5-turbo. Let’s unravel the layers of this code-driven wizardry!</p><h3 name="dc9a" id="dc9a" class="graf graf--h3 graf-after--p">The Import Game</h3><p name="a3ec" id="a3ec" class="graf graf--p graf-after--h3">Lets start with the Imports.</p><figure name="2234" id="2234" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/788653a128974bf9429cdaea6ee70a59.js"></script></figure><h3 name="0f7e" id="0f7e" class="graf graf--h3 graf-after--figure">The GPT-3.5-turbo Dance</h3><p name="4fed" id="4fed" class="graf graf--p graf-after--h3">At the heart of this magic is GPT-3.5-turbo, OpenAI’s language model extraordinaire. The <code class="markup--code markup--p-code">generate_text</code> function initiates a conversation with the AI, instructing it to answer questions as a diligent student filling out a form. The prompt sets the stage, and the AI responds with well-crafted, context-aware answers.</p><figure name="5a3a" id="5a3a" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/d52584db4e925a06734f5e64bf6eb106.js"></script></figure><h3 name="4eed" id="4eed" class="graf graf--h3 graf-after--figure">The Web Scraping Symphony</h3><p name="ede1" id="ede1" class="graf graf--p graf-after--h3">But how does our AI buddy get the questions to answer? Enter the <code class="markup--code markup--p-code">get_form_text</code> function—a web scraping maestro! It fetches the HTML content of your Google Form, uses BeautifulSoup to parse it, and employs regex magic to split the text based on specific delimiters. The result? A structured representation of the form content.</p><figure name="2e61" id="2e61" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/3a6dedcc35247d76b84ef9159f52cbd8.js"></script></figure><h3 name="afc9" id="afc9" class="graf graf--h3 graf-after--figure">Streamlit: Your Canvas to Interaction</h3><p name="4d08" id="4d08" class="graf graf--p graf-after--h3">Now, let’s talk about the interface that brings it all to life. Streamlit, the Picasso of Python apps, turns the mundane task of form-filling into an interactive masterpiece. The <code class="markup--code markup--p-code">main</code> function orchestrates the user experience, setting the stage for a seamless interaction.</p><figure name="b533" id="b533" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/5e399542903703f0b05cf4ec2b455ced.js"></script></figure><h3 name="73fc" id="73fc" class="graf graf--h3 graf-after--figure">A Symphony of User-Friendly Output</h3><p name="736c" id="736c" class="graf graf--p graf-after--h3">The output section is not just a display; it’s a symphony of user-friendly output. Each question gets its spotlight, with a clear delineation for easy readability. The use of Streamlit’s markdown capabilities adds an elegant touch to the presentation of questions and their corresponding answers.</p><figure name="391e" id="391e" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*GCOHDn4DfrGJgsEt7Vc_BA.png" data-width="2880" data-height="1800" src="https://cdn-images-1.medium.com/max/800/1*GCOHDn4DfrGJgsEt7Vc_BA.png"><figcaption class="imageCaption">The Google Form (<a href="https://docs.google.com/forms/d/e/1FAIpQLSc-eqnzGg3B6REVIXzfZYDgI-DD5H9L6I1iFEJOm71M3gG-jQ/viewform" data-href="https://docs.google.com/forms/d/e/1FAIpQLSc-eqnzGg3B6REVIXzfZYDgI-DD5H9L6I1iFEJOm71M3gG-jQ/viewform" class="markup--anchor markup--figure-anchor" rel="noopener" target="_blank">https://docs.google.com/forms/d/e/1FAIpQLSc-eqnzGg3B6REVIXzfZYDgI-DD5H9L6I1iFEJOm71M3gG-jQ/viewform</a>)</figcaption></figure><figure name="a5f3" id="a5f3" class="graf graf--figure graf-after--figure"><img class="graf-image" data-image-id="1*ddmZJElUZCOGF54Y4_EneA.png" data-width="2880" data-height="1800" src="https://cdn-images-1.medium.com/max/800/1*ddmZJElUZCOGF54Y4_EneA.png"><figcaption class="imageCaption">Uff Look At That</figcaption></figure><h3 name="aca6" id="aca6" class="graf graf--h3 graf-after--figure">And the Balloons Descend!</h3><p name="bc48" id="bc48" class="graf graf--p graf-after--h3">As a delightful touch, the app concludes with Streamlit’s <code class="markup--code markup--p-code">balloons</code> function—a visual celebration, an acknowledgment of the successful completion of the task. Because why shouldn&#39;t coding be a celebration?</p><figure name="130d" id="130d" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*AiekNsGTI80w2f2cS8EBnQ.png" data-width="2880" data-height="1800" src="https://cdn-images-1.medium.com/max/800/1*AiekNsGTI80w2f2cS8EBnQ.png"></figure><h3 name="6f41" id="6f41" class="graf graf--h3 graf-after--figure">Conclusion: The Code-Driven Odyssey</h3><p name="9e9f" id="9e9f" class="graf graf--p graf-after--h3">In conclusion, the code-driven journey of “FILL_ME_UP 記入” exemplifies the power of AI in simplifying complex tasks. It’s a testament to how cutting-edge technology can be harnessed to enhance user experiences and streamline processes.</p><p name="9b57" id="9b57" class="graf graf--p graf-after--p">If you’re intrigued by this project, don’t hesitate to explore the <a href="https://github.com/Eeman1113/FILL_ME_UP.git" data-href="https://github.com/Eeman1113/FILL_ME_UP.git" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">GitHub repository</a> and try out the app for yourself. As technology continues to evolve, projects like these offer a glimpse into the possibilities that lie ahead.</p><p name="2b52" id="2b52" class="graf graf--p graf-after--p">And with that, we wrap up our exploration of a code-driven journey that turns the tedious into the effortless, one Google Form at a time.</p><p name="bb29" id="bb29" class="graf graf--p graf-after--p"><a href="https://medium.com/@eeman.majumder" data-href="https://medium.com/@eeman.majumder" class="markup--anchor markup--p-anchor" target="_blank"><strong class="markup--strong markup--p-strong">If you liked this article, a follow would be amazing.</strong></a></p><p name="4062" id="4062" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">For my Github go here:</strong></p><div name="9fb4" id="9fb4" class="graf graf--mixtapeEmbed graf-after--p"><a href="https://github.com/Eeman1113" data-href="https://github.com/Eeman1113" class="markup--anchor markup--mixtapeEmbed-anchor" title="https://github.com/Eeman1113"><strong class="markup--strong markup--mixtapeEmbed-strong">Eeman1113</strong></a><a href="https://github.com/Eeman1113" class="js-mixtapeImage mixtapeImage u-ignoreBlock" data-media-id="156170b2813a04eaee065c1bc49b2241" data-thumbnail-img-id="0*LywvbEBO5fhytzhG" style="background-image: url(https://cdn-images-1.medium.com/fit/c/160/160/0*LywvbEBO5fhytzhG);"></a></div><p name="d5b4" id="d5b4" class="graf graf--p graf-after--mixtapeEmbed"><strong class="markup--strong markup--p-strong">For my day to day AIML updates follow me on Twitter:</strong></p><figure name="ca82" id="ca82" class="graf graf--figure graf--iframe graf-after--p"><blockquote class="twitter-tweet"><a href="https://twitter.com/EemanMajumder/status/1712876389165318620"></a></blockquote><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></figure><p name="0b4e" id="0b4e" class="graf graf--p graf-after--figure graf--trailing"><strong class="markup--strong markup--p-strong">Thanks for reading</strong> 😁<strong class="markup--strong markup--p-strong">, See ya guys soon 👋🏼</strong></p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@eeman.majumder" class="p-author h-card">Eeman Majumder</a> on <a href="https://medium.com/p/bfd73b90de5b"><time class="dt-published" datetime="2023-11-28T20:25:38.858Z">November 28, 2023</time></a>.</p><p><a href="https://medium.com/@eeman.majumder/i-made-an-ai-to-give-my-quizzes-for-me-bfd73b90de5b" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on August 6, 2024.</p></footer></article></body></html>

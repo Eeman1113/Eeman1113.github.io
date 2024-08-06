@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>How to add hearing/speech recognition in your AI/chatbot.</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">How to add hearing/speech recognition in your AI/chatbot.</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+So, this is very easy to do than you think it&#39;s basically importing and execution.
+</section>
+<section data-field="body" class="e-content">
+<section name="03c2" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="2445" id="2445" class="graf graf--h3 graf--leading graf--title">How to add hearing/speech recognition in your AI/chatbot.</h3><p name="852f" id="852f" class="graf graf--p graf-after--h3">So, this is very easy to do than you think it&#39;s basically importing and execution.</p><p name="787f" id="787f" class="graf graf--p graf-after--p">If you are not already setup with a chatbot go read my medium article on how to make one:</p><div name="54f6" id="54f6" class="graf graf--mixtapeEmbed graf-after--p"><a href="https://medium.com/@eeman.majumder/how-to-make-an-advanced-intelligent-chatbot-using-tensorflow-8f7097f16096" data-href="https://medium.com/@eeman.majumder/how-to-make-an-advanced-intelligent-chatbot-using-tensorflow-8f7097f16096" class="markup--anchor markup--mixtapeEmbed-anchor" title="https://medium.com/@eeman.majumder/how-to-make-an-advanced-intelligent-chatbot-using-tensorflow-8f7097f16096"><strong class="markup--strong markup--mixtapeEmbed-strong">How to make an advanced intelligent chatbot using tensorflow.</strong><br><em class="markup--em markup--mixtapeEmbed-em">Firstly lets get started with the imports:-</em>medium.com</a><a href="https://medium.com/@eeman.majumder/how-to-make-an-advanced-intelligent-chatbot-using-tensorflow-8f7097f16096" class="js-mixtapeImage mixtapeImage u-ignoreBlock" data-media-id="9041a18cd0175d0b1246520424bf8a0d" data-thumbnail-img-id="1*X22QAwCOUGmMNfVdJT8Jxw.png" style="background-image: url(https://cdn-images-1.medium.com/fit/c/160/160/1*X22QAwCOUGmMNfVdJT8Jxw.png);"></a></div><p name="87fb" id="87fb" class="graf graf--p graf-after--mixtapeEmbed">let&#39;s get started this one is going to be pretty short and easy.</p><p name="2d9a" id="2d9a" class="graf graf--p graf-after--p">Firstly the imports:-</p><figure name="dfe5" id="dfe5" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/a110fe6964ac463bd0b54e5b077dd3ff.js"></script></figure><p name="d87b" id="d87b" class="graf graf--p graf-after--figure">Lets now create the recogniser:</p><figure name="b1ea" id="b1ea" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/a7d443d35417e8fa6365dbcb633dec48.js"></script></figure><p name="0168" id="0168" class="graf graf--p graf-after--figure">Lets define our microphone:(if you want to specify the microphone you want to use you can, but here I use the first available microphone in my system)</p><figure name="d6a8" id="d6a8" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/89719fbff4fd13ad956a1d8f70a25562.js"></script></figure><p name="0b63" id="0b63" class="graf graf--p graf-after--figure">Now lets record our input speech:</p><figure name="baff" id="baff" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/92bb9ce8229dc155005bd151091d10ed.js"></script></figure><p name="fa03" id="fa03" class="graf graf--p graf-after--figure">Now basically lets use googles library to recognise the speech and conver into a text string:</p><figure name="f8d5" id="f8d5" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/fc274211ac62486c180b296365cd8051.js"></script></figure><p name="8179" id="8179" class="graf graf--p graf-after--figure">exporting the result in a text file (you can also directly return the result):</p><figure name="f376" id="f376" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/3a4c318c550dd4a942b3e53f4d994fd4.js"></script></figure><p name="0924" id="0924" class="graf graf--p graf-after--figure">And bam! the code is finished just import and use.</p><p name="cbe2" id="cbe2" class="graf graf--p graf-after--p">For example lets see the results on my AI name “DEW”:</p><figure name="8254" id="8254" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/9f7a77f3042234eaecbee2685081b84b.js"></script></figure><figure name="4ebe" id="4ebe" class="graf graf--figure graf-after--figure"><img class="graf-image" data-image-id="1*yYWpdBkdT7SzxiIgptP1pQ.png" data-width="2880" data-height="1800" data-is-featured="true" src="https://cdn-images-1.medium.com/max/800/1*yYWpdBkdT7SzxiIgptP1pQ.png"></figure><p name="5b7b" id="5b7b" class="graf graf--p graf-after--figure">So with just two lines of code in line number 15 and line number 92 our AI now has hearing!!</p><p name="0761" id="0761" class="graf graf--p graf-after--p">If you liked the article consider following 😁.</p><p name="1066" id="1066" class="graf graf--p graf-after--p">If you want more stuff here is my github:</p><div name="97b0" id="97b0" class="graf graf--mixtapeEmbed graf-after--p"><a href="https://github.com/Eeman1113" data-href="https://github.com/Eeman1113" class="markup--anchor markup--mixtapeEmbed-anchor" title="https://github.com/Eeman1113"><strong class="markup--strong markup--mixtapeEmbed-strong">Eeman1113 - Overview</strong><br><em class="markup--em markup--mixtapeEmbed-em">You can&#39;t perform that action at this time. You signed in with another tab or window. You signed out in another tab or…</em>github.com</a><a href="https://github.com/Eeman1113" class="js-mixtapeImage mixtapeImage u-ignoreBlock" data-media-id="156170b2813a04eaee065c1bc49b2241" data-thumbnail-img-id="0*DSo9KOVp_P1nDXSL" style="background-image: url(https://cdn-images-1.medium.com/fit/c/160/160/0*DSo9KOVp_P1nDXSL);"></a></div><p name="70d0" id="70d0" class="graf graf--p graf-after--mixtapeEmbed">For reciving more updates on my AI/ML research here is my twitter:</p><figure name="2aba" id="2aba" class="graf graf--figure graf--iframe graf-after--p"><blockquote class="twitter-tweet"><a href="https://twitter.com/EemanMajumder/status/1483659722024972289"></a></blockquote><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></figure><p name="0f4f" id="0f4f" class="graf graf--p graf-after--figure graf--trailing">Thanks for reading hehe 😁</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@eeman.majumder" class="p-author h-card">Eeman Majumder</a> on <a href="https://medium.com/p/5007b281b828"><time class="dt-published" datetime="2022-01-24T05:51:16.920Z">January 24, 2022</time></a>.</p><p><a href="https://medium.com/@eeman.majumder/how-to-add-hearing-speech-recognition-in-your-ai-chatbot-5007b281b828" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on August 6, 2024.</p></footer></article></body></html>

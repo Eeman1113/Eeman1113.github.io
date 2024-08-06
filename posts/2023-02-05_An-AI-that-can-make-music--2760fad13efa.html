@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>An AI that can make music.</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">An AI that can make music.</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+I was casually sitting on my bed and being sleepy today when suddenly I got this message:
+</section>
+<section data-field="body" class="e-content">
+<section name="37c6" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="ae69" id="ae69" class="graf graf--h3 graf--leading graf--title">An AI that can make music.</h3><figure name="538e" id="538e" class="graf graf--figure graf-after--h3"><img class="graf-image" data-image-id="1*8c9ya5OJlqyDHD_lNqqGgQ.png" data-width="1024" data-height="1024" data-is-featured="true" src="https://cdn-images-1.medium.com/max/800/1*8c9ya5OJlqyDHD_lNqqGgQ.png"><figcaption class="imageCaption">DALL-E</figcaption></figure><p name="41e3" id="41e3" class="graf graf--p graf-after--figure">I was casually sitting on my bed and being sleepy today when suddenly I got this message:</p><figure name="2421" id="2421" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*XXCIrEEvJiLLqJWGjpPsnQ.png" data-width="998" data-height="78" src="https://cdn-images-1.medium.com/max/800/1*XXCIrEEvJiLLqJWGjpPsnQ.png"></figure><p name="e579" id="e579" class="graf graf--p graf-after--figure">And as expected I googled it and boy was I shocked!!</p><figure name="d8e2" id="d8e2" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*cN5XUdStU_nAd1aX1XMA4w.png" data-width="2682" data-height="942" src="https://cdn-images-1.medium.com/max/800/1*cN5XUdStU_nAd1aX1XMA4w.png"><figcaption class="imageCaption"><a href="https://google-research.github.io/seanet/musiclm/examples/" data-href="https://google-research.github.io/seanet/musiclm/examples/" class="markup--anchor markup--figure-anchor" rel="nofollow noopener" target="_blank">https://google-research.github.io/seanet/musiclm/examples/</a></figcaption></figure><p name="08b2" id="08b2" class="graf graf--p graf-after--figure">This is what I was greeted with when I googled it. From the title only I knew what I am gonna face.</p><p name="fed7" id="fed7" class="graf graf--p graf-after--p">I went through the research paper and I was blow away. This thing is awesome.</p><h3 name="330f" id="330f" class="graf graf--h3 graf-after--p">Lets start with what is it ??</h3><p name="6b0c" id="6b0c" class="graf graf--p graf-after--h3">MusicLM is an AI model for generating music from text descriptions developed by Google Research. It uses a hierarchical sequence-to-sequence modeling approach to generate high-fidelity music that remains consistent over several minutes. The model is capable of generating music from text descriptions, such as “a calming violin melody backed by a distorted guitar riff”, and can even be conditioned on both text and a melody. This research provides a significant advancement in the field of AI music generation and has the potential to greatly impact the music industry.</p><h3 name="b416" id="b416" class="graf graf--h3 graf-after--p">How does it work ??</h3><p name="81e9" id="81e9" class="graf graf--p graf-after--h3">MusicLM is a machine learning model that can generate music given a text prompt. The model has two parts: (1) the representation and tokenization of audio and text, and (2) the hierarchical modeling of audio representations.</p><p name="02c3" id="02c3" class="graf graf--p graf-after--p">In the first part, the model uses three different models to extract audio representations. The first model, SoundStream, uses self-supervised audio representations to provide high-fidelity music synthesis. The second model, w2v-BERT, uses semantic tokens to help generate coherent music over a long period of time. The third model, MuLan, is used to represent the music given the text prompt.</p><p name="3d11" id="3d11" class="graf graf--p graf-after--p">In the second part, the model combines the discrete audio representations from the first part and generates music in two stages. In the first stage, the model maps the MuLan audio tokens to the semantic tokens. In the second stage, the model generates the acoustic tokens given the MuLan audio tokens and the semantic tokens. This generation process is done by using a decoder-only Transformer for each stage.</p><p name="2b36" id="2b36" class="graf graf--p graf-after--p">At inference time, the model uses the MuLan text tokens computed from the text prompt as a conditioning signal and converts the generated audio tokens to waveforms using the SoundStream decoder.</p><figure name="4bc8" id="4bc8" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*1AYjOh2DU2a9MLouIbLWCQ.png" data-width="1580" data-height="804" src="https://cdn-images-1.medium.com/max/800/1*1AYjOh2DU2a9MLouIbLWCQ.png"></figure><figure name="d715" id="d715" class="graf graf--figure graf-after--figure"><img class="graf-image" data-image-id="1*Wxx8e-By9OmWaAlvHkOV2g.png" data-width="2168" data-height="1026" src="https://cdn-images-1.medium.com/max/800/1*Wxx8e-By9OmWaAlvHkOV2g.png"></figure><h3 name="0605" id="0605" class="graf graf--h3 graf-after--figure">How will it impact the world ?</h3><p name="adba" id="adba" class="graf graf--p graf-after--h3">The potential impact of MusicLM on the world of music could be significant, as it has the ability to automate certain tasks related to music creation and analysis. This could lead to new and more efficient ways of making and distributing music, as well as provide new insights into musical trends and patterns. However, it is also important to note that the development of AI-generated music raises ethical and creative questions, such as the extent to which AI can truly replicate human creativity. The ultimate impact of MusicLM on the world will depend on how it is used and the direction of future research and development in the field of AI and music.</p><p name="2c1f" id="2c1f" class="graf graf--p graf-after--p">I seriously cant wait to see what wonders AI will do. Great start for AI on 2023.</p><h3 name="c544" id="c544" class="graf graf--h3 graf-after--p">All references of this article can be found here:</h3><ul class="postList"><li name="6349" id="6349" class="graf graf--li graf-after--h3"><a href="https://google-research.github.io/seanet/musiclm/examples/" data-href="https://google-research.github.io/seanet/musiclm/examples/" class="markup--anchor markup--li-anchor" rel="nofollow noopener" target="_blank">https://google-research.github.io/seanet/musiclm/examples/</a></li><li name="f560" id="f560" class="graf graf--li graf-after--li"><a href="https://arxiv.org/pdf/2301.11325.pdf" data-href="https://arxiv.org/pdf/2301.11325.pdf" class="markup--anchor markup--li-anchor" rel="nofollow noopener" target="_blank">https://arxiv.org/pdf/2301.11325.pdf</a></li></ul><p name="c46e" id="c46e" class="graf graf--p graf-after--li"><strong class="markup--strong markup--p-strong">For more AIML stuff follow me on Twitter:</strong></p><figure name="aae0" id="aae0" class="graf graf--figure graf--iframe graf-after--p"><blockquote class="twitter-tweet"><a href="https://twitter.com/EemanMajumder/status/1619074233346461696"></a></blockquote><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></figure><p name="8391" id="8391" class="graf graf--p graf-after--figure graf--trailing"><strong class="markup--strong markup--p-strong">Thanks For Reading 😁, See Ya Guys Next Week.👋🏼</strong></p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@eeman.majumder" class="p-author h-card">Eeman Majumder</a> on <a href="https://medium.com/p/2760fad13efa"><time class="dt-published" datetime="2023-02-05T10:07:09.334Z">February 5, 2023</time></a>.</p><p><a href="https://medium.com/@eeman.majumder/an-ai-that-can-make-music-2760fad13efa" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on August 6, 2024.</p></footer></article></body></html>

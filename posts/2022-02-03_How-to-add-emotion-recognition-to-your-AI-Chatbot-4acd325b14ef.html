@@ -1,0 +1,72 @@
+<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>How to add emotion recognition to your AI/Chatbot</title><style>
+      * {
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 50px;
+        margin-bottom: 17px;
+        color: #333;
+      }
+      h2 {
+        font-size: 24px;
+        line-height: 1.6;
+        margin: 30px 0 0 0;
+        margin-bottom: 18px;
+        margin-top: 33px;
+        color: #333;
+      }
+      h3 {
+        font-size: 30px;
+        margin: 10px 0 20px 0;
+        color: #333;
+      }
+      header {
+        width: 640px;
+        margin: auto;
+      }
+      section {
+        width: 640px;
+        margin: auto;
+      }
+      section p {
+        margin-bottom: 27px;
+        font-size: 20px;
+        line-height: 1.6;
+        color: #333;
+      }
+      section img {
+        max-width: 640px;
+      }
+      footer {
+        padding: 0 20px;
+        margin: 50px 0;
+        text-align: center;
+        font-size: 12px;
+      }
+      .aspectRatioPlaceholder {
+        max-width: auto !important;
+        max-height: auto !important;
+      }
+      .aspectRatioPlaceholder-fill {
+        padding-bottom: 0 !important;
+      }
+      header,
+      section[data-field=subtitle],
+      section[data-field=description] {
+        display: none;
+      }
+      </style></head><body><article class="h-entry">
+<header>
+<h1 class="p-name">How to add emotion recognition to your AI/Chatbot</h1>
+</header>
+<section data-field="subtitle" class="p-summary">
+So, Ever wonder how would it feel if your AI could understand your emotions to a physical extent. Honestly No 🤣, But can&#39;t hurt to try…
+</section>
+<section data-field="body" class="e-content">
+<section name="fed3" class="section section--body section--first section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="8def" id="8def" class="graf graf--h3 graf--leading graf--title">How to add emotion recognition to your AI/Chatbot</h3><p name="a58e" id="a58e" class="graf graf--p graf-after--h3">So, Ever wonder how would it feel if your AI could understand your emotions to a physical extent. Honestly No 🤣, But can&#39;t hurt to try right. So, I did try and succeeded to some extent.</p><p name="ba1f" id="ba1f" class="graf graf--p graf-after--p">If you don’t already have a AI/Chatbot Setup read my article on how to make one:</p><div name="997e" id="997e" class="graf graf--mixtapeEmbed graf-after--p"><a href="https://medium.com/@eeman.majumder/how-to-make-an-advanced-intelligent-chatbot-using-tensorflow-8f7097f16096" data-href="https://medium.com/@eeman.majumder/how-to-make-an-advanced-intelligent-chatbot-using-tensorflow-8f7097f16096" class="markup--anchor markup--mixtapeEmbed-anchor" title="https://medium.com/@eeman.majumder/how-to-make-an-advanced-intelligent-chatbot-using-tensorflow-8f7097f16096"><strong class="markup--strong markup--mixtapeEmbed-strong">How to make an advanced intelligent chatbot using tensorflow.</strong><br><em class="markup--em markup--mixtapeEmbed-em">Firstly lets get started with the imports:-</em>medium.com</a><a href="https://medium.com/@eeman.majumder/how-to-make-an-advanced-intelligent-chatbot-using-tensorflow-8f7097f16096" class="js-mixtapeImage mixtapeImage u-ignoreBlock" data-media-id="9041a18cd0175d0b1246520424bf8a0d" data-thumbnail-img-id="1*X22QAwCOUGmMNfVdJT8Jxw.png" style="background-image: url(https://cdn-images-1.medium.com/fit/c/160/160/1*X22QAwCOUGmMNfVdJT8Jxw.png);"></a></div><p name="34f3" id="34f3" class="graf graf--p graf-after--mixtapeEmbed">Let&#39;s see how it’s done.</p><p name="a10c" id="a10c" class="graf graf--p graf-after--p">Like all python codes lets start with the imports first:</p><figure name="30d3" id="30d3" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/9611614528f56604e45f4633aaae3f47.js"></script></figure><p name="da95" id="da95" class="graf graf--p graf-after--figure">As you can see we will be using cv2 for image processing and deepface library for facial tracking.</p><p name="6a5e" id="6a5e" class="graf graf--p graf-after--p">Now lets get the <em class="markup--em markup--p-em">harrcascade xml</em> file and processing it for our work:</p><figure name="0e28" id="0e28" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/9dbac5eba7173db80a36246de4b861e1.js"></script></figure><p name="80e0" id="80e0" class="graf graf--p graf-after--figure">Lets check for webcam inputs and use it:</p><figure name="c6c6" id="c6c6" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/dde37bae172cfb30570b0c988d1f6d2b.js"></script></figure><p name="6c67" id="6c67" class="graf graf--p graf-after--figure">Let’s make our video input greyscale cuz it makes it very easy to process the video file:</p><figure name="3ec9" id="3ec9" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/edba38a7d96a366c9d5e78965ef5c578.js"></script></figure><p name="1254" id="1254" class="graf graf--p graf-after--figure">Now lets track the face and make rectangle on the face and use deepface to detect the dominant emotion:</p><figure name="9e99" id="9e99" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/9182fda08dd569b104e588efa3eeecb2.js"></script></figure><p name="1498" id="1498" class="graf graf--p graf-after--figure">Lets now just print the output and stop the loop accordingly:</p><figure name="10a7" id="10a7" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/cb38858e934a9958d4a7945983a02947.js"></script></figure><p name="e934" id="e934" class="graf graf--p graf-after--figure">The code is finished as easy as that!!</p><p name="06b0" id="06b0" class="graf graf--p graf-after--p">Lets impliment it in my AI called ‘DEW’:</p><figure name="0610" id="0610" class="graf graf--figure graf--iframe graf-after--p"><script src="https://gist.github.com/Eeman1113/373de9b25281cf5dd7ab0e79a159a21b.js"></script></figure><figure name="57ec" id="57ec" class="graf graf--figure graf-after--figure"><img class="graf-image" data-image-id="1*Q89-8XxNT9VpA2y91V9s8A.png" data-width="2880" data-height="1800" data-is-featured="true" src="https://cdn-images-1.medium.com/max/800/1*Q89-8XxNT9VpA2y91V9s8A.png"><figcaption class="imageCaption">the code</figcaption></figure><p name="527e" id="527e" class="graf graf--p graf-after--figure">As you can see just with two lines of code in line number 17 and 112 our AI has emotion recognition now.</p><p name="89e5" id="89e5" class="graf graf--p graf-after--p">Lets see some results 😁</p><figure name="d092" id="d092" class="graf graf--figure graf-after--p"><img class="graf-image" data-image-id="1*huU85gicTe-VqQQ2KF8NdQ.png" data-width="1248" data-height="670" src="https://cdn-images-1.medium.com/max/800/1*huU85gicTe-VqQQ2KF8NdQ.png"><figcaption class="imageCaption">Processing</figcaption></figure><figure name="457d" id="457d" class="graf graf--figure graf-after--figure"><img class="graf-image" data-image-id="1*Chu9J7NHdiLAlIL-eByouQ.png" data-width="1310" data-height="1170" src="https://cdn-images-1.medium.com/max/800/1*Chu9J7NHdiLAlIL-eByouQ.png"><figcaption class="imageCaption">Processing</figcaption></figure><figure name="95ff" id="95ff" class="graf graf--figure graf-after--figure"><img class="graf-image" data-image-id="1*43Wp2Hu3YWXuVpnvMqSogQ.png" data-width="1156" data-height="868" src="https://cdn-images-1.medium.com/max/800/1*43Wp2Hu3YWXuVpnvMqSogQ.png"><figcaption class="imageCaption">The input</figcaption></figure><figure name="dac7" id="dac7" class="graf graf--figure graf-after--figure"><img class="graf-image" data-image-id="1*CpRs2oFxRR5xFhte28f8Hg.png" data-width="840" data-height="122" src="https://cdn-images-1.medium.com/max/800/1*CpRs2oFxRR5xFhte28f8Hg.png"><figcaption class="imageCaption">The output 🤣</figcaption></figure><p name="b313" id="b313" class="graf graf--p graf-after--figure">Thanks for reading 😁</p><p name="b0ad" id="b0ad" class="graf graf--p graf-after--p">Have fun coding :) , Follow for more fun AI stuff 😁</p><p name="350d" id="350d" class="graf graf--p graf-after--p">Check out my Github for more stuff:</p><div name="75c5" id="75c5" class="graf graf--mixtapeEmbed graf-after--p"><a href="https://github.com/Eeman1113" data-href="https://github.com/Eeman1113" class="markup--anchor markup--mixtapeEmbed-anchor" title="https://github.com/Eeman1113"><strong class="markup--strong markup--mixtapeEmbed-strong">Eeman1113 - Overview</strong><br><em class="markup--em markup--mixtapeEmbed-em">You can&#39;t perform that action at this time. You signed in with another tab or window. You signed out in another tab or…</em>github.com</a><a href="https://github.com/Eeman1113" class="js-mixtapeImage mixtapeImage u-ignoreBlock" data-media-id="156170b2813a04eaee065c1bc49b2241" data-thumbnail-img-id="0*eGIY5FJ-sNk5oel1" style="background-image: url(https://cdn-images-1.medium.com/fit/c/160/160/0*eGIY5FJ-sNk5oel1);"></a></div><p name="e85f" id="e85f" class="graf graf--p graf-after--mixtapeEmbed">Follow me on twitter for my day to day AIML research updates:</p><figure name="bc7a" id="bc7a" class="graf graf--figure graf--iframe graf-after--p"><blockquote class="twitter-tweet"><a href="https://twitter.com/EemanMajumder/status/1483659722024972289"></a></blockquote><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></figure><p name="75be" id="75be" class="graf graf--p graf-after--figure graf--trailing">Thanks for reading :) , See ya next time.</p></div></div></section>
+</section>
+<footer><p>By <a href="https://medium.com/@eeman.majumder" class="p-author h-card">Eeman Majumder</a> on <a href="https://medium.com/p/4acd325b14ef"><time class="dt-published" datetime="2022-02-03T15:58:27.827Z">February 3, 2022</time></a>.</p><p><a href="https://medium.com/@eeman.majumder/how-to-add-emotion-recognition-to-your-ai-chatbot-4acd325b14ef" class="p-canonical">Canonical link</a></p><p>Exported from <a href="https://medium.com">Medium</a> on August 6, 2024.</p></footer></article></body></html>
