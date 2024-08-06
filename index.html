@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eeman's Medium Adventures</title>
+    <link rel="icon" type="image/x-icon" href="./image/logo.ico">
     <script src="https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/font.min.js"></script>
     <style>
         body {
@@ -71,9 +72,17 @@
             border-bottom: 1px solid #eee;
         }
         .article-title {
+            color: black;
+            text-decoration: none;
             font-size: 1.2em;
             margin: 0 0 10px 0;
             font-weight: 600;
+        }
+        .article-title a {
+            position: relative;
+            color: black;
+            z-index: 2;
+            text-decoration: none;
         }
         .article-preview {
             font-size: 0.9em;
@@ -132,15 +141,15 @@
                 <h2>Popular Articles</h2>
                 <ul class="article-list">
                     <li class="article-item">
-                        <h3 class="article-title">Making An RL AI to Break the Mario Speed Run World Record</h3>
+                        <h3 class="article-title"><a href="./posts/2022-05-28_Making-an-RL-AI-to-break-the-Mario-speed-run-world-record--bd406646d80.html">Making An RL AI To Break The Mario Speed Run World Record</a></h3>
                         <p class="article-preview">Discover how I used reinforcement learning to create an AI capable of breaking speed run records in Mario.</p>
                     </li>
                     <li class="article-item">
-                        <h3 class="article-title">How To Make An Advanced Intelligent Chatbot Using TensorFlow</h3>
+                        <h3 class="article-title"><a href="./posts/2022-01-22_How-to-make-an-advanced-intelligent-chatbot-using-tensorflow--8f7097f16096.html">How To Make An Advanced Intelligent Chatbot Using Tensorflow And Deep Learning</a></h3>
                         <p class="article-preview">Learn the steps to create a sophisticated chatbot using TensorFlow and natural language processing techniques.</p>
                     </li>
                     <li class="article-item">
-                        <h3 class="article-title">I Made An AI To Chat With My Friends Without Them Noticing</h3>
+                        <h3 class="article-title"><a href="./posts/2022-07-01_I-made-an-AI-to-chats-with-my-friends-without-them-noticing--Part-1--c9a6482a4d80.html">I Made An AI To Chats With My Friends Without Them Noticing</a></h3>
                         <p class="article-preview">Explore the ethical implications and technical challenges of creating an AI that can mimic human conversation.</p>
                     </li>
                 </ul>
