@@ -60,9 +60,12 @@
         }
         .profile-image {
             width: 100%;
+            max-width: 200px;
             border-radius: 50%;
             aspect-ratio: 1 / 1;
             object-fit: cover;
+            margin: 0 auto 20px;
+            display: block;
         }
         .article-list {
             list-style-type: none;
@@ -114,23 +117,37 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             transform: translateY(-2px);
         }
-        .faq {
-            margin-top: 40px;
-        }
-        .faq h2 {
-            margin-bottom: 20px;
-        }
-        .faq-item {
-            margin-bottom: 10px;
-        }
-        .faq-question {
-            cursor: pointer;
-            font-weight: 600;
-        }
-        .faq-answer {
-            display: none;
-            margin-top: 5px;
-            padding-left: 20px;
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            .main-content {
+                display: flex;
+                flex-direction: column;
+            }
+            .sidebar {
+                order: 0;
+                display: flex;
+                flex-direction: column;
+            }
+            .profile-image {
+                max-width: 150px;
+                margin: 0 auto 20px;
+            }
+            .intro {
+                text-align: center;
+                margin-bottom: 20px;
+                order: 1;
+            }
+            .topics-section {
+                order: 2;
+            }
+            .content {
+                order: 3;
+            }
+            .article-list {
+                order: 4;
+            }
         }
     </style>
 </head>
@@ -141,10 +158,26 @@
             <a href="https://linktr.ee/eemanmajumder" class="button">Contact</a>
         </header>
         <div class="main-content">
+            <div class="sidebar">
+                <img src="./image/for_med.png" alt="Eeman's profile picture" class="profile-image">
+                <div class="intro">
+                    <h1>Eeman's Medium Adventures</h1>
+                    <p>AIIIIIIIIIIIIII OVERLOADSSSSSS MEDIUMMMMMMM YAYYAYAYAAYAAY</p>
+                    <p>AI enthusiast | Data Scientist | Writer</p>
+                </div>
+                <div class="topics-section">
+                    <h2>What's keeping me busy?</h2>
+                    <div class="topics">
+                        <span class="topic">AI</span>
+                        <span class="topic">Machine Learning</span>
+                        <span class="topic">Python</span>
+                        <span class="topic">TensorFlow</span>
+                        <span class="topic">NLP</span>
+                        <span class="topic">Data Science</span>
+                    </div>
+                </div>
+            </div>
             <div class="content">
-                <h1>Eeman's Medium Adventures</h1>
-                <p>AIIIIIIIIIIIIII OVERLOADSSSSSS MEDIUMMMMMMM YAYYAYAYAAYAAY (If you on phone see you soon)</p>
-                <p>AI enthusiast | Data Scientist | Writer</p>
                 <h2>Popular Articles</h2>
                 <ul class="article-list">
                     <li class="article-item">
@@ -159,47 +192,13 @@
                         <h3 class="article-title"><a href="./posts/2022-07-01_I-made-an-AI-to-chats-with-my-friends-without-them-noticing--Part-1--c9a6482a4d80.html">I Made An AI To Chats With My Friends Without Them Noticing</a></h3>
                         <p class="article-preview">Explore the ethical implications and technical challenges of creating an AI that can mimic human conversation.</p>
                     </li>
-                </ul>
-                <div class="read-more">
-                    <a href="./articles.html" class="button">Read More Articles</a>
-                </div>
-            </div>
-            <div class="sidebar">
-                <img src="./image/for_med.png" alt="Eeman's profile picture" class="profile-image">
-                <h2>What's keeping me busy?</h2>
-                <div class="topics">
-                    <span class="topic">AI</span>
-                    <span class="topic">Machine Learning</span>
-                    <span class="topic">Python</span>
-                    <span class="topic">TensorFlow</span>
-                    <span class="topic">NLP</span>
-                    <span class="topic">Data Science</span>
-                </div>
+
+            </ul>
+            <div class="read-more">
+                <a href="./articles.html" class="button">Read More Articles</a>
             </div>
         </div>
-        <!-- <div class="faq">
-            <h2>Frequently Asked Questions</h2>
-            <div class="faq-item">
-                <div class="faq-question">What topics do you write about?</div>
-                <div class="faq-answer">I primarily write about AI, machine learning, data science, and their practical applications in various fields.</div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question">How often do you publish new articles?</div>
-                <div class="faq-answer">I aim to publish new articles every week, covering the latest developments in AI and data science.</div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question">Can I request a specific topic for you to write about?</div>
-                <div class="faq-answer">Absolutely! I'm always open to suggestions and requests from my readers. Feel free to reach out with your ideas.</div>
-            </div>
-        </div> -->
     </div>
-    <script>
-        document.querySelectorAll('.faq-question').forEach(question => {
-            question.addEventListener('click', () => {
-                const answer = question.nextElementSibling;
-                answer.style.display = answer.style.display === 'block' ? 'none' : 'block';
-            });
-        });
-    </script>
+</div>
 </body>
 </html>
