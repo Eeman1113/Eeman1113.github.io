@@ -60,9 +60,12 @@
         }
         .profile-image {
             width: 100%;
+            max-width: 250px;
             border-radius: 50%;
             aspect-ratio: 1 / 1;
             object-fit: cover;
+            margin: 0 auto 20px;
+            display: block;
         }
         .article-list {
             list-style-type: none;
@@ -79,11 +82,8 @@
             font-weight: 600;
         }
         .article-title a {
-            position: relative;
             color: black;
-            z-index: 2;
             text-decoration: none;
-            display: inline-block;
         }
         .article-preview {
             font-size: 0.9em;
@@ -91,7 +91,7 @@
             margin: 0;
         }
         .read-more {
-            text-align: center;
+            text-align: left;
             margin-top: 20px;
         }
         .topics {
@@ -99,6 +99,15 @@
             flex-wrap: wrap;
             gap: 10px;
             margin-top: 20px;
+            justify-content: center;
+        }
+
+        .topics {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+            justify-content: center;
         }
         .topic {
             background-color: #f0f0f0;
@@ -108,29 +117,55 @@
             font-size: 0.9em;
             font-weight: 500;
             transition: all 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            animation: topicAppear 0.5s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
         }
         .topic:hover {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            background-color: #e0e0e0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             transform: translateY(-2px);
         }
-        .faq {
-            margin-top: 40px;
+        @keyframes topicAppear {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-        .faq h2 {
-            margin-bottom: 20px;
+        .topic:nth-child(1) { animation-delay: 0.1s; }
+        .topic:nth-child(2) { animation-delay: 0.2s; }
+        .topic:nth-child(3) { animation-delay: 0.3s; }
+        .topic:nth-child(4) { animation-delay: 0.4s; }
+        .topic:nth-child(5) { animation-delay: 0.5s; }
+        .topic:nth-child(6) { animation-delay: 0.6s; }
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-        .faq-item {
-            margin-bottom: 10px;
-        }
-        .faq-question {
-            cursor: pointer;
-            font-weight: 600;
-        }
-        .faq-answer {
-            display: none;
-            margin-top: 5px;
-            padding-left: 20px;
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                order: -1;
+            }
+            .profile-image {
+                max-width: 150px;
+                margin: 0 auto 20px;
+            }
+            .intro, .topics-section {
+                text-align: center;
+            }
+            .topics {
+                justify-content: center;
+            }
+            .read-more {
+                text-align: center;
+            }
         }
     </style>
 </head>
@@ -142,9 +177,11 @@
         </header>
         <div class="main-content">
             <div class="content">
-                <h1>Eeman's Medium Adventures</h1>
-                <p>AIIIIIIIIIIIIII OVERLOADSSSSSS MEDIUMMMMMMM YAYYAYAYAAYAAY (If you on phone see you soon)</p>
-                <p>AI enthusiast | Data Scientist | Writer</p>
+                <div class="intro">
+                    <h1>Eeman's Medium Adventures</h1>
+                    <p>AIIIIIIIIIIIIII OVERLOADSSSSSS MEDIUMMMMMMM YAYYAYAYAAYAAY (If you on phone see you soon)</p>
+                    <p>AI enthusiast | Data Scientist | Writer</p>
+                </div>
                 <h2>Popular Articles</h2>
                 <ul class="article-list">
                     <li class="article-item">
@@ -166,40 +203,19 @@
             </div>
             <div class="sidebar">
                 <img src="./image/for_med.png" alt="Eeman's profile picture" class="profile-image">
-                <h2>What's keeping me busy?</h2>
-                <div class="topics">
-                    <span class="topic">AI</span>
-                    <span class="topic">Machine Learning</span>
-                    <span class="topic">Python</span>
-                    <span class="topic">TensorFlow</span>
-                    <span class="topic">NLP</span>
-                    <span class="topic">Data Science</span>
+                <div class="topics-section">
+                    <h2>What's keeping me busy?</h2>
+                    <div class="topics">
+                        <span class="topic">AI</span>
+                        <span class="topic">Machine Learning</span>
+                        <span class="topic">Python</span>
+                        <span class="topic">TensorFlow</span>
+                        <span class="topic">NLP</span>
+                        <span class="topic">Data Science</span>
+                    </div>
                 </div>
             </div>
         </div>
-        <!-- <div class="faq">
-            <h2>Frequently Asked Questions</h2>
-            <div class="faq-item">
-                <div class="faq-question">What topics do you write about?</div>
-                <div class="faq-answer">I primarily write about AI, machine learning, data science, and their practical applications in various fields.</div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question">How often do you publish new articles?</div>
-                <div class="faq-answer">I aim to publish new articles every week, covering the latest developments in AI and data science.</div>
-            </div>
-            <div class="faq-item">
-                <div class="faq-question">Can I request a specific topic for you to write about?</div>
-                <div class="faq-answer">Absolutely! I'm always open to suggestions and requests from my readers. Feel free to reach out with your ideas.</div>
-            </div>
-        </div> -->
     </div>
-    <script>
-        document.querySelectorAll('.faq-question').forEach(question => {
-            question.addEventListener('click', () => {
-                const answer = question.nextElementSibling;
-                answer.style.display = answer.style.display === 'block' ? 'none' : 'block';
-            });
-        });
-    </script>
 </body>
 </html>
