@@ -38,9 +38,17 @@
             font-weight: bold;
         }
         .main-content {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
+            display: flex;
             gap: 40px;
+        }
+        .content {
+            flex: 2;
+        }
+        .sidebar {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         h1, h2 {
             margin-top: 0;
@@ -64,7 +72,7 @@
         }
         .profile-image {
             width: 100%;
-            max-width: 250px;
+            max-width: 450px;
             border-radius: 50%;
             aspect-ratio: 1 / 1;
             object-fit: cover;
@@ -105,14 +113,6 @@
             margin-top: 20px;
             justify-content: center;
         }
-
-        .topics {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 20px;
-            justify-content: center;
-        }
         .topic {
             background-color: #f0f0f0;
             color: #333;
@@ -142,17 +142,12 @@
         .topic:nth-child(4) { animation-delay: 0.4s; }
         .topic:nth-child(5) { animation-delay: 0.5s; }
         .topic:nth-child(6) { animation-delay: 0.6s; }
-        .sidebar {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
         @media (max-width: 768px) {
             .container {
                 padding: 20px;
             }
             .main-content {
-                grid-template-columns: 1fr;
+                flex-direction: column;
             }
             .sidebar {
                 order: -1;
@@ -183,7 +178,7 @@
             <div class="content">
                 <div class="intro">
                     <h1>Eeman's Medium Adventures</h1>
-                    <p>AIIIIIIIIIIIIII OVERLOADSSSSSS MEDIUMMMMMMM YAYYAYAYAAYAAY (If you on phone see you soon)</p>
+                    <p>AIIIIIIIIIIIIII OVERLOADSSSSSS MEDIUMMMMMMM YAYYAYAYAAYAAY</p>
                     <p>AI enthusiast | Data Scientist | Writer</p>
                 </div>
                 <h2>Popular Articles</h2>
