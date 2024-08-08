@@ -5,10 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Article List</title>
     <style>
-        @font-face {
-        font-family: 'Geist Mono Medium';
-        src: url('font/statics-otf/GeistMono-Medium.otf');
-        }
+        /* Your existing styles */
         body {
             font-family: 'Geist Mono Medium', sans-serif;
             background-color: #f5f5f5;
@@ -136,16 +133,134 @@
         .article-item:hover .article-title a, .article-item:hover .article-preview {
             color: white !important;
         }
-        </style>
+        .search-input{
+            font: inherit;
+        }
+        /* New Search Bar Styles */
+        .search-bar {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: flex-end;
+        }
+        form {
+            position: relative;
+            width: 100%;
+            max-width: 17em;
+        }
+        input, .caret {
+            display: block;
+            transition: all 0.5s linear;
+        }
+        input {
+            background: transparent;
+            border-radius: 50%;
+            box-shadow: 0 0 0 0.25em inset;
+            caret-color: black;
+            width: 2em;
+            height: 2em;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+        input:focus, input:valid {
+            background: white;
+            border-radius: 0.25em;
+            box-shadow: none;
+            padding: 0.75em 1em;
+            transition-duration: 0.25s;
+            transition-delay: 0.25s;
+            width: 100%;
+            height: 3em;
+        }
+        input:focus {
+            animation: showCaret 1s steps(1);
+            outline: transparent;
+        }
+        input:focus + .caret, input:valid + .caret {
+            animation: handleToCaret 1s linear;
+            background: transparent;
+            width: 1px;
+            height: 1.5em;
+            transform: translate(0,-1em) rotate(-180deg) translate(7.5em,-0.25em);
+        }
+        input::-webkit-search-decoration {
+            -webkit-appearance: none;
+        }
+        label {
+            color: white;
+            overflow: hidden;
+            position: absolute;
+            width: 0;
+            height: 0;
+        }
+        .caret {
+            background: currentColor;
+            border-radius: 0 0 0.125em 0.125em;
+            margin-bottom: -0.6em;
+            width: 0.25em;
+            height: 1em;
+            transform: translate(0,-1em) rotate(-45deg) translate(0,0.875em);
+            transform-origin: 50% 0;
+        }
+        @keyframes showCaret {
+            from {
+                caret-color: transparent;
+            }
+            to {
+                caret-color: black;
+            }
+        }
+        @keyframes handleToCaret {
+            from {
+                background: currentColor;
+                width: 0.25em;
+                height: 1em;
+                transform: translate(0,-1em) rotate(-45deg) translate(0,0.875em);
+            }
+            25% {
+                background: currentColor;
+                width: 0.25em;
+                height: 1em;
+                transform: translate(0,-1em) rotate(-180deg) translate(0,0.875em);
+            }
+            50%, 62.5% {
+                background: black;
+                width: 1px;
+                height: 1.5em;
+                transform: translate(0,-1em) rotate(-180deg) translate(7.5em,2.5em);
+            }
+            75%, 99% {
+                background: black;
+                width: 1px;
+                height: 1.5em;
+                transform: translate(0,-1em) rotate(-180deg) translate(7.5em,-0.25em);
+            }
+            87.5% {
+                background: black;
+                width: 1px;
+                height: 1.5em;
+                transform: translate(0,-1em) rotate(-180deg) translate(7.5em,0.125em);
+            }
+            to {
+                background: transparent;
+                width: 1px;
+                height: 1.5em;
+                transform: translate(0,-1em) rotate(-180deg) translate(7.5em,-0.25em);
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <div class="logo">EM</div>
+            <div class="logo">EA</div>
             <a href="index.html" class="button">Back to Home</a>
         </div>
         <h1>All Articles</h1>
-        <ul class="article-list">
+<ul class="article-list">
+    <div class="search-bar">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search articles...">
+    </div>
             <li class="article-item">
                 <h3 class="article-title"><a href="./posts/2022-05-14_Making-a-Deep-Learning-Chandler-Bing-AI--from-f-r-i-e-n-d-s-Part-1-5cd2af606ffe.html">Making a Deep Learning Chandler Bing AI from F.R.I.E.N.D.S (Part 1)</a></h3>
                 <p class="article-preview">Explore the journey of creating a deep learning AI to mimic Chandler Bing's personality and dialogue from F.R.I.E.N.D.S.</p>
@@ -314,6 +429,48 @@
             </ul>
 
         </ul>
-    </div>
+    </div> 
+    <script>
+        document.getElementById('searchInput').addEventListener('input', function() {
+            let filter = this.value.toLowerCase().trim();
+            let articles = document.querySelectorAll('.article-item');
+        
+            articles.forEach(function(article) {
+                let titleElement = article.querySelector('.article-title a');
+                let previewElement = article.querySelector('.article-preview');
+                
+                let title = titleElement.textContent.toLowerCase();
+                let preview = previewElement.textContent.toLowerCase();
+        
+                // Check if either title or preview contains the filter term
+                let matchesTitle = title.includes(filter);
+                let matchesPreview = preview.includes(filter);
+                
+                // Toggle article visibility based on the search term
+                if (matchesTitle || matchesPreview) {
+                    article.style.display = '';
+                    highlightMatch(titleElement, filter);  // Optional: highlight matches in title
+                    highlightMatch(previewElement, filter); // Optional: highlight matches in preview
+                } else {
+                    article.style.display = 'none';
+                }
+            });
+        });
+        
+        function highlightMatch(element, filter) {
+            let html = element.textContent;
+            let regex = new RegExp('(' + filter + ')', 'gi');
+            html = html.replace(regex, '<mark>$1</mark>');  // Wrap matches with <mark> tag
+            element.innerHTML = html;  // Update the element's HTML
+        }
+        
+        // Optional: Clear highlights on input change
+        document.getElementById('searchInput').addEventListener('focus', function() {
+            document.querySelectorAll('.article-title a, .article-preview').forEach(function(el) {
+                el.innerHTML = el.textContent;  // Remove highlight
+            });
+        });
+        </script>
+        
 </body>
 </html>
