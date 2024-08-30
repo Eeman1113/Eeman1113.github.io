@@ -26,49 +26,54 @@
         .card {
             background-color: rgba(255, 255, 255, 0.9);
             border-radius: 30px;
-            padding: 2rem;
-            box-shadow: 0 10px 30px rgba(255, 182, 193, 0.3);
+            padding: 2.5rem;
+            box-shadow: 0 15px 40px rgba(255, 182, 193, 0.4);
             text-align: center;
             max-width: 90%;
-            width: 100%;
-            border: 3px solid #ffb6c1;
+            width: 400px;
+            border: 4px solid #ffb6c1;
             margin: 1rem;
             position: relative;
             z-index: 1;
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(255, 182, 193, 0.5);
         }
         h1 {
             color: #ff69b4;
-            font-size: 2.2rem;
-            margin-bottom: 0.5rem;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
             font-family: 'Bubblegum Sans', cursive;
-            text-shadow: 2px 2px 4px rgba(255, 105, 180, 0.3);
+            text-shadow: 3px 3px 6px rgba(255, 105, 180, 0.3);
         }
         p {
             color: #8e5e66;
-            font-size: 1rem;
-            line-height: 1.4;
-            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
         }
         #hugButton {
             background: linear-gradient(45deg, #ff69b4 0%, #ffb6c1 100%);
             color: white;
             border: none;
-            padding: 0.8rem 1.5rem;
-            font-size: 1.1rem;
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
             border-radius: 50px;
             cursor: pointer;
             transition: all 0.3s ease;
             font-weight: 600;
-            box-shadow: 0 4px 15px rgba(255, 105, 180, 0.4);
+            box-shadow: 0 6px 20px rgba(255, 105, 180, 0.4);
             font-family: 'Bubblegum Sans', cursive;
         }
         #hugButton:hover, #hugButton:active {
             transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 6px 20px rgba(255, 105, 180, 0.6);
+            box-shadow: 0 8px 25px rgba(255, 105, 180, 0.6);
         }
         #hugCount {
-            font-size: 1.2rem;
-            margin-top: 1.5rem;
+            font-size: 1.4rem;
+            margin-top: 2rem;
             color: #ff69b4;
             font-weight: 600;
             font-family: 'Bubblegum Sans', cursive;
@@ -76,58 +81,60 @@
         .floating-element {
             position: fixed;
             pointer-events: none;
-            animation: float 6s ease-in-out infinite;
+            animation: float 8s ease-in-out infinite;
             z-index: 2;
         }
         @keyframes float {
             0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(5deg); }
+            50% { transform: translateY(-30px) rotate(5deg); }
         }
         .animal {
-            font-size: 3rem;
-            opacity: 0.7;
+            font-size: 4rem;
+            opacity: 0.8;
+            filter: drop-shadow(0 5px 15px rgba(255, 182, 193, 0.4));
         }
-        #bear { top: 20%; left: 20%; }
-        #rabbit { top: 25%; right: 25%; }
-        #cat { bottom: 25%; left: 25%; }
-        #dog { bottom: 20%; right: 20%; }
+        #bear { top: 15%; left: 15%; }
+        #rabbit { top: 20%; right: 20%; }
+        #cat { bottom: 20%; left: 20%; }
+        #dog { bottom: 15%; right: 15%; }
         .cloud {
             background-color: rgba(255, 255, 255, 0.8);
             border-radius: 50%;
-            height: 30px;
-            width: 80px;
-            box-shadow: 0 4px 10px rgba(255, 182, 193, 0.3);
+            height: 40px;
+            width: 100px;
+            box-shadow: 0 6px 15px rgba(255, 182, 193, 0.3);
         }
-        #cloud1 { top: 35%; left: 10%; }
-        #cloud2 { top: 65%; right: 15%; }
+        #cloud1 { top: 30%; left: 5%; }
+        #cloud2 { top: 60%; right: 10%; }
 
         .emoji {
             position: absolute;
-            font-size: 2rem;
+            font-size: 2.5rem;
             pointer-events: none;
-            animation: floatUp 3s ease-out;
+            animation: floatUp 4s ease-out;
             opacity: 0;
             z-index: 3;
+            filter: drop-shadow(0 3px 10px rgba(255, 105, 180, 0.5));
         }
         @keyframes floatUp {
             0% {
-                transform: translateY(0);
+                transform: translateY(0) scale(0.5);
                 opacity: 1;
             }
             100% {
-                transform: translateY(-100vh);
+                transform: translateY(-100vh) scale(1.5);
                 opacity: 0;
             }
         }
 
         @media (max-width: 600px) {
-            h1 { font-size: 1.8rem; }
-            p { font-size: 0.9rem; }
-            #hugButton { font-size: 1rem; padding: 0.7rem 1.3rem; }
-            #hugCount { font-size: 1rem; }
-            .animal { font-size: 2rem; }
-            .cloud { height: 20px; width: 60px; }
-            .emoji { font-size: 1.5rem; }
+            h1 { font-size: 2rem; }
+            p { font-size: 1rem; }
+            #hugButton { font-size: 1.1rem; padding: 0.9rem 1.8rem; }
+            #hugCount { font-size: 1.2rem; }
+            .animal { font-size: 3rem; }
+            .cloud { height: 30px; width: 80px; }
+            .emoji { font-size: 2rem; }
         }
     </style>
 </head>
@@ -142,26 +149,62 @@
     <div class="container">
         <div class="card">
             <h1>Hugs for Divija</h1>
-            <p>Hey Divija! Sorry I cant be there with you right now but here take all my hugs and loveeeee 💖. Tap the button for a warm, fuzzy virtual hug!</p>
+            <p>Hey Divija! Sorry I can't be there with you right now, but here are all my hugs and love 💖. Tap the button for a warm, fuzzy virtual hug!</p>
             <button id="hugButton">Get a Cuddly Hug 🤗</button>
             <p id="hugCount">Snuggly hugs received: 0</p>
         </div>
     </div>
 
     <script>
-        let hugCount = 0;
+        let hugCount = parseInt(localStorage.getItem('hugCount')) || 0;
         const hugButton = document.getElementById('hugButton');
         const hugCountDisplay = document.getElementById('hugCount');
         const container = document.querySelector('.container');
 
+        // Generate a unique user ID (simulating a real user identification system)
+        const userId = localStorage.getItem('userId') || generateUserId();
+        localStorage.setItem('userId', userId);
+
+        updateHugCount();
+
         hugButton.addEventListener('click', () => {
             hugCount++;
-            hugCountDisplay.textContent = `Snuggly hugs received: ${hugCount}`;
+            updateHugCount();
+            localStorage.setItem('hugCount', hugCount);
+            saveToCSV();
             createEmoji();
             if (hugCount % 5 === 0) {
                 createFloatingAnimal();
             }
         });
+
+        function updateHugCount() {
+            hugCountDisplay.textContent = `Snuggly hugs received: ${hugCount}`;
+        }
+
+        function generateUserId() {
+            return 'user_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        function saveToCSV() {
+            const date = new Date().toISOString();
+            const data = `${userId},${hugCount},${date}\n`;
+
+            // In a real application, this would be a server-side API call
+            // Here, we're simulating the save operation
+            console.log('Saving to CSV:', data);
+
+            // Simulate an API call to save data
+            simulateApiCall(data);
+        }
+
+        function simulateApiCall(data) {
+            // Simulate a delay
+            setTimeout(() => {
+                console.log('Data saved successfully:', data);
+                // In a real application, you might update the UI to reflect successful save
+            }, 500);
+        }
 
         function createEmoji() {
             const emojis = ['❤️', '🤗', '💖', '😊', '🥰', '🫂', '❤️'];
@@ -174,7 +217,7 @@
 
             setTimeout(() => {
                 container.removeChild(emoji);
-            }, 3000);
+            }, 4000);
         }
 
         function createFloatingAnimal() {
@@ -184,11 +227,12 @@
             animal.style.position = 'fixed';
             animal.style.left = `${20 + Math.random() * 60}%`;
             animal.style.top = `${20 + Math.random() * 60}%`;
-            animal.style.fontSize = '2rem';
-            animal.style.animation = `float ${6 + Math.random() * 4}s ease-in-out infinite`;
+            animal.style.fontSize = '3rem';
+            animal.style.animation = `float ${8 + Math.random() * 4}s ease-in-out infinite`;
             animal.style.animationDelay = `${Math.random() * 2}s`;
-            animal.style.opacity = '0.7';
+            animal.style.opacity = '0.8';
             animal.style.zIndex = '2';
+            animal.style.filter = 'drop-shadow(0 5px 15px rgba(255, 182, 193, 0.4))';
             document.body.appendChild(animal);
         }
     </script>
