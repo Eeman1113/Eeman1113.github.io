@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cute Virtual Hugs for Divija</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ffeaf3 0%, #fff6e5 100%);
+            overflow: hidden;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1rem;
+            box-sizing: border-box;
+            position: relative;
+        }
+        .card {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 30px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(255, 182, 193, 0.3);
+            text-align: center;
+            max-width: 90%;
+            width: 100%;
+            border: 3px solid #ffb6c1;
+            margin: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+        h1 {
+            color: #ff69b4;
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            font-family: 'Bubblegum Sans', cursive;
+            text-shadow: 2px 2px 4px rgba(255, 105, 180, 0.3);
+        }
+        p {
+            color: #8e5e66;
+            font-size: 1rem;
+            line-height: 1.4;
+            margin-bottom: 1.5rem;
+        }
+        #hugButton {
+            background: linear-gradient(45deg, #ff69b4 0%, #ffb6c1 100%);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(255, 105, 180, 0.4);
+            font-family: 'Bubblegum Sans', cursive;
+        }
+        #hugButton:hover, #hugButton:active {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 6px 20px rgba(255, 105, 180, 0.6);
+        }
+        #hugCount {
+            font-size: 1.2rem;
+            margin-top: 1.5rem;
+            color: #ff69b4;
+            font-weight: 600;
+            font-family: 'Bubblegum Sans', cursive;
+        }
+        .floating-element {
+            position: fixed;
+            pointer-events: none;
+            animation: float 6s ease-in-out infinite;
+            z-index: 2;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+        .animal {
+            font-size: 3rem;
+            opacity: 0.7;
+        }
+        #bear { top: 20%; left: 20%; }
+        #rabbit { top: 25%; right: 25%; }
+        #cat { bottom: 25%; left: 25%; }
+        #dog { bottom: 20%; right: 20%; }
+        .cloud {
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            height: 30px;
+            width: 80px;
+            box-shadow: 0 4px 10px rgba(255, 182, 193, 0.3);
+        }
+        #cloud1 { top: 35%; left: 10%; }
+        #cloud2 { top: 65%; right: 15%; }
+
+        .emoji {
+            position: absolute;
+            font-size: 2rem;
+            pointer-events: none;
+            animation: floatUp 3s ease-out;
+            opacity: 0;
+            z-index: 3;
+        }
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh);
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 1.8rem; }
+            p { font-size: 0.9rem; }
+            #hugButton { font-size: 1rem; padding: 0.7rem 1.3rem; }
+            #hugCount { font-size: 1rem; }
+            .animal { font-size: 2rem; }
+            .cloud { height: 20px; width: 60px; }
+            .emoji { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-element animal" id="bear">🐻</div>
+    <div class="floating-element animal" id="rabbit">🐰</div>
+    <div class="floating-element animal" id="cat">🐱</div>
+    <div class="floating-element animal" id="dog">🐶</div>
+    <div class="floating-element cloud" id="cloud1"></div>
+    <div class="floating-element cloud" id="cloud2"></div>
+
+    <div class="container">
+        <div class="card">
+            <h1>Cute Hugs for Divija</h1>
+            <p>Hey Divija! Sorry I cant be there with you right now but here all take all my hugs and loveeeee for you 💖. Tap the button for a warm, fuzzy virtual hug!</p>
+            <button id="hugButton">Send a Cuddly Hug 🤗</button>
+            <p id="hugCount">Snuggly hugs received: 0</p>
+        </div>
+    </div>
+
+    <script>
+        let hugCount = 0;
+        const hugButton = document.getElementById('hugButton');
+        const hugCountDisplay = document.getElementById('hugCount');
+        const container = document.querySelector('.container');
+
+        hugButton.addEventListener('click', () => {
+            hugCount++;
+            hugCountDisplay.textContent = `Snuggly hugs received: ${hugCount}`;
+            createEmoji();
+            if (hugCount % 5 === 0) {
+                createFloatingAnimal();
+            }
+        });
+
+        function createEmoji() {
+            const emojis = ['❤️', '🤗', '💖', '😊', '🥰'];
+            const emoji = document.createElement('div');
+            emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            emoji.classList.add('emoji');
+            emoji.style.left = `${Math.random() * 100}%`;
+            emoji.style.bottom = '0';
+            container.appendChild(emoji);
+
+            setTimeout(() => {
+                container.removeChild(emoji);
+            }, 3000);
+        }
+
+        function createFloatingAnimal() {
+            const animals = ['🐼', '🐨', '🦄', '🐷'];
+            const animal = document.createElement('div');
+            animal.textContent = animals[Math.floor(Math.random() * animals.length)];
+            animal.style.position = 'fixed';
+            animal.style.left = `${20 + Math.random() * 60}%`;
+            animal.style.top = `${20 + Math.random() * 60}%`;
+            animal.style.fontSize = '2rem';
+            animal.style.animation = `float ${6 + Math.random() * 4}s ease-in-out infinite`;
+            animal.style.animationDelay = `${Math.random() * 2}s`;
+            animal.style.opacity = '0.7';
+            animal.style.zIndex = '2';
+            document.body.appendChild(animal);
+        }
+    </script>
+</body>
+</html>
