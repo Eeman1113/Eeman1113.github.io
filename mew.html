@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cute Virtual Hugs for Divija</title>
     <link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/groq-sdk@latest/dist/bundle.js"></script>
     <style>
         body, html {
             height: 100%;
@@ -106,7 +107,6 @@
         }
         #cloud1 { top: 30%; left: 5%; }
         #cloud2 { top: 60%; right: 10%; }
-
         .emoji {
             position: absolute;
             font-size: 2.5rem;
@@ -126,7 +126,96 @@
                 opacity: 0;
             }
         }
-
+        #chatIcon {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 60px;
+            height: 60px;
+            background-color: #ffb6c1;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(255, 182, 193, 0.6);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        #chatIcon:hover {
+            transform: scale(1.1);
+        }
+        #chatBox {
+            display: none;
+            position: fixed;
+            bottom: 90px;
+            left: 20px;
+            width: 300px;
+            height: 400px;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            z-index: 1000;
+        }
+        #chatHeader {
+            background-color: #ffb6c1;
+            color: white;
+            padding: 10px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        #chatMessages {
+            height: 310px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+        .message {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 18px;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+        .user-message {
+            background-color: #e6e6e6;
+            align-self: flex-end;
+            margin-left: auto;
+        }
+        .bot-message {
+            background-color: #ffb6c1;
+            color: white;
+            align-self: flex-start;
+        }
+        #chatInput {
+            display: flex;
+            padding: 10px;
+        }
+        #messageInput {
+            flex-grow: 1;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 12px;
+            margin-right: 10px;
+            background-color: #f0f0f0;
+        }
+        #sendButton {
+            background-color: #ffb6c1;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #sendButton:hover {
+            background-color: #ff69b4;
+        }
         @media (max-width: 600px) {
             h1 { font-size: 2rem; }
             p { font-size: 1rem; }
@@ -155,18 +244,39 @@
         </div>
     </div>
 
+    <div id="chatIcon">🐻</div>
+
+    <div id="chatBox">
+        <div id="chatHeader">
+            <span>Chat with Cuddles</span>
+            <span id="closeChat" style="cursor: pointer;">×</span>
+        </div>
+        <div id="chatMessages"></div>
+        <div id="chatInput">
+            <input type="text" id="messageInput" placeholder="Type a message...">
+            <button id="sendButton">➤</button>
+        </div>
+    </div>
     <script>
         let hugCount = parseInt(localStorage.getItem('hugCount')) || 0;
         const hugButton = document.getElementById('hugButton');
         const hugCountDisplay = document.getElementById('hugCount');
         const container = document.querySelector('.container');
-
-        // Generate a unique user ID (simulating a real user identification system)
         const userId = localStorage.getItem('userId') || generateUserId();
         localStorage.setItem('userId', userId);
-
+    
+        const chatIcon = document.getElementById('chatIcon');
+        const chatBox = document.getElementById('chatBox');
+        const closeChat = document.getElementById('closeChat');
+        const chatMessages = document.getElementById('chatMessages');
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+    
+        // Initialize Groq client
+        const groq = new Groq.GroqClient({ apiKey: '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' });
+    
         updateHugCount();
-
+    
         hugButton.addEventListener('click', () => {
             hugCount++;
             updateHugCount();
@@ -177,35 +287,43 @@
                 createFloatingAnimal();
             }
         });
-
+    
+        chatIcon.addEventListener('click', () => {
+            chatBox.style.display = 'block';
+        });
+    
+        closeChat.addEventListener('click', () => {
+            chatBox.style.display = 'none';
+        });
+    
+        sendButton.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    
         function updateHugCount() {
             hugCountDisplay.textContent = `Snuggly hugs received: ${hugCount}`;
         }
-
+    
         function generateUserId() {
             return 'user_' + Math.random().toString(36).substr(2, 9);
         }
-
+    
         function saveToCSV() {
             const date = new Date().toISOString();
             const data = `${userId},${hugCount},${date}\n`;
-
-            // In a real application, this would be a server-side API call
-            // Here, we're simulating the save operation
             console.log('Saving to CSV:', data);
-
-            // Simulate an API call to save data
             simulateApiCall(data);
         }
-
+    
         function simulateApiCall(data) {
-            // Simulate a delay
             setTimeout(() => {
                 console.log('Data saved successfully:', data);
-                // In a real application, you might update the UI to reflect successful save
             }, 500);
         }
-
+    
         function createEmoji() {
             const emojis = ['❤️', '🤗', '💖', '😊', '🥰', '🫂', '❤️'];
             const emoji = document.createElement('div');
@@ -214,12 +332,12 @@
             emoji.style.left = `${Math.random() * 100}%`;
             emoji.style.bottom = '0';
             container.appendChild(emoji);
-
+    
             setTimeout(() => {
                 container.removeChild(emoji);
             }, 4000);
         }
-
+    
         function createFloatingAnimal() {
             const animals = ['🐼', '🐨', '🦄', '🐷','🤗', '💖', '😊', '🥰', '🫂', '❤️'];
             const animal = document.createElement('div');
@@ -234,7 +352,73 @@
             animal.style.zIndex = '2';
             animal.style.filter = 'drop-shadow(0 5px 15px rgba(255, 182, 193, 0.4))';
             document.body.appendChild(animal);
-            // I love you divija 
+        }
+    
+        async function sendMessageToGroq(message) {
+            try {
+                const chatCompletion = await groq.chat.completions.create({
+                    messages: [
+                        {
+                            role: "system",
+                            content: "You are a friendly and supportive AI assistant named Cuddles. Your role is to chat with Divija and help her feel better about her day. Be empathetic, positive, and offer comforting words or advice when appropriate."
+                        },
+                        {
+                            role: "user",
+                            content: message
+                        }
+                    ],
+                    model: "llama3-8b-8192",
+                    temperature: 0.7,
+                    max_tokens: 150,
+                    top_p: 1,
+                    stream: true,
+                    stop: null
+                });
+    
+                let fullResponse = '';
+                for await (const chunk of chatCompletion) {
+                    const content = chunk.choices[0]?.delta?.content || '';
+                    fullResponse += content;
+                    updateBotResponse(fullResponse);
+                }
+            } catch (error) {
+                console.error('Error communicating with Groq AI:', error);
+                addMessage('bot', "I'm sorry, I'm having trouble responding right now. Please try again later.");
+            }
+        }
+    
+        function updateBotResponse(partialResponse) {
+            const lastMessage = chatMessages.lastElementChild;
+            if (lastMessage && lastMessage.classList.contains('bot-message')) {
+                lastMessage.textContent = partialResponse;
+            } else {
+                addMessage('bot', partialResponse);
+            }
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+    
+        async function sendMessage() {
+            const message = messageInput.value.trim();
+            if (message) {
+                addMessage('user', message);
+                messageInput.value = '';
+                messageInput.disabled = true;
+                sendButton.disabled = true;
+    
+                await sendMessageToGroq(message);
+    
+                messageInput.disabled = false;
+                sendButton.disabled = false;
+                messageInput.focus();
+            }
+        }
+    
+        function addMessage(sender, text) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', `${sender}-message`);
+            messageElement.textContent = text;
+            chatMessages.appendChild(messageElement);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
         }
     </script>
 </body>
