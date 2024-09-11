@@ -3,131 +3,221 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Divija Gallery</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@400;600&family=Great+Vibes&display=swap" rel="stylesheet">
+    <title>The Adorable Divija Gallery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Dancing+Script&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #ff69b4;
+            --secondary-color: #fff0f5;
+            --text-color: #4a5568;
+        }
+        
         body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: #fff0f5;
-            color: #4a5568;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
             line-height: 1.6;
-            padding: 20px;
             margin: 0;
+            padding: 0;
             overflow-x: hidden;
         }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
         h1 {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Dancing Script', cursive;
             text-align: center;
-            color: #ff1493;
-            font-size: 3.5em;
+            color: var(--primary-color);
+            font-size: 3rem;
             margin-bottom: 30px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
         }
+        
         .gallery {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             gap: 25px;
             padding: 20px;
         }
+        
         .gallery-item {
             background-color: white;
-            border-radius: 15px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
             overflow: hidden;
             transition: all 0.3s ease;
+            position: relative;
         }
+        
         .gallery-item:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            transform: translateY(-10px) rotate(2deg);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
         }
+        
         .gallery-item img {
             width: 100%;
-            height: 350px;
+            height: 300px;
             object-fit: cover;
             display: block;
             transition: filter 0.3s ease;
         }
+        
         .gallery-item:hover img {
             filter: brightness(1.1);
         }
+        
         .gallery-item p {
             padding: 15px;
             margin: 0;
             text-align: center;
             font-weight: 600;
-            color: #ff1493;
-            font-size: 1em;
+            color: var(--primary-color);
+            font-size: 1rem;
         }
+        
         .note {
-            font-family: 'Great Vibes', cursive;
+            font-family: 'Dancing Script', cursive;
             text-align: center;
-            font-size: 2.5em;
-            color: #ff1493;
-            margin-top: 50px;
+            font-size: 1.4rem;
+            color: #ff69b4;
+            margin: 50px auto;
             padding: 30px;
-            background-color: rgba(255, 255, 255, 0.8);
-            border-radius: 15px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-            line-height: 1.4;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            line-height: 1.6;
+            max-width: 400px;
+            position: relative;
         }
-        @keyframes fadeIn {
+
+        .note::before {
+            content: '🌸';
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            font-size: 2rem;
+        }
+
+        .note::after {
+            content: '💖';
+            position: absolute;
+            bottom: -10px;
+            right: -10px;
+            font-size: 2rem;
+        }
+
+        .note span {
+            display: block;
+        }
+        
+        .floating-item {
+            position: fixed;
+            pointer-events: none;
+            z-index: 1000;
+            animation: float 20s infinite ease-in-out;
+            font-size: 2rem;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            25% { transform: translate(50px, 50px); }
+            50% { transform: translate(100px, 0); }
+            75% { transform: translate(50px, -50px); }
+        }
+        
+        @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        
         .gallery-item, .note {
-            animation: fadeIn 0.5s ease forwards;
+            animation: fadeInUp 0.5s ease forwards;
             opacity: 0;
         }
-        .gallery-item:nth-child(1) { animation-delay: 0.1s; }
-        .gallery-item:nth-child(2) { animation-delay: 0.2s; }
-        .gallery-item:nth-child(3) { animation-delay: 0.3s; }
-        .gallery-item:nth-child(4) { animation-delay: 0.4s; }
-        .gallery-item:nth-child(5) { animation-delay: 0.5s; }
-        .gallery-item:nth-child(6) { animation-delay: 0.6s; }
-        .note { animation-delay: 0.7s; }
+        
+        @media (max-width: 768px) {
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+            
+            .gallery-item img {
+                height: auto;
+                max-height: 400px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .note {
+                font-size: 1.2rem;
+                padding: 20px;
+            }
+        }
     </style>
 </head>
 <body>
-    <h1>The Divija Gallery</h1>
-    <div class="gallery">
-        <div class="gallery-item">
-            <img src="./image/smile.png" alt="Divija smiling">
-            <p>Divija's radiant smile 😊</p>
+    <div class="container">
+        <h1>The Adorable Divija Gallery</h1>
+        <div class="gallery">
+            <div class="gallery-item">
+                <img src="./image/smile.png" alt="Divija smiling">
+                <p>Divija's radiant smile 😊</p>
+            </div>
+            <div class="gallery-item">
+                <img src="./image/laugh.PNG" alt="Divija laughing">
+                <p>Laughter is the best medicine 😂</p>
+            </div>
+            <div class="gallery-item">
+                <img src="./image/nature.jpg" alt="Divija in nature">
+                <p>Nature's beauty + Divija = Perfect 🌿</p>
+            </div>
+            <div class="gallery-item">
+                <img src="./image/cute.png" alt="Divija with a cute expression">
+                <p>Cuteness overload! 🥰</p>
+            </div>
+            <div class="gallery-item">
+                <img src="./image/silly.jpg" alt="Divija being silly">
+                <p>Silly faces are the best faces 🤪</p>
+            </div>
         </div>
-        <div class="gallery-item">
-            <img src="./image/laugh.PNG" alt="Divija laughing">
-            <p>Laughter is the best medicine </p>
+        <div class="note">
+            <span>" Hey There Dumbo,</span>
+            <span>Every picture in this gallery,</span>
+            <span>Calls to me so tenderly,</span>
+            <span>Each one a glimpse, a fleeting view,</span>
+            <span>That fills my heart with thoughts of you.</span>
+            <span>With every frame, my heart beats fast,</span>
+            <span>A flutter deep, like butterflies amassed,</span>
+            <span>Their wings take flight within my soul,</span>
+            <span>With each new image, I lose control.</span>
+            <span>The colors, smiles, the light in your eyes,</span>
+            <span>Ignite a fire that never dies,</span>
+            <span>For every picture makes me yearn,</span>
+            <span>For more of you, with every turn. "</span>
         </div>
-        <div class="gallery-item">
-            <img src="./image/nature.jpg" alt="Divija in nature">
-            <p>Nature's beauty + Divija = Perfect 🌿</p>
-        </div>
-        <div class="gallery-item">
-            <img src="./image/cute.png" alt="Divija with a cute expression">
-            <p>Cuteness overload! 🥰</p>
-        </div>
-        <div class="gallery-item">
-            <img src="./image/silly.jpg" alt="Divija being silly">
-            <p>Silly faces are the best faces 🤪</p>
-        </div>
-
     </div>
-    <div class="note">
-        " Hey There Dumbo,<br>
-        Every picture in this gallery,<br>
-        Calls to me so tenderly,<br>
-        Each one a glimpse, a fleeting view,<br>
-        That fills my heart with thoughts of you.<br>
-        
-        With every frame, my heart beats fast,<br>
-        A flutter deep, like butterflies amassed,<br>
-        Their wings take flight within my soul,<br>
-        With each new image, I lose control.<br>
-        
-        The colors, smiles, the light in your eyes,<br>
-        Ignite a fire that never dies,<br>
-        For every picture makes me yearn,<br>
-        For more of you, with every turn.<br>""
+    
+    <div class="floating-item" style="top: 10%; left: 5%;">🦋</div>
+    <div class="floating-item" style="top: 30%; right: 10%;">🌸</div>
+    <div class="floating-item" style="bottom: 20%; left: 15%;">🌟</div>
+    <div class="floating-item" style="bottom: 40%; right: 5%;">💖</div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const galleryItems = document.querySelectorAll('.gallery-item');
+            galleryItems.forEach((item, index) => {
+                item.style.animationDelay = `${index * 0.1}s`;
+            });
+            
+            const note = document.querySelector('.note');
+            note.style.animationDelay = `${galleryItems.length * 0.1}s`;
+        });
+    </script>
 </body>
 </html>
-<!-- I love you Divija  -->
+<!-- I LOVE YOU DIVIJA  -->
