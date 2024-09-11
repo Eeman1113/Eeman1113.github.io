@@ -114,6 +114,55 @@
             display: block;
         }
         
+        .email-button {
+            display: block;
+            width: 200px;
+            margin: 30px auto;
+            padding: 15px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 50px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .email-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+            background-color: #ff1493;
+        }
+
+        .email-button::before {
+            content: '💌';
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .email-button::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(45deg);
+            transition: all 0.3s ease;
+        }
+
+        .email-button:hover::after {
+            left: 100%;
+            top: 100%;
+        }
+        
         .floating-item {
             position: fixed;
             pointer-events: none;
@@ -157,12 +206,17 @@
                 font-size: 1.2rem;
                 padding: 20px;
             }
+
+            .email-button {
+                width: 80%;
+                font-size: 1rem;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>The Adorable Divija Gallery</h1>
+        <h1>The Adorable Divija Gallery </h1>
         <div class="gallery">
             <div class="gallery-item">
                 <img src="./image/smile.png" alt="Divija smiling">
@@ -201,6 +255,7 @@
             <span>For more of you, with every turn. "</span>
             <span> - With Love Tera Eemonie <3</span>
         </div>
+        <a href="mailto:eeman.majumder@gmail.com?subject=I Miss You!&body=Hey Emonie, I Miss You..." class="email-button">Miss Me, Email Me!</a>
     </div>
     
     <div class="floating-item" style="top: 10%; left: 5%;">🦋</div>
@@ -220,5 +275,4 @@
         });
     </script>
 </body>
-</html>
 <!-- I LOVE YOU DIVIJA  -->
