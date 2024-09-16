@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Othello Terminal</title>
+    <style>
+        :root {
+            --bg-color: #1a1a2e;
+            --text-color: #a0e0e0;
+            --board-bg: #16213e;
+            --cell-bg: #0f3460;
+            --highlight-color: #406882;
+            --piece-black: #000000;
+            --piece-white: #ffffff;
+            --accent-color: #e94560;
+        }
+        body, pre {
+            font-family: 'Courier New', monospace;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            line-height: 1.2;
+            font-size: 14px;
+        }
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .ascii-title {
+            color: var(--accent-color);
+            text-align: center;
+            white-space: pre;
+            margin-bottom: 20px;
+        }
+        .board {
+            display: inline-block;
+            background-color: var(--board-bg);
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px;
+        }
+        .row {
+            display: flex;
+        }
+        .cell {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            border: 1px solid var(--text-color);
+        }
+        .piece {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+        .black {
+            background-color: var(--piece-black);
+            border: 2px solid #444;
+        }
+        .white {
+            background-color: var(--piece-white);
+            border: 2px solid #ccc;
+        }
+        .valid-move {
+            background-color: var(--highlight-color);
+        }
+        .valid-move:hover {
+            background-color: #507892;
+        }
+        #status, .instructions, #moveHistory {
+            background-color: var(--board-bg);
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 400px;
+        }
+        .instructions h2 {
+            color: var(--accent-color);
+            margin-top: 0;
+            cursor: pointer;
+        }
+        .instructions-content {
+            display: none;
+        }
+        .blink {
+            animation: blink-animation 1s steps(5, start) infinite;
+        }
+        @keyframes blink-animation {
+            to {
+                visibility: hidden;
+            }
+        }
+        @media (max-width: 600px) {
+            body, pre {
+                font-size: 12px;
+            }
+            .cell {
+                width: 35px;
+                height: 35px;
+            }
+            .piece {
+                width: 25px;
+                height: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <pre class="ascii-title">
+  ____  _   _          _ _       
+ / __ \| | | |        | | |      
+| |  | | |_| |__   ___| | | ___  
+| |  | | __| '_ \ / _ \ | |/ _ \ 
+| |__| | |_| | | |  __/ | | (_) |
+ \____/ \__|_| |_|\___|_|_|\___/ 
+        </pre>
+        <div id="board" class="board"></div>
+        <pre id="status"></pre>
+        <pre id="moveHistory"></pre>
+        <div class="instructions">
+            <h2 onclick="toggleInstructions()">Instructions (click to show/hide)</h2>
+            <pre id="instructionsContent" class="instructions-content">
+How to Play:
+1. The game is played on an 8x8 grid.
+2. Black always moves first.
+3. To make a move, click on a valid cell (highlighted).
+4. A valid move must outflank at least one opponent's piece.
+5. Outflanking means placing your piece so that your opponent's
+   piece(s) are between your newly placed piece and another of yours.
+6. All outflanked opponent's pieces are then flipped to your color.
+7. If you can't make a valid move, your turn is skipped.
+8. The game ends when neither player can make a move.
+9. The player with the most pieces on the board wins.
+
+Strategy Tips:
+• Try to control the corners, as they can't be outflanked.
+• Be cautious about placing pieces near corners you don't control.
+• Sometimes, having fewer pieces mid-game can be advantageous.
+• Think several moves ahead and try to force your opponent into
+  unfavorable positions.
+            </pre>
+        </div>
+    </div>
+
+    <script>
+        const board = document.getElementById('board');
+        const status = document.getElementById('status');
+        const moveHistory = document.getElementById('moveHistory');
+        let currentPlayer = 'B';
+        let gameBoard = Array(8).fill().map(() => Array(8).fill(null));
+        let moves = [];
+
+        function initializeBoard() {
+            gameBoard[3][3] = 'W';
+            gameBoard[3][4] = 'B';
+            gameBoard[4][3] = 'B';
+            gameBoard[4][4] = 'W';
+            renderBoard();
+        }
+
+        function renderBoard() {
+            board.innerHTML = '';
+            for (let i = 0; i < 8; i++) {
+                const row = document.createElement('div');
+                row.className = 'row';
+                for (let j = 0; j < 8; j++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'cell';
+                    cell.dataset.row = i;
+                    cell.dataset.col = j;
+                    if (gameBoard[i][j]) {
+                        const piece = document.createElement('div');
+                        piece.className = `piece ${gameBoard[i][j] === 'B' ? 'black' : 'white'}`;
+                        cell.appendChild(piece);
+                    } else if (isValidMove(i, j)) {
+                        cell.classList.add('valid-move');
+                        cell.textContent = '•';
+                    }
+                    cell.addEventListener('click', () => makeMove(i, j));
+                    row.appendChild(cell);
+                }
+                board.appendChild(row);
+            }
+            updateStatus();
+        }
+
+        function isValidMove(row, col) {
+            if (gameBoard[row][col] !== null) return false;
+            const directions = [
+                [-1, -1], [-1, 0], [-1, 1],
+                [0, -1],           [0, 1],
+                [1, -1],  [1, 0],  [1, 1]
+            ];
+            return directions.some(([dx, dy]) => {
+                let x = row + dx;
+                let y = col + dy;
+                if (x < 0 || x >= 8 || y < 0 || y >= 8 || gameBoard[x][y] !== (currentPlayer === 'B' ? 'W' : 'B')) return false;
+                while (x >= 0 && x < 8 && y >= 0 && y < 8) {
+                    if (gameBoard[x][y] === null) return false;
+                    if (gameBoard[x][y] === currentPlayer) return true;
+                    x += dx;
+                    y += dy;
+                }
+                return false;
+            });
+        }
+
+        function makeMove(row, col) {
+            if (!isValidMove(row, col)) return;
+
+            gameBoard[row][col] = currentPlayer;
+            const directions = [
+                [-1, -1], [-1, 0], [-1, 1],
+                [0, -1],           [0, 1],
+                [1, -1],  [1, 0],  [1, 1]
+            ];
+            let flippedPieces = 0;
+            directions.forEach(([dx, dy]) => {
+                let x = row + dx;
+                let y = col + dy;
+                const toFlip = [];
+                while (x >= 0 && x < 8 && y >= 0 && y < 8 && gameBoard[x][y] === (currentPlayer === 'B' ? 'W' : 'B')) {
+                    toFlip.push([x, y]);
+                    x += dx;
+                    y += dy;
+                }
+                if (x >= 0 && x < 8 && y >= 0 && y < 8 && gameBoard[x][y] === currentPlayer) {
+                    flippedPieces += toFlip.length;
+                    toFlip.forEach(([fx, fy]) => {
+                        gameBoard[fx][fy] = currentPlayer;
+                        animateFlip(fx, fy);
+                    });
+                }
+            });
+
+            moves.push(`${currentPlayer === 'B' ? 'Black' : 'White'} placed at ${String.fromCharCode(97 + col)}${row + 1}, flipped ${flippedPieces} piece${flippedPieces !== 1 ? 's' : ''}`);
+            updateMoveHistory();
+
+            currentPlayer = currentPlayer === 'B' ? 'W' : 'B';
+            renderBoard();
+        }
+
+        function animateFlip(row, col) {
+            const cell = board.children[row].children[col];
+            const piece = cell.firstChild;
+            piece.style.transform = 'rotateY(180deg)';
+            setTimeout(() => {
+                piece.className = `piece ${currentPlayer === 'B' ? 'black' : 'white'}`;
+                piece.style.transform = 'rotateY(0deg)';
+            }, 150);
+        }
+
+        function updateStatus() {
+            const blackCount = gameBoard.flat().filter(cell => cell === 'B').length;
+            const whiteCount = gameBoard.flat().filter(cell => cell === 'W').length;
+            status.innerHTML = `Black: ${blackCount} | White: ${whiteCount} | Current Turn: ${currentPlayer === 'B' ? 'Black' : 'White'}\n`;
+
+            if (!gameBoard.flat().includes(null) || (!hasValidMoves('B') && !hasValidMoves('W'))) {
+                const winner = blackCount > whiteCount ? 'Black' : whiteCount > blackCount ? 'White' : 'Tie';
+                status.innerHTML += `Game Over! ${winner === 'Tie' ? "It's a tie!" : winner + ' wins!'}\n`;
+            } else if (!hasValidMoves(currentPlayer)) {
+                currentPlayer = currentPlayer === 'B' ? 'W' : 'B';
+                status.innerHTML += 'No valid moves, turn skipped\n';
+                moves.push(`${currentPlayer === 'B' ? 'White' : 'Black'} had no valid moves, turn skipped`);
+                updateMoveHistory();
+                renderBoard();
+            }
+            status.innerHTML += '\n> ' + '<span class="blink">_</span>';
+        }
+
+        function hasValidMoves(player) {
+            for (let i = 0; i < 8; i++) {
+                for (let j = 0; j < 8; j++) {
+                    if (isValidMove(i, j)) return true;
+                }
+            }
+            return false;
+        }
+
+        function updateMoveHistory() {
+            moveHistory.innerHTML = 'Move History:\n' + moves.slice(-5).join('\n');
+        }
+
+        function toggleInstructions() {
+            const instructionsContent = document.getElementById('instructionsContent');
+            instructionsContent.style.display = instructionsContent.style.display === 'none' ? 'block' : 'none';
+        }
+
+        initializeBoard();
+    </script>
+</body>
+</html>
