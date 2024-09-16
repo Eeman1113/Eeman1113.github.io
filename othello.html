@@ -78,9 +78,18 @@
         .valid-move:hover {
             background-color: #507892;
         }
-        #status, .instructions, #moveHistory {
+        #status, #moveHistory {
             background-color: var(--board-bg);
             padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 400px;
+        }
+        .instructions {
+            background-color: var(--board-bg);
+            padding: 15px;
             border-radius: 5px;
             margin-bottom: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
@@ -90,10 +99,28 @@
         .instructions h2 {
             color: var(--accent-color);
             margin-top: 0;
+            margin-bottom: 10px;
             cursor: pointer;
+            font-size: 1.2em;
         }
         .instructions-content {
             display: none;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+        .instructions-content h3 {
+            color: var(--text-color);
+            margin-top: 15px;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        .instructions-content ol, .instructions-content ul {
+            padding-left: 20px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+        }
+        .instructions-content li {
+            margin-bottom: 5px;
         }
         .blink {
             animation: blink-animation 1s steps(5, start) infinite;
@@ -133,26 +160,28 @@
         <pre id="moveHistory"></pre>
         <div class="instructions">
             <h2 onclick="toggleInstructions()">Instructions (click to show/hide)</h2>
-            <pre id="instructionsContent" class="instructions-content">
-How to Play:
-1. The game is played on an 8x8 grid.
-2. Black always moves first.
-3. To make a move, click on a valid cell (highlighted).
-4. A valid move must outflank at least one opponent's piece.
-5. Outflanking means placing your piece so that your opponent's
-   piece(s) are between your newly placed piece and another of yours.
-6. All outflanked opponent's pieces are then flipped to your color.
-7. If you can't make a valid move, your turn is skipped.
-8. The game ends when neither player can make a move.
-9. The player with the most pieces on the board wins.
-
-Strategy Tips:
-• Try to control the corners, as they can't be outflanked.
-• Be cautious about placing pieces near corners you don't control.
-• Sometimes, having fewer pieces mid-game can be advantageous.
-• Think several moves ahead and try to force your opponent into
-  unfavorable positions.
-            </pre>
+            <div id="instructionsContent" class="instructions-content">
+                <h3>How to Play:</h3>
+                <ol>
+                    <li>The game is played on an 8x8 grid.</li>
+                    <li>Black always moves first.</li>
+                    <li>To make a move, click on a valid cell (highlighted).</li>
+                    <li>A valid move must outflank at least one opponent's piece.</li>
+                    <li>Outflanking means placing your piece so that your opponent's piece(s) are between your newly placed piece and another of yours.</li>
+                    <li>All outflanked opponent's pieces are then flipped to your color.</li>
+                    <li>If you can't make a valid move, your turn is skipped.</li>
+                    <li>The game ends when neither player can make a move.</li>
+                    <li>The player with the most pieces on the board wins.</li>
+                </ol>
+                
+                <h3>Strategy Tips:</h3>
+                <ul>
+                    <li>Try to control the corners, as they can't be outflanked.</li>
+                    <li>Be cautious about placing pieces near corners you don't control.</li>
+                    <li>Sometimes, having fewer pieces mid-game can be advantageous.</li>
+                    <li>Think several moves ahead and try to force your opponent into unfavorable positions.</li>
+                </ul>
+            </div>
         </div>
     </div>
 
