@@ -78,6 +78,9 @@
         .valid-move:hover {
             background-color: #507892;
         }
+        .ai-move {
+            background-color: var(--accent-color);
+        }
         #status, #moveHistory {
             background-color: var(--board-bg);
             padding: 10px;
@@ -130,6 +133,20 @@
                 visibility: hidden;
             }
         }
+        .mode-toggle {
+            background-color: var(--board-bg);
+            color: var(--text-color);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        .mode-toggle:hover {
+            background-color: var(--highlight-color);
+        }
         @media (max-width: 600px) {
             body, pre {
                 font-size: 12px;
@@ -156,6 +173,7 @@
  \____/ \__|_| |_|\___|_|_|\___/ 
         </pre>
         <div id="board" class="board"></div>
+        <button id="modeToggle" class="mode-toggle">Switch to AI Mode</button>
         <pre id="status"></pre>
         <pre id="moveHistory"></pre>
         <div class="instructions">
@@ -189,9 +207,11 @@
         const board = document.getElementById('board');
         const status = document.getElementById('status');
         const moveHistory = document.getElementById('moveHistory');
+        const modeToggle = document.getElementById('modeToggle');
         let currentPlayer = 'B';
         let gameBoard = Array(8).fill().map(() => Array(8).fill(null));
         let moves = [];
+        let isAIMode = false;
 
         function initializeBoard() {
             gameBoard[3][3] = 'W';
@@ -281,6 +301,10 @@
 
             currentPlayer = currentPlayer === 'B' ? 'W' : 'B';
             renderBoard();
+
+            if (isAIMode && currentPlayer === 'W') {
+                setTimeout(makeAIMove, 1000);
+            }
         }
 
         function animateFlip(row, col) {
@@ -329,7 +353,40 @@
             instructionsContent.style.display = instructionsContent.style.display === 'none' ? 'block' : 'none';
         }
 
+        function makeAIMove() {
+        const validMoves = [];
+        for (let i = 0; i < 8; i++) {
+            for (let j = 0; j < 8; j++) {
+                if (isValidMove(i, j)) {
+                    validMoves.push([i, j]);
+                }
+            }
+        }
+        
+        if (validMoves.length > 0) {
+            const [row, col] = validMoves[Math.floor(Math.random() * validMoves.length)];
+            makeMove(row, col);
+            highlightAIMove(row, col);
+        }
+    }
+
+    function highlightAIMove(row, col) {
+        setTimeout(() => {
+            const cell = board.children[row].children[col];
+            cell.classList.add('ai-move');
+            setTimeout(() => {
+                cell.classList.remove('ai-move');
+            }, 1000);
+        }, 0);
+    }
+
+    modeToggle.addEventListener('click', () => {
+        isAIMode = !isAIMode;
+        modeToggle.textContent = isAIMode ? 'Switch to Human vs Human' : 'Switch to AI Mode';
         initializeBoard();
-    </script>
+    });
+
+    initializeBoard();
+</script>
 </body>
 </html>
