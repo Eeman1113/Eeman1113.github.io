@@ -62,32 +62,15 @@
             width: 30px;
             height: 30px;
             border-radius: 50%;
-            transition: transform 0.5s ease;
-            transform-style: preserve-3d;
+            transition: transform 0.3s ease;
         }
-        .piece::before,
-        .piece::after {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            backface-visibility: hidden;
-        }
-        .piece::before {
+        .black {
             background-color: var(--piece-black);
             border: 2px solid #444;
         }
-        .piece::after {
+        .white {
             background-color: var(--piece-white);
             border: 2px solid #ccc;
-            transform: rotateY(180deg);
-        }
-        .piece.black {
-            transform: rotateY(0deg);
-        }
-        .piece.white {
-            transform: rotateY(180deg);
         }
         .valid-move {
             background-color: var(--highlight-color);
@@ -314,9 +297,9 @@
                 }
                 if (x >= 0 && x < 8 && y >= 0 && y < 8 && gameBoard[x][y] === currentPlayer) {
                     flippedPieces += toFlip.length;
-                    toFlip.forEach(([fx, fy], index) => {
+                    toFlip.forEach(([fx, fy]) => {
                         gameBoard[fx][fy] = currentPlayer;
-                        setTimeout(() => animateFlip(fx, fy), index * 100);
+                        animateFlip(fx, fy);
                     });
                 }
             });
@@ -335,19 +318,11 @@
         function animateFlip(row, col) {
             const cell = board.children[row].children[col];
             const piece = cell.firstChild;
-            
-            // Trigger haptic feedback
-            if (navigator.vibrate) {
-                navigator.vibrate(50);
-            }
-
-            // Animate the flip
-            piece.style.transform = `rotateY(${currentPlayer === 'B' ? '180deg' : '0deg'})`;
-            
-            // Update the piece class after the animation
+            piece.style.transform = 'rotateY(180deg)';
             setTimeout(() => {
-                piece.className = `piece ${currentPlayer === 'B' ? 'white' : 'black'}`;
-            }, 250);
+                piece.className = `piece ${currentPlayer === 'B' ? 'black' : 'white'}`;
+                piece.style.transform = 'rotateY(0deg)';
+            }, 150);
         }
 
         function updateStatus() {
@@ -394,203 +369,203 @@
         }
 
         function makeAIMove() {
-            status.innerHTML = status.innerHTML.replace('<span id="aiThinking">AI is thinking...</span>\n', '');
-            status.innerHTML += 'AI is analyzing the board...\n';
-            setTimeout(() => {
-                const [row, col] = getBestMove(gameBoard, currentPlayer, 4);
-                const evaluation = evaluateBoard(gameBoard, currentPlayer);
-                const thoughts = `AI chose move: ${String.fromCharCode(97 + col)}${row + 1}`;
-                const calculation = `Evaluation: ${evaluation.toFixed(2)}, Search depth: 4`;
-                status.innerHTML = status.innerHTML.replace('AI is analyzing the board...\n', '');
-                status.innerHTML += thoughts + '\n' + calculation + '\n';
-                makeMove(row, col);
-                highlightAIMove(row, col);
-                updateStatus();
-            }, 1000);
+        status.innerHTML = status.innerHTML.replace('<span id="aiThinking">AI is thinking...</span>\n', '');
+        status.innerHTML += 'AI is analyzing the board...\n';
+        setTimeout(() => {
+            const [row, col] = getBestMove(gameBoard, currentPlayer, 4);
+            const evaluation = evaluateBoard(gameBoard, currentPlayer);
+            const thoughts = `AI chose move: ${String.fromCharCode(97 + col)}${row + 1}`;
+            const calculation = `Evaluation: ${evaluation.toFixed(2)}, Search depth: 4`;
+            status.innerHTML = status.innerHTML.replace('AI is analyzing the board...\n', '');
+            status.innerHTML += thoughts + '\n' + calculation + '\n';
+            makeMove(row, col);
+            highlightAIMove(row, col);
+            updateStatus();
+        }, 1000);
+    }
+
+    function getBestMove(board, player, depth) {
+        const [_, bestMove] = alphabeta(board, depth, -Infinity, Infinity, true, player);
+        return bestMove;
+    }
+
+    function alphabeta(board, depth, alpha, beta, maximizingPlayer, player) {
+        if (depth === 0 || isGameOver(board)) {
+            return [evaluateBoard(board, player), null];
         }
 
-        function getBestMove(board, player, depth) {
-            const [_, bestMove] = alphabeta(board, depth, -Infinity, Infinity, true, player);
-            return bestMove;
-        }
+        const validMoves = getValidMoves(board, player);
+        
+        if (maximizingPlayer) {
+            let maxEval = -Infinity;
+            let bestMove = null;
 
-        function alphabeta(board, depth, alpha, beta, maximizingPlayer, player) {
-            if (depth === 0 || isGameOver(board)) {
-                return [evaluateBoard(board, player), null];
-            }
+            for (const move of validMoves) {
+                const newBoard = makeMoveCopy(board, move[0], move[1], player);
+                const [evalScore, _] = alphabeta(newBoard, depth - 1, alpha, beta, false, player === 'B' ? 'W' : 'B');
 
-            const validMoves = getValidMoves(board, player);
-            
-            if (maximizingPlayer) {
-                let maxEval = -Infinity;
-                let bestMove = null;
-
-                for (const move of validMoves) {
-                    const newBoard = makeMoveCopy(board, move[0], move[1], player);
-                    const [evalScore, _] = alphabeta(newBoard, depth - 1, alpha, beta, false, player === 'B' ? 'W' : 'B');
-
-                    if (evalScore > maxEval) {
-                        maxEval = evalScore;
-                        bestMove = move;
-                    }
-                    alpha = Math.max(alpha, evalScore);
-                    if (beta <= alpha) {
-                        break;
-                    }
+                if (evalScore > maxEval) {
+                    maxEval = evalScore;
+                    bestMove = move;
                 }
-
-                return [maxEval, bestMove];
-            } else {
-                let minEval = Infinity;
-                let bestMove = null;
-
-                for (const move of validMoves) {
-                    const newBoard = makeMoveCopy(board, move[0], move[1], player);
-                    const [evalScore, _] = alphabeta(newBoard, depth - 1, alpha, beta, true, player === 'B' ? 'W' : 'B');
-
-                    if (evalScore < minEval) {
-                        minEval = evalScore;
-                        bestMove = move;
-                    }
-                    beta = Math.min(beta, evalScore);
-                    if (beta <= alpha) {
-                        break;
-                    }
-                }
-
-                return [minEval, bestMove];
-            }
-        }
-
-        function evaluateBoard(board, player) {
-            const opponent = player === 'B' ? 'W' : 'B';
-            
-            const coinParity = getCoinParity(board, player);
-            const mobility = getMobility(board, player);
-            const corners = getCorners(board, player);
-            const stability = getStability(board, player);
-
-            return coinParity + 2 * mobility + 5 * corners + 3 * stability;
-        }
-
-        function getCoinParity(board, player) {
-            const playerCount = board.flat().filter(cell => cell === player).length;
-            const opponentCount = board.flat().filter(cell => cell === (player === 'B' ? 'W' : 'B')).length;
-            return 100 * (playerCount - opponentCount) / (playerCount + opponentCount);
-        }
-
-        function getMobility(board, player) {
-            const playerMoves = getValidMoves(board, player).length;
-            const opponentMoves = getValidMoves(board, player === 'B' ? 'W' : 'B').length;
-            return 100 * (playerMoves - opponentMoves) / (playerMoves + opponentMoves + 1);
-        }
-
-        function getCorners(board, player) {
-            const playerCorners = [board[0][0], board[0][7], board[7][0], board[7][7]].filter(corner => corner === player).length;
-            const opponentCorners = [board[0][0], board[0][7], board[7][0], board[7][7]].filter(corner => corner === (player === 'B' ? 'W' : 'B')).length;
-            return 100 * (playerCorners - opponentCorners) / (playerCorners + opponentCorners + 1);
-        }
-
-        function getStability(board, player) {
-            const edges = [
-                ...board[0], ...board[7],
-                ...board.map(row => row[0]),
-                ...board.map(row => row[7])
-            ];
-            const playerEdges = edges.filter(cell => cell === player).length;
-            const opponentEdges = edges.filter(cell => cell === (player === 'B' ? 'W' : 'B')).length;
-            return 100 * (playerEdges - opponentEdges) / (playerEdges + opponentEdges + 1);
-        }
-
-        function getValidMoves(board, player) {
-            const validMoves = [];
-            for (let i = 0; i < 8; i++) {
-                for (let j = 0; j < 8; j++) {
-                    if (isValidMoveCopy(board, i, j, player)) {
-                        validMoves.push([i, j]);
-                    }
+                alpha = Math.max(alpha, evalScore);
+                if (beta <= alpha) {
+                    break;
                 }
             }
-            return validMoves;
-        }
 
-        function isValidMoveCopy(board, row, col, player) {
-            if (board[row][col] !== null) return false;
-            const directions = [
-                [-1, -1], [-1, 0], [-1, 1],
-                [0, -1],           [0, 1],
-                [1, -1],  [1, 0],  [1, 1]
-            ];
-            return directions.some(([dx, dy]) => {
-                let x = row + dx;
-                let y = col + dy;
-                if (x < 0 || x >= 8 || y < 0 || y >= 8 || board[x][y] !== (player === 'B' ? 'W' : 'B')) return false;
-                while (x >= 0 && x < 8 && y >= 0 && y < 8) {
-                    if (board[x][y] === null) return false;
-                    if (board[x][y] === player) return true;
-                    x += dx;
-                    y += dy;
-                }
-                return false;
-            });
-        }
+            return [maxEval, bestMove];
+        } else {
+            let minEval = Infinity;
+            let bestMove = null;
 
-        function makeMoveCopy(board, row, col, player) {
-            const newBoard = board.map(row => [...row]);
-            newBoard[row][col] = player;
-            const directions = [
-                [-1, -1], [-1, 0], [-1, 1],
-                [0, -1],           [0, 1],
-                [1, -1],  [1, 0],  [1, 1]
-            ];
-            directions.forEach(([dx, dy]) => {
-                let x = row + dx;
-                let y = col + dy;
-                const toFlip = [];
-                while (x >= 0 && x < 8 && y >= 0 && y < 8 && newBoard[x][y] === (player === 'B' ? 'W' : 'B')) {
-                    toFlip.push([x, y]);
-                    x += dx;
-                    y += dy;
-                }
-                if (x >= 0 && x < 8 && y >= 0 && y < 8 && newBoard[x][y] === player) {
-                    toFlip.forEach(([fx, fy]) => {
-                        newBoard[fx][fy] = player;
-                    });
-                }
-            });
-            return newBoard;
-        }
+            for (const move of validMoves) {
+                const newBoard = makeMoveCopy(board, move[0], move[1], player);
+                const [evalScore, _] = alphabeta(newBoard, depth - 1, alpha, beta, true, player === 'B' ? 'W' : 'B');
 
-        function isGameOver(board) {
-            return !board.flat().includes(null) || (!hasValidMovesCopy(board, 'B') && !hasValidMovesCopy(board, 'W'));
-        }
-
-        function hasValidMovesCopy(board, player) {
-            for (let i = 0; i < 8; i++) {
-                for (let j = 0; j < 8; j++) {
-                    if (isValidMoveCopy(board, i, j, player)) return true;
+                if (evalScore < minEval) {
+                    minEval = evalScore;
+                    bestMove = move;
                 }
+                beta = Math.min(beta, evalScore);
+                if (beta <= alpha) {
+                    break;
+                }
+            }
+
+            return [minEval, bestMove];
+        }
+    }
+
+    function evaluateBoard(board, player) {
+        const opponent = player === 'B' ? 'W' : 'B';
+        
+        const coinParity = getCoinParity(board, player);
+        const mobility = getMobility(board, player);
+        const corners = getCorners(board, player);
+        const stability = getStability(board, player);
+
+        return coinParity + 2 * mobility + 5 * corners + 3 * stability;
+    }
+
+    function getCoinParity(board, player) {
+        const playerCount = board.flat().filter(cell => cell === player).length;
+        const opponentCount = board.flat().filter(cell => cell === (player === 'B' ? 'W' : 'B')).length;
+        return 100 * (playerCount - opponentCount) / (playerCount + opponentCount);
+    }
+
+    function getMobility(board, player) {
+        const playerMoves = getValidMoves(board, player).length;
+        const opponentMoves = getValidMoves(board, player === 'B' ? 'W' : 'B').length;
+        return 100 * (playerMoves - opponentMoves) / (playerMoves + opponentMoves + 1);
+    }
+
+    function getCorners(board, player) {
+        const playerCorners = [board[0][0], board[0][7], board[7][0], board[7][7]].filter(corner => corner === player).length;
+        const opponentCorners = [board[0][0], board[0][7], board[7][0], board[7][7]].filter(corner => corner === (player === 'B' ? 'W' : 'B')).length;
+        return 100 * (playerCorners - opponentCorners) / (playerCorners + opponentCorners + 1);
+    }
+
+    function getStability(board, player) {
+        const edges = [
+            ...board[0], ...board[7],
+            ...board.map(row => row[0]),
+            ...board.map(row => row[7])
+        ];
+        const playerEdges = edges.filter(cell => cell === player).length;
+        const opponentEdges = edges.filter(cell => cell === (player === 'B' ? 'W' : 'B')).length;
+        return 100 * (playerEdges - opponentEdges) / (playerEdges + opponentEdges + 1);
+    }
+
+    function getValidMoves(board, player) {
+        const validMoves = [];
+        for (let i = 0; i < 8; i++) {
+            for (let j = 0; j < 8; j++) {
+                if (isValidMoveCopy(board, i, j, player)) {
+                    validMoves.push([i, j]);
+                }
+            }
+        }
+        return validMoves;
+    }
+
+    function isValidMoveCopy(board, row, col, player) {
+        if (board[row][col] !== null) return false;
+        const directions = [
+            [-1, -1], [-1, 0], [-1, 1],
+            [0, -1],           [0, 1],
+            [1, -1],  [1, 0],  [1, 1]
+        ];
+        return directions.some(([dx, dy]) => {
+            let x = row + dx;
+            let y = col + dy;
+            if (x < 0 || x >= 8 || y < 0 || y >= 8 || board[x][y] !== (player === 'B' ? 'W' : 'B')) return false;
+            while (x >= 0 && x < 8 && y >= 0 && y < 8) {
+                if (board[x][y] === null) return false;
+                if (board[x][y] === player) return true;
+                x += dx;
+                y += dy;
             }
             return false;
-        }
-
-        function highlightAIMove(row, col) {
-            setTimeout(() => {
-                const cell = board.children[row].children[col];
-                cell.classList.add('ai-move');
-                setTimeout(() => {
-                    cell.classList.remove('ai-move');
-                }, 1000);
-            }, 0);
-        }
-
-        modeToggle.addEventListener('click', () => {
-            isAIMode = !isAIMode;
-            modeToggle.textContent = isAIMode ? 'Switch to Human vs Human' : 'Switch to AI Mode';
-            initializeBoard();
         });
+    }
 
+    function makeMoveCopy(board, row, col, player) {
+        const newBoard = board.map(row => [...row]);
+        newBoard[row][col] = player;
+        const directions = [
+            [-1, -1], [-1, 0], [-1, 1],
+            [0, -1],           [0, 1],
+            [1, -1],  [1, 0],  [1, 1]
+        ];
+        directions.forEach(([dx, dy]) => {
+            let x = row + dx;
+            let y = col + dy;
+            const toFlip = [];
+            while (x >= 0 && x < 8 && y >= 0 && y < 8 && newBoard[x][y] === (player === 'B' ? 'W' : 'B')) {
+                toFlip.push([x, y]);
+                x += dx;
+                y += dy;
+            }
+            if (x >= 0 && x < 8 && y >= 0 && y < 8 && newBoard[x][y] === player) {
+                toFlip.forEach(([fx, fy]) => {
+                    newBoard[fx][fy] = player;
+                });
+            }
+        });
+        return newBoard;
+    }
+
+    function isGameOver(board) {
+        return !board.flat().includes(null) || (!hasValidMovesCopy(board, 'B') && !hasValidMovesCopy(board, 'W'));
+    }
+
+    function hasValidMovesCopy(board, player) {
+        for (let i = 0; i < 8; i++) {
+            for (let j = 0; j < 8; j++) {
+                if (isValidMoveCopy(board, i, j, player)) return true;
+            }
+        }
+        return false;
+    }
+
+    function highlightAIMove(row, col) {
+        setTimeout(() => {
+            const cell = board.children[row].children[col];
+            cell.classList.add('ai-move');
+            setTimeout(() => {
+                cell.classList.remove('ai-move');
+            }, 1000);
+        }, 0);
+    }
+
+    modeToggle.addEventListener('click', () => {
+        isAIMode = !isAIMode;
+        modeToggle.textContent = isAIMode ? 'Switch to Human vs Human' : 'Switch to AI Mode';
         initializeBoard();
-    </script>
+    });
+
+    initializeBoard();
+</script>
 </body>
 </html>
