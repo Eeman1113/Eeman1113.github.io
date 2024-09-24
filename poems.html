@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eeja. - Poem Video Gallery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #8B7355;
+            --bg-color: #f5f5dc;
+            --card-bg: rgba(230, 230, 202, 0.3);
+            --text-color: #4a4a4a;
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+            color: var(--text-color);
+            overflow-x: hidden;
+        }
+        .logo {
+            font-family: 'Playfair Display', serif;
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 40px;
+            font-size: 64px;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .video-item {
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .video-item:hover {
+            transform: translateY(-5px);
+        }
+        .video-container {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            aspect-ratio: 9 / 16;
+            position: relative;
+        }
+        .video-container.fullscreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1000;
+            border-radius: 0;
+            background-color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.3s ease;
+        }
+        .video-container.fullscreen video {
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        .video-title {
+            margin-top: 12px;
+            color: var(--primary-color);
+            font-size: 16px;
+            text-align: center;
+            font-weight: 400;
+        }
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 48px;
+            }
+            .gallery {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 20px;
+            }
+            .video-title {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1 class="logo">eeja.</h1>
+    <div class="gallery" id="video-gallery"></div>
+    <script>
+        const poems = [
+            { id: 1, title: "Warm Cup Of Coffee", path: "./videos/elixir.mp4" },
+            { id: 2, title: "Little Escape", path: "./videos/escape.mp4" },
+            { id: 3, title: "Comfort Place", path: "./videos/garden.mp4" },
+            { id: 4, title: "You Are My Sun", path: "./videos/sun.mp4" },
+            { id: 5, title: "4444", path: "./videos/gardian angel.mp4" },
+            { id: 6, title: "Mountains", path: "./videos/mountain.mp4" },
+            { id: 7, title: "Often When", path: "./videos/speaker.mp4" }
+        ];
+
+        function createVideoItem(poem) {
+            return `
+                <div class="video-item">
+                    <div class="video-container">
+                        <video src="${poem.path}" loop muted autoplay playsinline></video>
+                    </div>
+                    <p class="video-title">${poem.title}</p>
+                </div>
+            `;
+        }
+
+        function renderGallery() {
+            const gallery = document.getElementById('video-gallery');
+            gallery.innerHTML = poems.map(createVideoItem).join('');
+            
+            gallery.addEventListener('click', function(e) {
+                const videoContainer = e.target.closest('.video-container');
+                if (videoContainer) {
+                    toggleFullScreen(videoContainer);
+                }
+            });
+        }
+
+        function toggleFullScreen(container) {
+            const video = container.querySelector('video');
+            if (!document.fullscreenElement) {
+                if (container.requestFullscreen) {
+                    container.requestFullscreen();
+                } else if (container.mozRequestFullScreen) {
+                    container.mozRequestFullScreen();
+                } else if (container.webkitRequestFullscreen) {
+                    container.webkitRequestFullscreen();
+                } else if (container.msRequestFullscreen) {
+                    container.msRequestFullscreen();
+                }
+                container.classList.add('fullscreen');
+                video.muted = false;
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+                container.classList.remove('fullscreen');
+                video.muted = true;
+            }
+        }
+
+        renderGallery();
+
+        // Listen for fullscreen changes
+        document.addEventListener('fullscreenchange', handleFullscreenChange);
+        document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+        document.addEventListener('mozfullscreenchange', handleFullscreenChange);
+        document.addEventListener('MSFullscreenChange', handleFullscreenChange);
+
+        function handleFullscreenChange() {
+            if (!document.fullscreenElement && !document.webkitFullscreenElement && 
+                !document.mozFullScreenElement && !document.msFullscreenElement) {
+                const fullscreenContainer = document.querySelector('.video-container.fullscreen');
+                if (fullscreenContainer) {
+                    fullscreenContainer.classList.remove('fullscreen');
+                    fullscreenContainer.querySelector('video').muted = true;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
