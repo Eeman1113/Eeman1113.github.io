@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects - Eeman Majumder</title>
+    <link rel="icon" type="image/x-icon" href="./image/logo.ico">
+    <script src="https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/font.min.js"></script>
+    <style>
+        @font-face {
+            font-family: 'Geist Mono Medium';
+            src: url('font/statics-otf/GeistMono-Medium.otf');
+        }
+        body {
+            font-family: 'Geist Mono Medium', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 40px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: black;
+            text-decoration: none;
+        }
+        .logo a {
+            color: black;
+            text-decoration: none;
+        }
+        h1, h2 {
+            margin-top: 0;
+            font-weight: 600;
+        }
+        .button {
+            display: inline-block;
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #555;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Search & Filters */
+        .controls {
+            margin-bottom: 30px;
+        }
+        .search-box {
+            width: 100%;
+            padding: 10px 20px;
+            border: 1px solid #eee;
+            border-radius: 5px;
+            font-family: 'Geist Mono Medium', sans-serif;
+            font-size: 0.9em;
+            outline: none;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+        .search-box:focus {
+            border-color: #333;
+        }
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .filter-btn {
+            background-color: #f0f0f0;
+            color: #333;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            font-family: 'Geist Mono Medium', sans-serif;
+            transition: all 0.3s ease;
+        }
+        .filter-btn:hover {
+            background-color: #e0e0e0;
+        }
+        .filter-btn.active {
+            background-color: #333;
+            color: white;
+        }
+        .project-count {
+            font-size: 0.85em;
+            color: #999;
+            margin-bottom: 20px;
+        }
+
+        /* Project List */
+        .project-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .project-item {
+            margin-bottom: 0;
+            padding: 16px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .project-item:first-child {
+            border-top: 1px solid #eee;
+        }
+        .project-name {
+            font-size: 1em;
+            margin: 0 0 4px 0;
+            font-weight: 600;
+        }
+        .project-name a {
+            color: black;
+            text-decoration: none;
+        }
+        .project-name a:hover {
+            text-decoration: underline;
+        }
+        .project-desc {
+            font-size: 0.85em;
+            color: #666;
+            margin: 0;
+        }
+        .project-tags {
+            display: flex;
+            gap: 6px;
+            margin-top: 6px;
+        }
+        .project-tag {
+            font-size: 0.75em;
+            color: #999;
+            background: #f5f5f5;
+            padding: 2px 8px;
+            border-radius: 3px;
+        }
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo"><a href="./index.html">EM</a></div>
+            <a href="https://linktr.ee/eemanmajumder" class="button">Contact</a>
+        </header>
+
+        <h1>Projects</h1>
+        <p style="color: #666; font-size: 0.9em; margin-bottom: 30px;">Everything I've built.</p>
+
+        <div class="controls">
+            <input type="text" class="search-box" id="searchBox" placeholder="Search projects...">
+            <div class="filters" id="filters"></div>
+        </div>
+        <div class="project-count" id="projectCount"></div>
+
+        <ul class="project-list" id="projectList"></ul>
+    </div>
+
+<script>
+const PROJECTS = [
+    { name: "Study_For_Me_AI", desc: "AI study assistant that auto-generates answers from textual data for efficient learning.", tags: ["ai", "python"] },
+    { name: "ML-BASED-CAREER-COUINCLER", desc: "Career counselor that suggests job positions using GPT-3 and generates report images.", tags: ["ai", "web"] },
+    { name: "Better_Song_reccomendetar_than_spotify", desc: "Spotify playlist generator leveraging audio feature analysis via Spotipy.", tags: ["python", "tools"] },
+    { name: "My-AI-ML-Neural-net-and-Tensorflow-Study", desc: "TensorFlow study repo with step-by-step Jupyter notebooks for neural networks.", tags: ["ai", "education"] },
+    { name: "FILL_ME_UP", desc: "Streamlit app that generates Google Form responses using GPT-3.5-turbo.", tags: ["ai", "web"] },
+    { name: "AI_to_attend_my_online_classes", desc: "AI assistant that automates online class attendance via voice recognition.", tags: ["ai", "bots"] },
+    { name: "Chatterboii69", desc: "Chatbot framework that processes user input through CSV data analysis.", tags: ["ai", "python"] },
+    { name: "Eeman1113.github.io", desc: "Personal portfolio website.", tags: ["web"] },
+    { name: "Generating-Art-using-AI", desc: "Art generation tool using generative AI models on the CC12M dataset.", tags: ["ai", "creative"] },
+    { name: "Lenia_Python_Implementation", desc: "Tutorial notebook evolving discrete to continuous cellular automata interactively.", tags: ["python", "education"] },
+    { name: "PyFlashlight", desc: "Deep learning framework with GPU-accelerated automatic differentiation.", tags: ["ai", "python"] },
+    { name: "LeapHigher", desc: "Auto-clicker automating coding challenges using OCR and database-driven answers.", tags: ["tools", "python"] },
+    { name: "plant-monitoring-system-using-python-and-audrino", desc: "Arduino plant monitoring tracking temp/humidity with real-time graph plotting.", tags: ["python", "tools"] },
+    { name: "dogs-Vs-cats-AI-", desc: "Image classifier differentiating dogs and cats using neural networks.", tags: ["ai", "python"] },
+    { name: "Teaching-stuff", desc: "Educational resource teaching fundamental programming through practical exercises.", tags: ["education"] },
+    { name: "digits-AI", desc: "Digit recognition tool identifying handwritten digits via Scikit-learn.", tags: ["ai", "python"] },
+    { name: "MLFS", desc: "Machine Learning guidebook with step-by-step tutorials and visual examples.", tags: ["ai", "education"] },
+    { name: "Eeman", desc: "SketchUp-based architectural house design models.", tags: ["creative"] },
+    { name: "Face-tracker-cv3-", desc: "Real-time face tracker using OpenCV 3's Haar cascade algorithm.", tags: ["ai", "python"] },
+    { name: "telegram-dog-bot", desc: "Telegram bot that sends random dog images on /bop command.", tags: ["bots", "python"] },
+    { name: "AI-to-send-you-newspapers-from-a-randomly-made-up-world.", desc: "Headline generator creating fictional news from a simulated world.", tags: ["ai", "creative"] },
+    { name: "rat_bonk", desc: "Game implementing rat-bonking mechanics through keyboard-controlled movement.", tags: ["games", "python"] },
+    { name: "HackX", desc: "Tool that automates cheating in online exams.", tags: ["tools", "python"] },
+    { name: "Ampusee", desc: "Book reader controlled with hand gesture recognition through webcam.", tags: ["ai", "tools"] },
+    { name: "Morse-code", desc: "Morse code translator converting text to Morse and back.", tags: ["python", "tools"] },
+    { name: "playothello.online", desc: "Othello game with real-time AI opponents across three difficulty levels.", tags: ["games", "web"] },
+    { name: "Examinee_AI", desc: "Question-answering app generating answers using GPT-3 API.", tags: ["ai", "web"] },
+    { name: "AI-to-make-wierd-spotify-playlists-", desc: "Generates weird Spotify playlists using AI-driven algorithms.", tags: ["ai", "creative"] },
+    { name: "QR_BASED_ATTENDANCE", desc: "QR attendance system scanning QR codes to track employee check-ins.", tags: ["tools", "python"] },
+    { name: "word-2-word-level-transcription-and-forced-alignment-lip-sync-ultra-pro-max-2d-avatar", desc: "Lip-syncing engine generating synchronized 2D avatar animations from audio.", tags: ["ai", "creative"] },
+    { name: "CHEATCHINGU", desc: "OCR utility extracting text from screenshots using computer vision.", tags: ["ai", "tools"] },
+    { name: "AI", desc: "Simple machine learning functionality using basic algorithms.", tags: ["ai", "python"] },
+    { name: "Automated_Email_System-", desc: "Automated email system scheduling and sending messages via SMTP.", tags: ["tools", "python"] },
+    { name: "The-AI-Based-Book-Generator", desc: "AI-powered book generator producing narrative content through ML.", tags: ["ai", "creative"] },
+    { name: "detection-of-COVID-19-WITH-KERAS", desc: "X-ray analysis detecting COVID-19 using Keras CNNs.", tags: ["ai", "python"] },
+    { name: "bill-management", desc: "Bill management tool printing and saving restaurant invoices.", tags: ["tools", "python"] },
+    { name: "seo", desc: "SEO toolkit generating meta tags and sitemaps.", tags: ["tools", "python"] },
+    { name: "OCR_for_SBI", desc: "OCR system for SBI processing scanned documents with OpenCV and Tesseract.", tags: ["ai", "tools"] },
+    { name: "Chatbot_in_15_lines_GPT-3", desc: "GPT-3 chatbot in a concise 15-line Jupyter notebook.", tags: ["ai", "python"] },
+    { name: "AutoGitter", desc: "Git automation tool for managing and interacting with repositories.", tags: ["tools", "python"] },
+    { name: "DivineFinder", desc: "Web app enabling religious search using JSON data and HTML interfaces.", tags: ["web", "python"] },
+    { name: "mg", desc: "Rust writing checker detecting weasel words, passive voice, and spelling errors.", tags: ["rust", "tools"] },
+    { name: "Commit_Kar_Deta_Hun", desc: "Demo of basic Git commit operations using numbered text files.", tags: ["tools"] },
+    { name: "Enahncing-Images-using-AI", desc: "Image enhancement toolkit leveraging ESRGAN for AI super-resolution.", tags: ["ai", "python"] },
+    { name: "Time_Bomb", desc: "Web app simulating virtual file deletion upon timer expiration.", tags: ["web", "games"] },
+    { name: "notion-like-ai-editor", desc: "Collaborative text editor with Lexical, Liveblocks, and Vercel AI SDK.", tags: ["web", "ai"] },
+    { name: "Ethindia23_PS", desc: "Data processing utility analyzing Ethereum transaction data from CSV files.", tags: ["python", "tools"] },
+    { name: "AI-writes-Articles", desc: "AI article generator leveraging GPU-accelerated language models.", tags: ["ai", "python"] },
+    { name: "Github_Contributor_AI_Ver", desc: "AI-powered GitHub contributor analysis identifying active contributors.", tags: ["ai", "tools"] },
+    { name: "Esoteric_Languages_Adventures", desc: "Esoteric programming examples in Brainfuck.", tags: ["creative", "education"] },
+    { name: "anius", desc: "Streamlit anime streaming and search app with embedded video players.", tags: ["web", "python"] },
+    { name: "Machine-Learning-Study", desc: "Applied ML coursework with weekly notebooks implementing KNN classification.", tags: ["ai", "education"] },
+    { name: "NGO_Manager", desc: "Volunteer management system using Node.js and PostgreSQL.", tags: ["web", "tools"] },
+    { name: "Length_Based_Video_Sorter", desc: "Video sorter organizing media into duration-based folders using FFmpeg.", tags: ["tools", "python"] },
+    { name: "nextprompter", desc: "Next.js file processor applying user prompts to generate modified code snippets.", tags: ["web", "tools"] },
+    { name: "JoJo", desc: "Data analysis tool processing and visualizing India's job market dataset.", tags: ["python", "ai"] },
+    { name: "Movie_Plotter_AI", desc: "Movie plot generator leveraging AI to analyze text and create narratives.", tags: ["ai", "creative"] },
+    { name: "housefly", desc: "House layout generator creating ASCII art rooms with random doors and windows.", tags: ["python", "creative"] },
+    { name: "Scrape_Me_Zaddy", desc: "Web scraper extracting text from HTML elements via Streamlit.", tags: ["tools", "web"] },
+    { name: "readball", desc: "Retro-themed app simulating football matches with text-based commentary.", tags: ["games", "web"] },
+    { name: "Python_To_English", desc: "Translator converting Python code into natural English.", tags: ["ai", "python"] },
+    { name: "Medium-Articles-", desc: "Static blog hosting ML tutorials and AI project showcases.", tags: ["web", "education"] },
+    { name: "CNWGOL", desc: "Conway's Game of Life with interactive HTML canvas rendering.", tags: ["games", "web"] },
+    { name: "Chandler-Bing-Deep-Learning-AI", desc: "Deep learning chatbot implementing conversational AI.", tags: ["ai", "python"] },
+    { name: "AI-that-chats-with-my-friends-", desc: "Rust chatbot facilitating natural language conversations.", tags: ["rust", "ai"] },
+    { name: "Noter", desc: "Note-making app generating study materials using Streamlit and Groq API.", tags: ["ai", "web"] },
+    { name: "Humaneyes", desc: "Eye detection library using traditional CV techniques without AI.", tags: ["python", "tools"] },
+    { name: "What-Should-I-make-Today", desc: "Meal recommendation tool using an Indian food dataset.", tags: ["python", "ai"] },
+    { name: "Chetan-Bhagat-AI", desc: "AI generator creating Chetan Bhagat-style prose using NLP.", tags: ["ai", "creative"] },
+    { name: "Story", desc: "Multi-agent system generating stories through recursive agent interactions.", tags: ["ai", "agents"] },
+    { name: "rust_grammar", desc: "Rust grammar analysis library and REST API for syntax errors and readability.", tags: ["rust", "tools"] },
+    { name: "Artificial_Life", desc: "Conway's Game of Life simulation using Pygame.", tags: ["games", "python"] },
+    { name: "NNFS", desc: "Neural network framework executing sequential module operations.", tags: ["ai", "python"] },
+    { name: "huddler", desc: "AI system for huddle meetings using RAG fusion for real-time interaction.", tags: ["ai", "agents"] },
+    { name: "AI-to-rate-my-AI-projects-", desc: "AI project rating tool evaluating model quality using structured criteria.", tags: ["ai", "python"] },
+    { name: "A2A_Experiments", desc: "Agent communication framework enabling two AI agents to interact via JSON.", tags: ["ai", "agents"] },
+    { name: "Coding_Train", desc: "Interactive programming exercises inspired by the Coding Train.", tags: ["education", "web"] },
+    { name: "mkme", desc: "Command-line tool that suggests what to make.", tags: ["tools"] },
+    { name: "Pyamagotchi", desc: "Virtual pet game simulating Tamagotchi care with turtle graphics.", tags: ["games", "python"] },
+    { name: "AI_to_generate_sentences_from_words", desc: "AI sentence generator transforming keywords into coherent text.", tags: ["ai", "python"] },
+    { name: "GODOT_Adventures", desc: "Godot game assets with character models, scene scripts, and configs.", tags: ["games", "creative"] },
+    { name: "AI_Girlfriend", desc: "Companion bot simulating realistic human interactions using NLP.", tags: ["ai", "bots"] },
+    { name: "Gerne", desc: "Interactive storytelling adventure with whimsical scenarios and unexpected twists.", tags: ["ai", "creative"] },
+    { name: "random-", desc: "Rust random number generator producing cryptographically secure values.", tags: ["rust", "tools"] },
+    { name: "Kagaz", desc: "Groq-integrated LLM newspaper generator with AI-generated characters.", tags: ["ai", "creative"] },
+    { name: "type", desc: "JavaScript type system validating data structures via ASCII representations.", tags: ["web", "tools"] },
+    { name: "Earth", desc: "Minimal static HTML website serving Earth-themed content.", tags: ["web"] },
+    { name: "Wensday", desc: "Personal AI project demonstrating fundamental intelligence capabilities.", tags: ["ai"] },
+    { name: "Valid_Kun", desc: "AI motivational companion generating personalized messages via OpenAI.", tags: ["ai", "bots"] },
+    { name: "Homeworker", desc: "AI agent that does homework automatically.", tags: ["ai", "agents"] },
+    { name: "Highlight", desc: "Next.js code diff visualizer with Quill.js text highlighting.", tags: ["web", "tools"] },
+    { name: "Commitment_iShoes", desc: "Repository with multiple README files for documentation.", tags: ["tools"] },
+    { name: "ant_man", desc: "Ant behavior simulation modeling pheromone trails using Pygame.", tags: ["games", "python"] },
+    { name: "Magic", desc: "Utility executing magical operations through scripted commands.", tags: ["python", "tools"] },
+    { name: "Fun_With_Pandas", desc: "Jupyter notebook generating synthetic datasets with pandas.", tags: ["python", "education"] },
+    { name: "Hand_Ditto", desc: "TensorFlow handwriting synthesis generating SVG from text using LSTM.", tags: ["ai", "creative"] },
+    { name: "flow_me_raho_bro", desc: "Next.js app analyzing data flows with sentiment analysis and charting.", tags: ["web", "ai"] },
+    { name: "large-scale-energy-anomaly-detection", desc: "Energy anomaly detection analyzing large-scale time-series data.", tags: ["ai", "python"] },
+    { name: "sunnAI", desc: "Music generation web app leveraging MusicGen models for endless songs.", tags: ["ai", "creative"] },
+    { name: "sootplane", desc: "Static HTML website presenting a mind-related concept.", tags: ["web"] },
+    { name: "Work_for_manuscripts.ai", desc: "Manuscript tool auto-summarizing and paraphrasing academic texts.", tags: ["ai", "tools"] },
+    { name: "SalvagedWeb", desc: "Simple HTML web project with basic pages and documentation.", tags: ["web"] },
+    { name: "agent_test", desc: "Full-stack app testing generative AI agents in a game environment.", tags: ["ai", "agents"] },
+    { name: "Some_Gen_Stuff", desc: "Inference framework with DALL·E and Stable Diffusion pipelines.", tags: ["ai", "creative"] },
+    { name: "Portfolio", desc: "MIT-licensed portfolio repository.", tags: ["web"] },
+    { name: "DEW", desc: "TensorFlow chatbot with LSTM layers for intent recognition.", tags: ["ai", "python"] },
+    { name: "AutoCars", desc: "Autonomous traffic simulation modeling urban patterns with swarm intelligence.", tags: ["ai", "games"] },
+    { name: "veditor", desc: "Intelligent video editing pipeline with voice detection and LLM deduplication.", tags: ["ai", "tools"] },
+    { name: "seascolor", desc: "Skin undertone analyzer classifying seasonal types via K-means clustering.", tags: ["ai", "web"] },
+    { name: "nativesee", desc: "PDF reader with hand gesture navigation using TensorFlow.js hand pose.", tags: ["ai", "web"] },
+    { name: "Black-and-white-to-colour-photos", desc: "Converts B&W photographs to color using neural networks.", tags: ["ai", "python"] },
+    { name: "PrompterToolkit", desc: "Streamlit app processing Next.js files to generate prompt-enhanced output.", tags: ["tools", "web"] },
+    { name: "Dinorant", desc: "RL Chrome Dino bot using Q-learning to optimize gameplay.", tags: ["ai", "games"] },
+    { name: "React-Text-Editor-Using-Quill.js", desc: "React text editor with Quill.js for rich text editing.", tags: ["web"] },
+    { name: "The-Yolo-Bootcamp", desc: "YOLOv7 implementation with GPU-accelerated object detection.", tags: ["ai", "python"] },
+    { name: "Procedural_Generation_Python", desc: "Procedural generation toolkit for 3D terrain, caves, and islands.", tags: ["python", "creative"] },
+    { name: "morphic-ai-answer-engine-generative-ui", desc: "AI search engine with multiple AI providers and Vercel AI SDK.", tags: ["ai", "web"] },
+    { name: "Resuwrite", desc: "AI novel generation transforming resume data into creative stories.", tags: ["ai", "creative"] },
+    { name: "yapnotes", desc: "Speech-to-text note-taking capturing audio into organized notes.", tags: ["ai", "tools"] },
+    { name: "Moon_Phase", desc: "Birthday moon phase calculator computing lunar illumination percentages.", tags: ["web", "python"] },
+    { name: "UniversalComponents", desc: "Health tracking app integrating diet, food database, and symptom monitoring.", tags: ["web", "tools"] },
+    { name: "PythonRSB", desc: "AI writing assistant analyzing text for redundancy and readability.", tags: ["ai", "tools"] },
+    { name: "Pharma-Mart", desc: "Next.js app with Radix UI and Tailwind for responsive interfaces.", tags: ["web"] },
+    { name: "Stable_Diffusion_App", desc: "Streamlit Stable Diffusion app generating images from prompts.", tags: ["ai", "web"] },
+    { name: "Grammar_Engine", desc: "Haskell grammar engine processing natural language syntax via JSON and HTTP.", tags: ["tools"] },
+    { name: "Generating-Animation-By-An-AI", desc: "Animation generator using VQGAN and CLIP for AI video from text prompts.", tags: ["ai", "creative"] },
+    { name: "eeja", desc: "Responsive portfolio with looping video clips and fullscreen toggling.", tags: ["web", "creative"] },
+    { name: "WebGraphics", desc: "Lightweight web graphics toolkit with HTML and SVG interactives.", tags: ["web", "creative"] },
+    { name: "infiwrite", desc: "A distraction-free writing space — just a blank void with soft analog noise.", tags: ["web", "creative"] },
+    { name: "konflict", desc: "News digest aggregating RSS feeds for India-Pakistan conflict articles.", tags: ["web", "tools"] },
+    { name: "Pokemon_Adventures", desc: "Tailwind web app dynamically displaying Pokémon data with search.", tags: ["web", "games"] },
+    { name: "TypeFaster", desc: "Typing automation tool using Selenium on Human Benchmark tests.", tags: ["tools", "python"] },
+    { name: "Invest", desc: "Investment education game visualizing financial trends with Chart.js.", tags: ["web", "games"] },
+    { name: "Talkative_Docs", desc: "Document interaction tool for conversational document queries.", tags: ["ai", "tools"] },
+    { name: "anyoouhl", desc: "RAG app integrating Tavily web search with AI responses and follow-ups.", tags: ["ai", "web"] },
+    { name: "janku_humaneyes", desc: "Next.js app with Python API endpoints to humanize text.", tags: ["ai", "web"] },
+    { name: "AI_Detector", desc: "AI-generated content detector using BERT model analysis.", tags: ["ai", "python"] },
+    { name: "LeapCode", desc: "Chrome extension extracting LeetCode problems into CSV with Discord integration.", tags: ["tools", "web"] },
+    { name: "Leetcode", desc: "C++ solutions for Leetcode programming challenges.", tags: ["education"] },
+    { name: "Mario-RL-AI", desc: "Reinforcement learning agent navigating Super Mario using Q-learning.", tags: ["ai", "games"] },
+    { name: "Bookish", desc: "Streamlit book chapter generator using text-davinci-003.", tags: ["ai", "web"] },
+    { name: "Anime-Synopsis-Generator-With-Deep-Learning", desc: "GPT-2 anime synopsis generator with deep learning techniques.", tags: ["ai", "creative"] },
+    { name: "Wirerio", desc: "Converts hand-drawn UI sketches into HTML/CSS/JS via Google Gemini.", tags: ["ai", "web"] },
+    { name: "Sume_Kun", desc: "Minimal GitHub repository with README and license.", tags: ["tools"] },
+    { name: "Commitment_iShoes_2", desc: "Versioned documentation system for tracking commitments.", tags: ["tools"] },
+    { name: "Eeman1113", desc: "Streamlit portfolio showcasing AI projects including YOLOv7 and ML career tools.", tags: ["web", "ai"] },
+    { name: "High_Life", desc: "PDF to study notes generator extracting key info with PyPDF2 and NLTK.", tags: ["ai", "tools"] },
+    { name: "AsciiCam", desc: "Webcam-to-ASCII converter transforming live camera to monochrome ASCII art.", tags: ["python", "creative"] },
+    { name: "Sell_Me_A_Thing_AI", desc: "AI sales pitch generator creating persuasive product descriptions.", tags: ["ai", "tools"] },
+    { name: "eemanGPT", desc: "Streamlit chat interface with Groq API using llama3-8b model.", tags: ["ai", "web"] },
+    { name: "Neyus", desc: "Streamlit news scraper from inshorts.com using BeautifulSoup.", tags: ["web", "tools"] },
+    { name: "The_Thing_Maker", desc: "Tool generating customizable objects.", tags: ["python", "tools"] },
+    { name: "black-and-white-videos-to-colour-", desc: "Video colorization converting B&W videos to color.", tags: ["ai", "python"] },
+    { name: "Dawg", desc: "Streamlit object detection app using Hugging Face.", tags: ["ai", "web"] },
+    { name: "Pathfinder", desc: "Streamlit file path finder locating files in GitHub repos.", tags: ["tools", "web"] },
+    { name: "I_Make_Notes", desc: "CLI note-taking tool processing input into structured notes.", tags: ["tools", "python"] },
+    { name: "fintech", desc: "Llama-based conversational AI for fintech-specific text generation.", tags: ["ai", "python"] },
+    { name: "calc", desc: "Unit economics calculator computing business metrics client-side.", tags: ["web", "tools"] },
+    { name: "lucida", desc: "Minimalist HTML static website template.", tags: ["web"] },
+    { name: "sad", desc: "Meditative text generator using Ollama for character-by-character output.", tags: ["ai", "creative"] },
+    { name: "Susu", desc: "Sudoku puzzle generator with interactive solving across three difficulties.", tags: ["games", "web"] },
+    { name: "yjs_lexi", desc: "Lexer tokenizing collaborative text using Yjs for real-time sync.", tags: ["web", "tools"] },
+    { name: "blahblah", desc: "Minimal project repository.", tags: ["tools"] },
+    { name: "JS_Interview", desc: "JS Interview questions database.", tags: ["education", "web"] },
+    { name: "how_we_act", desc: "Town simulation with LLM-driven cognitive interactions via Pygame.", tags: ["ai", "games"] },
+    { name: "UC", desc: "TypeScript React journaling platform for monitoring Ulcerative Colitis symptoms.", tags: ["web", "tools"] },
+    { name: "day-scribe-essence", desc: "React/TypeScript diary app with Supabase auth and multimedia entries.", tags: ["web"] },
+    { name: "sci", desc: "Multi-agent research platform synthesizing academic reports via web exploration.", tags: ["ai", "agents"] },
+    { name: "dev-ee", desc: "Streamlit Python code editor executing user-submitted code.", tags: ["web", "tools"] },
+    { name: "Agentic_Description", desc: "Multi-agent system with tool calling to generate repo descriptions.", tags: ["ai", "agents"] },
+    { name: "evolve", desc: "Evolution-based discovery model using adaptive genetic algorithms.", tags: ["ai", "python"] },
+    { name: "Heartbeat", desc: "Image processing utility converting photos to WebP for web delivery.", tags: ["tools", "python"] },
+    { name: "gram", desc: "Rust grammar checker detecting weasel words and passive voice with regex.", tags: ["rust", "tools"] },
+    { name: "TATPILTM", desc: "Static HTML web app rendering a basic homepage.", tags: ["web"] },
+    { name: "500_React_Interview_Questions", desc: "Streamlit React interview study app with flashcards and category filtering.", tags: ["education", "web"] },
+    { name: "Rhythm", desc: "Next.js app with Radix UI and Tailwind for accessible interfaces.", tags: ["web"] },
+    { name: "The_Window", desc: "Static HTML window manager adjusting layouts with CSS.", tags: ["web"] },
+    { name: "Prologue_Please", desc: "Static HTML book store displaying inventory from CSV with images.", tags: ["web"] },
+    { name: "_rvsp_", desc: "Speed reading app using RSVP technology for one-word-at-a-time presentation.", tags: ["web", "tools"] },
+    { name: "Lump", desc: "Writing tool integrating Quill.js with AI-powered text suggestions.", tags: ["web", "ai"] },
+    { name: "test", desc: "Static website serving HTML pages for testing.", tags: ["web"] },
+    { name: "Planin", desc: "Node.js API proxy routing Notion API requests.", tags: ["web", "tools"] },
+    { name: "infinite", desc: "Discovery tool with network graph visualization, Vis.js, and dark mode.", tags: ["web", "tools"] },
+    { name: "Interviewer", desc: "Audio segmentation tool extracting questions from MP3 via timestamps.", tags: ["tools", "python"] },
+    { name: "EWITW", desc: "Combinatorial generator creating infinite CSV libraries of character sequences.", tags: ["python", "creative"] },
+    { name: "AutoDiscovery", desc: "Multi-agent research platform using Google Gemini and parallel agents.", tags: ["ai", "agents"] },
+    { name: "likho", desc: "Handwriting generator converting text to realistic SVG via neural networks.", tags: ["ai", "web"] },
+    { name: "AgeSci", desc: "Multi-agent system generating IEEE-format papers with LaTeX compilation.", tags: ["ai", "agents"] },
+    { name: "Articles", desc: "Medium articles on AI implementation projects and tutorials.", tags: ["education"] },
+    { name: "Sira", desc: "Conversational AI agent with FAISS memory and Google Gemini responses.", tags: ["ai", "agents"] },
+    { name: "Orbit", desc: "Static HTML game challenging users with orbital mechanics.", tags: ["games", "web"] },
+    { name: "Idaten_Jump", desc: "Encyclopedia compiling fan media for the Idaten Jump series.", tags: ["web", "creative"] },
+    { name: "spellcheck", desc: "Rust spell checker implementing Norvig's statistical algorithm with n-grams.", tags: ["rust", "tools"] },
+    { name: "is_shree_alive", desc: "Static HTML website with a minimal page and embedded image.", tags: ["web"] },
+    { name: "maze", desc: "HTML maze game with dynamically rendered interactive pathways.", tags: ["games", "web"] },
+    { name: "Hivemind", desc: "Multi-agent AI research system generating LaTeX papers with TikZ diagrams.", tags: ["ai", "agents"] },
+    { name: "harp", desc: "Rust grammar checker with WebAssembly-optimized processing.", tags: ["rust", "tools"] },
+    { name: "500_NodeJs_Interview_Questions", desc: "Streamlit app exploring 500 Node.js interview questions with filters.", tags: ["education", "web"] },
+    { name: "Universal_Paperclips_Auto", desc: "Selenium bot automating Paperclip trading in a browser game.", tags: ["bots", "python"] },
+    { name: "BookVaccum", desc: "Book downloader retrieving Project Gutenberg eBooks in bulk.", tags: ["tools", "python"] },
+    { name: "Last_Tea_Shop_Web", desc: "Tailwind site with dice rollers and character sheets for tabletop RPGs.", tags: ["web", "games"] },
+    { name: "blush", desc: "Skin tone analyzer recommending blush colors via OpenCV clustering.", tags: ["ai", "web"] },
+    { name: "tetrisAI", desc: "Tetris game using AI to optimize piece placement strategies.", tags: ["ai", "games"] },
+    { name: "humanize-ai", desc: "Text humanization platform with Supabase auth and Stripe payments.", tags: ["ai", "web"] },
+    { name: "Isabella", desc: "AI interviewer conducting interactive job candidate interviews.", tags: ["ai", "bots"] },
+    { name: "Around_Us", desc: "Cesium-powered flight simulator with 3D globe navigation.", tags: ["web", "games"] },
+    { name: "ADAS_Mobile", desc: "ADAS app with real-time YOLOv8 object detection and lane tracking.", tags: ["ai", "python"] },
+    { name: "aegis", desc: "Enterprise security & regression testing platform with AWS integration.", tags: ["tools", "web"] },
+    { name: "Parallel-Agent-Reinforcement-Learning-PARL-", desc: "PARL agent swarm creating sub-agents to generate complete novels.", tags: ["ai", "agents"] },
+    { name: "autofx", desc: "Mathematical forex trading bot using technical indicators and ML.", tags: ["ai", "tools"] },
+    { name: "Bday", desc: "React birthday website with GSAP animations and canvas-confetti.", tags: ["web", "creative"] },
+    { name: "valentine", desc: "React Valentine's site with animated heart formations via GSAP.", tags: ["web", "creative"] },
+    { name: "investment-research-agent", desc: "Investment research agent orchestrating market data via Amazon Bedrock.", tags: ["ai", "agents"] },
+    { name: "ConvergenceEngine", desc: "Research work on the trajectory of AI over the past decade.", tags: ["ai", "education"] },
+];
+
+const CATEGORIES = {
+    all: "All",
+    ai: "AI / ML",
+    web: "Web",
+    python: "Python",
+    rust: "Rust",
+    agents: "Agents",
+    games: "Games",
+    tools: "Tools",
+    creative: "Creative",
+    bots: "Bots",
+    education: "Education"
+};
+
+let activeFilter = "all";
+const BASE_URL = "https://github.com/Eeman1113/";
+
+// Render filter buttons
+const filtersContainer = document.getElementById("filters");
+Object.entries(CATEGORIES).forEach(([key, label]) => {
+    const btn = document.createElement("button");
+    btn.className = `filter-btn${key === "all" ? " active" : ""}`;
+    btn.textContent = label;
+    btn.addEventListener("click", () => {
+        document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        activeFilter = key;
+        renderProjects();
+    });
+    filtersContainer.appendChild(btn);
+});
+
+document.getElementById("searchBox").addEventListener("input", renderProjects);
+
+function renderProjects() {
+    const query = document.getElementById("searchBox").value.toLowerCase().trim();
+    const list = document.getElementById("projectList");
+
+    let filtered = PROJECTS.filter(p => {
+        const matchesFilter = activeFilter === "all" || p.tags.includes(activeFilter);
+        const matchesSearch = !query ||
+            p.name.toLowerCase().includes(query) ||
+            p.desc.toLowerCase().includes(query) ||
+            p.tags.some(t => t.includes(query));
+        return matchesFilter && matchesSearch;
+    });
+
+    document.getElementById("projectCount").textContent =
+        filtered.length === PROJECTS.length
+            ? `${PROJECTS.length} projects`
+            : `Showing ${filtered.length} of ${PROJECTS.length}`;
+
+    list.innerHTML = "";
+
+    if (filtered.length === 0) {
+        list.innerHTML = `<div class="no-results">No projects found.</div>`;
+        return;
+    }
+
+    filtered.forEach(p => {
+        const li = document.createElement("li");
+        li.className = "project-item";
+        const displayName = p.name.replace(/_/g, " ").replace(/-/g, "‑");
+        li.innerHTML = `
+            <h3 class="project-name"><a href="${BASE_URL}${p.name}" target="_blank" rel="noopener">${displayName}</a></h3>
+            <p class="project-desc">${p.desc}</p>
+            <div class="project-tags">${p.tags.map(t => `<span class="project-tag">${t}</span>`).join("")}</div>
+        `;
+        list.appendChild(li);
+    });
+}
+
+renderProjects();
+</script>
+</body>
+</html>
