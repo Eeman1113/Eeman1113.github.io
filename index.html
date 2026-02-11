@@ -36,11 +36,11 @@
         .logo {
             font-size: 24px;
             font-weight: bold;
-            color: black; /* Changed to black */
+            color: black;
             text-decoration: none;
         }
         .logo a {
-            color: black; /* Added to ensure the link is also black */
+            color: black;
             text-decoration: none;
         }
         .main-content {
@@ -111,6 +111,9 @@
         .read-more {
             text-align: left;
             margin-top: 20px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
         }
         .topics {
             display: flex;
@@ -169,7 +172,7 @@
                 justify-content: center;
             }
             .read-more {
-                text-align: center;
+                justify-content: center;
             }
         }
     </style>
@@ -177,7 +180,7 @@
 <body>
     <div class="container">
         <header class="header">
-            <div class="logo"><a href="./hugsfordivi.html">EM</a></div>
+            <div class="logo"><a href="./index.html">EM</a></div>
             <a href="https://linktr.ee/eemanmajumder" class="button">Contact</a>
         </header>
         <div class="main-content">
@@ -204,6 +207,7 @@
                 </ul>
                 <div class="read-more">
                     <a href="./articles.html" class="button">Read More Articles</a>
+                    <a href="./projects.html" class="button">View Projects</a>
                 </div>
             </div>
             <div class="sidebar">
