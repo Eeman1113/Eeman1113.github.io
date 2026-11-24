@@ -1,0 +1,1676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#cfdbe6">
+<title>PYTHA Kitchen Configurator</title>
+<style>
+  :root { --panel:rgba(255,255,255,.93); --ink:#1d2124; --muted:#6b7177; --line:#dcdfe3; --accent:#2f6fde; }
+  * { box-sizing:border-box; }
+  html,body { overscroll-behavior:none; -webkit-tap-highlight-color:transparent; margin:0; height:100%; background:#cfdbe6; color:var(--ink); font:14px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; overflow:hidden; }
+  #c { position:fixed; inset:0; display:block; width:100%; height:100%; touch-action:none; }
+  button { font:inherit; color:var(--ink); background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:7px 12px; cursor:pointer; backdrop-filter:blur(6px); }
+  button[aria-pressed="true"] { border-color:var(--accent); color:var(--accent); }
+  button:hover { border-color:var(--accent); }
+  .muted { color:var(--muted); font-size:12px; }
+
+  /* ---------- start screen ---------- */
+  #start { position:fixed; inset:0; z-index:20; display:grid; place-items:center; background:radial-gradient(1200px 700px at 30% 20%, #eef3f8, #cfdbe6); }
+  #start .card { width:min(560px, calc(100% - 32px)); background:#fff; border-radius:18px; padding:30px 30px 24px; box-shadow:0 20px 60px rgba(30,50,80,.15); }
+  #start h1 { margin:0 0 6px; font-size:22px; } #start p { margin:0 0 18px; color:var(--muted); }
+  #drop { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; width:100%; min-height:150px; border:2px dashed #b9c4d0; border-radius:14px; padding:28px 18px; text-align:center; cursor:pointer; transition:background .2s, border-color .2s; }
+  #drop:hover { border-color:var(--accent); background:#f6f9ff; }
+  #drop .ico { font-size:28px; line-height:1; color:var(--accent); margin-bottom:6px; }
+  #drop.over { background:#eef4ff; border-color:var(--accent); }
+  #drop b { display:block; font-size:16px; } #drop .muted { display:block; }
+  #fileIn { display:none; }
+  #log { margin-top:12px; font-size:13px; color:var(--muted); } #log:empty { display:none; }
+  #log.err { color:#a3241b; }
+  #start ul { margin:16px 0 0; padding-left:18px; color:var(--muted); font-size:12.5px; }
+  .prog { height:4px; background:#eef0f2; border-radius:4px; overflow:hidden; margin-top:10px; display:none; }
+  .prog i { display:block; height:100%; width:0; background:var(--accent); transition:width .2s; }
+
+  /* ---------- app chrome ---------- */
+  .bar { position:fixed; top:12px; left:12px; right:12px; display:flex; gap:8px; align-items:center; flex-wrap:wrap; pointer-events:none; z-index:3; }
+  .bar > * { pointer-events:auto; }
+  .bar { flex-wrap:nowrap; overflow-x:auto; scrollbar-width:none; } .bar::-webkit-scrollbar { display:none; }
+  .bar button { padding:6px 9px; font-size:13.5px; white-space:nowrap; flex:none; } .bar h1 { flex:0 1 auto; min-width:60px; } #price { flex:none; }
+  .bar h1 { font-size:15px; font-weight:600; margin:0 4px 0 0; background:var(--panel); padding:8px 12px; border-radius:10px; border:1px solid var(--line); max-width:280px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .sep { width:1px; height:24px; background:var(--line); }
+  #price { display:flex; align-items:center; gap:8px; background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:5px 12px; font-variant-numeric:tabular-nums; }
+  #price b { font-size:16px; } #price .d { font-size:12px; padding:1px 7px; border-radius:20px; background:#eef0f2; color:var(--muted); }
+  #price .d.up { background:#fde8e6; color:#b3261e; } #price .d.down { background:#e4f4ea; color:#1e7b3c; }
+  .panel { position:fixed; top:64px; bottom:12px; width:min(430px, calc(100% - 24px)); background:var(--panel); border:1px solid var(--line); border-radius:12px; display:none; flex-direction:column; overflow:hidden; backdrop-filter:blur(8px); z-index:2; }
+  .panel.open { display:flex; }
+  .panel.left { left:12px; width:min(370px, calc(100% - 24px)); } .panel.right { right:12px; }
+  #els { width:min(760px, calc(100% - 24px)); } table.wide td { white-space:nowrap; max-width:340px; overflow:hidden; text-overflow:ellipsis; } table.wide { width:max-content; min-width:100%; }
+  .panel header { padding:12px 14px 10px; border-bottom:1px solid var(--line); }
+  .panel header h2 { margin:0 0 4px; font-size:15px; }
+  .panel .body { overflow:auto; padding:6px 14px 14px; font-size:13px; }
+  .tabs { display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; } .tabs button { padding:4px 10px; font-size:13px; }
+  table { width:100%; border-collapse:collapse; }
+  th { text-align:left; color:var(--muted); font-weight:500; font-size:12px; padding:6px 4px; border-bottom:1px solid var(--line); position:sticky; top:-6px; background:#fff; z-index:1; }
+  td { padding:5px 4px; border-bottom:1px solid var(--line); vertical-align:top; }
+  td.n, th.n { text-align:right; white-space:nowrap; font-variant-numeric:tabular-nums; }
+  tr.tot td { font-weight:600; border-bottom:none; } tr.grand td { font-weight:700; font-size:15px; border-top:2px solid var(--ink); }
+  tr.click { cursor:pointer; } tr.click:hover td { background:rgba(47,111,222,.08); } tr.sel td { background:rgba(47,111,222,.16); }
+  h3.sh { font-size:13px; margin:14px 0 2px; display:flex; justify-content:space-between; }
+  .rate { width:84px; font:inherit; font-size:13px; padding:2px 5px; border:1px solid var(--line); border-radius:6px; text-align:right; }
+  #elSearch, #secSel { width:100%; font:inherit; padding:6px 8px; border-radius:8px; border:1px solid var(--line); background:#fff; color:var(--ink); margin-top:6px; }
+  .sec h3 { font-size:12px; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); margin:14px 0 6px; font-weight:600; }
+  .ctl { padding:8px 0 10px; border-bottom:1px solid var(--line); }
+  .ctl .top { display:flex; justify-content:space-between; align-items:baseline; gap:8px; }
+  .ctl .lab { font-weight:600; font-size:13px; } .ctl .sub { color:var(--muted); font-size:11.5px; }
+  .ctl .val { font-variant-numeric:tabular-nums; font-size:13px; text-align:right; white-space:nowrap; } .ctl .val small { color:var(--muted); display:block; font-size:11.5px; }
+  .ctl .row { display:flex; align-items:center; gap:6px; margin-top:6px; }
+  .ctl input[type=range] { flex:1; accent-color:var(--accent); }
+  .ctl .row button { padding:2px 9px; border-radius:8px; font-size:15px; line-height:1.2; }
+  .ctl input[type=number] { width:74px; font:inherit; font-size:13px; padding:3px 6px; border:1px solid var(--line); border-radius:7px; }
+  .ctl.changed .lab::after { content:" •"; color:var(--accent); }
+  .lock { color:var(--muted); font-size:12px; margin-top:4px; }
+  .status { font-size:12px; padding:6px 8px; border-radius:8px; margin:8px 0 0; background:#e9f5ee; color:#1e6b37; }
+  .status.bad { background:#fdecea; color:#a3241b; }
+  .note { font-size:12px; color:var(--muted); margin:8px 0 0; }
+  .acts { display:flex; gap:6px; flex-wrap:wrap; margin-top:12px; } .acts button { font-size:13px; padding:5px 10px; }
+  .chk { display:flex; gap:6px; align-items:center; font-size:12.5px; margin-top:8px; }
+  .opens { display:flex; flex-wrap:wrap; gap:6px; } .opens button { font-size:12.5px; padding:4px 10px; border-radius:999px; } .opens button[aria-pressed="true"] { background:#e8effd; }
+  #cfg.stop { box-shadow:0 0 0 3px rgba(179,38,30,.55); }
+  #info { position:fixed; left:12px; bottom:12px; max-width:min(380px, calc(100% - 24px)); background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:12px 14px; display:none; z-index:2; }
+  #info h2 { margin:0 0 6px; font-size:15px; } #info dl { margin:0; display:grid; grid-template-columns:auto 1fr; gap:2px 10px; font-size:13px; } #info dt { color:var(--muted); } #info dd { margin:0; word-break:break-word; }
+  #hint { position:fixed; right:12px; bottom:12px; color:var(--muted); font-size:12px; background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:6px 10px; z-index:1; }
+  #tip { position:fixed; pointer-events:none; display:none; background:rgba(29,33,36,.92); color:#fff; font-size:12px; padding:3px 8px; border-radius:6px; white-space:nowrap; z-index:5; }
+  #dimLabel { position:fixed; pointer-events:none; background:#1d2124; color:#fff; font-size:12px; padding:3px 8px; border-radius:6px; transform:translate(-50%,-130%); white-space:nowrap; display:none; font-variant-numeric:tabular-nums; z-index:1; }
+  #focusBar { position:fixed; left:50%; bottom:18px; transform:translate(-50%, 20px); opacity:0; pointer-events:none; display:flex; align-items:center; gap:10px; background:#1d2124; color:#fff; border-radius:999px; padding:6px 8px 6px 14px; font-size:13px; transition:opacity .25s, transform .25s; box-shadow:0 6px 24px rgba(0,0,0,.25); z-index:4; white-space:nowrap; }
+  #focusBar.on { opacity:1; transform:translate(-50%, 0); pointer-events:auto; }
+  body:has(#focusBar.on) #hint { opacity:0; }
+  #focusBar .dot { width:8px; height:8px; border-radius:50%; background:#5b8dff; box-shadow:0 0 0 4px rgba(91,141,255,.25); }
+  #focusBar button { background:#2d3236; color:#fff; border:1px solid #444b52; border-radius:999px; padding:5px 11px; font-size:12.5px; backdrop-filter:none; }
+  #focusBar .fx { font-size:11.5px; opacity:.6; padding-right:6px; }
+  #focusBar kbd { font:inherit; font-size:11px; opacity:.7; border:1px solid #59616a; border-radius:4px; padding:0 4px; margin-left:4px; }
+  #busy { position:fixed; inset:0; display:none; place-items:center; z-index:10; background:rgba(207,219,230,.6); font-size:15px; }
+  .panel header { position:relative; } .panel .x { position:absolute; top:8px; right:8px; padding:2px 9px; font-size:14px; border-radius:8px; }
+  .bar { top:max(12px, env(safe-area-inset-top)); left:max(12px, env(safe-area-inset-left)); right:max(12px, env(safe-area-inset-right)); }
+  @media (max-width:760px), (pointer:coarse) and (max-width:1024px) {
+    .panel, .panel.left, #els { top:auto; left:8px; right:8px; width:auto; height:min(58%, 520px); bottom:max(8px, env(safe-area-inset-bottom)); border-radius:16px 16px 12px 12px; }
+    .panel header { padding-top:16px; } .panel header::before { content:""; position:absolute; top:6px; left:50%; width:36px; height:4px; margin-left:-18px; border-radius:4px; background:#cfd4da; }
+    #hint, #focusBar .fx { display:none; }
+    .bar h1 { max-width:130px; font-size:14px; } .bar button { padding:7px 10px; }
+    #price .muted { display:none; } #price b { font-size:15px; } .bar h1 { order:-2; } #price { order:-1; } #price .d { display:none; }
+    #focusBar { bottom:max(14px, env(safe-area-inset-bottom)); max-width:calc(100% - 16px); }
+    body:has(.panel.open) #focusBar { bottom:calc(min(58%, 520px) + 18px); }
+    .ctl .row button { padding:6px 12px; } .ctl input[type=range] { height:28px; } .ctl input[type=number] { font-size:16px; }
+    #elSearch, #secSel, .rate { font-size:16px; }
+    #info { bottom:max(12px, env(safe-area-inset-bottom)); }
+  }
+</style>
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+               "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
+</script>
+</head>
+<body>
+<canvas id="c"></canvas>
+
+<div id="start">
+  <div class="card">
+    <h1>PYTHA kitchen configurator</h1>
+    <p>Drop a PYTHA project file (<b>.pyo</b>) to get an interactive 3D model with an automatic bill of quantities, resizable cabinets and opening doors &amp; drawers. The file is read in your browser and is not uploaded anywhere.</p>
+    <label id="drop" for="fileIn"><span class="ico" aria-hidden="true">⬆</span><b>Drop a .pyo file here</b><span class="muted">or click to choose one</span></label>
+    <input type="file" id="fileIn">
+    <div class="prog" id="prog"><i></i></div>
+    <div id="log"></div>
+    <ul>
+      <li>Parts, assemblies, materials and loose hardware are listed automatically.</li>
+      <li>Prices use editable default rates in INR (per cm², per running foot or per piece).</li>
+      <li>Room items (walls, windows, room doors) and appliances are shown but kept out of the furniture quote.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="bar" id="bar" style="display:none">
+  <h1 id="title">Project</h1>
+  <button id="vDoll">Dollhouse</button><button id="vInside">Inside</button><button id="vFront">Front</button><button id="vPlan">Plan</button>
+  <span class="sep"></span>
+  <button id="bWalls" aria-pressed="true">Cutaway</button><button id="bHQ" aria-pressed="true">HQ</button><button id="bOpen" aria-pressed="false">Open all</button>
+  <span class="sep"></span>
+  <button id="bCfg" aria-pressed="true">Customize</button><button id="bBill" aria-pressed="false">Bill</button><button id="bEl" aria-pressed="false">Elements</button>
+  <div id="price" title="Furniture total incl. installation & GST"><span class="muted">Total</span> <b id="pTot">–</b> <span class="d" id="pDel">as designed</span></div>
+  <button id="bVR" style="display:none" title="View in a VR headset">VR</button>
+  <button id="bNew" title="Open another .pyo file">Open…</button>
+</div>
+
+<aside id="cfg" class="panel left" aria-label="Customize sizes">
+  <header><h2>Customize sizes</h2><button class="x" aria-label="Close">✕</button>
+    <div class="muted">Tap a cabinet in the 3D view or pick one below. Every size can change by up to 6 in (152 mm); the price updates as you go.</div>
+    <select id="secSel"></select>
+  </header>
+  <div class="body" id="cfgBody"></div>
+</aside>
+<aside id="bill" class="panel right" aria-label="Bill of quantities">
+  <header><h2>Bill of quantities – furniture</h2><button class="x" aria-label="Close">✕</button><div class="muted" id="billSub"></div>
+    <div class="tabs"><button data-t="sum" aria-pressed="true">Summary</button><button data-t="mat" aria-pressed="false">By material</button><button data-t="obj" aria-pressed="false">By object</button><button data-t="rates" aria-pressed="false">Rates</button></div></header>
+  <div class="body" id="billBody"></div>
+</aside>
+<aside id="els" class="panel right" aria-label="Elements">
+  <header><h2>Elements in this file</h2><button class="x" aria-label="Close">✕</button><div class="muted" id="elSub"></div>
+    <input id="elSearch" type="search" placeholder="Filter by name, material, category…">
+    <div class="tabs"><button data-e="parts" aria-pressed="true">Parts</button><button data-e="groups" aria-pressed="false">Assemblies</button><button data-e="ngo" aria-pressed="false">Loose hardware</button><button id="elCopy">Copy CSV</button><button id="elDl">Download CSV</button></div></header>
+  <div class="body" id="elBody"></div>
+</aside>
+
+<div id="info"><h2 id="iName"></h2><dl id="iDl"></dl></div>
+<div id="hint" style="display:none">Click doors &amp; drawers to open · <b>Triple-click</b> to focus · <b>Double-click</b> background or zoom out to leave focus</div>
+<div id="dimLabel"></div><div id="tip"></div>
+<div id="focusBar" role="status"><span class="dot"></span><span>Focus: <b id="focusName"></b></span><button id="focusRefit">Re-centre</button><button id="focusExit">Exit focus <kbd>Esc</kbd></button><span class="fx">or double-click outside · pinch out</span></div>
+<div id="busy">Working…</div>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { GTAOPass } from 'three/addons/postprocessing/GTAOPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { Pass, FullScreenQuad } from 'three/addons/postprocessing/Pass.js';
+import { toCreasedNormals } from 'three/addons/utils/BufferGeometryUtils.js';
+// =====================================================================
+//  PYTHA .pyo reader (runs entirely in the browser)
+// =====================================================================
+const TYPE_SIZE = { 1: 1, 2: 1, 3: 2, 4: 4, 5: 4, 6: 8, 7: 8, 8: 2, 9: 4, 10: 8 };
+
+function readPyo(buf) {
+  const u8 = new Uint8Array(buf), dv = new DataView(buf);
+  const magic = new TextDecoder('latin1').decode(u8.subarray(0, 8));
+  if (magic !== 'PYTHA_OB') throw new Error('This is not a PYTHA project file (.pyo). The file does not start with the PYTHA_OB signature.');
+  const nameLen = dv.getUint16(11, true) || 20;
+  const dir = {};
+  let p = 13, first = Infinity;
+  while (p + nameLen + 10 <= u8.length && p < first) {
+    let end = p; while (end < p + nameLen && u8[end]) end++;
+    const name = new TextDecoder('latin1').decode(u8.subarray(p, end));
+    if (!name) break;
+    const t = dv.getUint16(p + nameLen, true), c = dv.getUint32(p + nameLen + 2, true), o = dv.getUint32(p + nameLen + 6, true);
+    dir[name] = { t, c, o };
+    if (o) first = Math.min(first, o);
+    p += nameLen + 10;
+  }
+  const has = n => dir[n] && dir[n].c > 0;
+  const bytes = n => { const d = dir[n]; const sz = TYPE_SIZE[d.t] || 1; return buf.slice(d.o + 20, d.o + 20 + d.c * sz); };
+  const i32 = n => has(n) ? new Int32Array(bytes(n)) : new Int32Array(0);
+  const f64 = n => has(n) ? new Float64Array(bytes(n)) : new Float64Array(0);
+  const utf = n => has(n) ? new TextDecoder('utf-16le').decode(bytes(n)) : '';
+  const strs = (base, count) => {                       // *_UNI_TXT + *_UNI_LEN → array of strings
+    const txt = utf(base + '_UNI_TXT'), len = i32(base + '_UNI_LEN'), out = [];
+    let q = 0;
+    for (let k = 0; k < len.length; k++) { out.push(txt.substr(q, len[k]).trim()); q += len[k]; }
+    while (out.length < count) out.push('');
+    return out;
+  };
+  return { dir, has, i32, f64, strs };
+}
+
+function extractModel(buf, log) {
+  const R = readPyo(buf);
+  if (!R.has('MAKROS') || !R.has('PUNKTE')) throw new Error('No 3D parts were found in this file (MAKROS/PUNKTE tables are missing).');
+  const M = R.i32('MAKROS'), N = Math.floor(M.length / 7);
+  const pts = R.f64('PUNKTE');
+  const FV = R.i32('FACE_VERTEX_LIST'), NV = R.i32('FACE_REF_NUM_VERT'), SA = R.i32('FACE_REF_START_ADR');
+  const S = {
+    makattr: R.strs('MAKATTR', N), name: R.strs('BEZEICHNUNG', N), art: R.strs('ART_NR', N),
+    ctype: R.strs('KONSTRTYP', N), core: R.strs('KERNMAT', N), mat: R.strs('MAT_PFAD', N),
+  };
+  const ppg = R.i32('PART_PG_PID'), inv = R.i32('PARTATTR_INVIS');
+  // groups
+  const gown = R.i32('GRUP_OWN_PID'), gpg = R.i32('GRUP_PG_PID'), NG = gown.length;
+  const G = { name: R.strs('GR_NAME_NEU', NG), bez: R.strs('G_BEZ', NG), art: R.strs('G_ART_NR', NG), ctype: R.strs('G_KONSTRT', NG) };
+  const groups = new Map();
+  for (let k = 0; k < NG; k++) groups.set(gown[k], { id: gown[k], parent: gpg[k], name: G.name[k] || ('Group ' + gown[k]), bez: G.bez[k], art: G.art[k], ctype: G.ctype[k], parts: [], kids: [] });
+  for (const g of groups.values()) if (groups.has(g.parent)) groups.get(g.parent).kids.push(g.id);
+  // non-geometric objects (loose hardware)
+  const nNgo = R.i32('NGO_OBJNAME_UNI_LEN').length;
+  const ngoName = R.strs('NGO_OBJNAME', nNgo), ngoArt = R.strs('NGO_ART_NR', nNgo), ngoCat = R.strs('NGO_KONSTRT', nNgo);
+  const ngoOwn = R.i32('NGO_OWGN_PG_PIDS');
+  const ngo = [];
+  for (let k = 0; k < nNgo; k++) ngo.push({ name: ngoName[k] || ngoArt[k] || 'Item', art: ngoArt[k], cat: ngoCat[k], group: ngoOwn.length >= 2 * nNgo ? ngoOwn[nNgo + k] : 0 });
+  // parts
+  const parts = [];
+  for (let i = 0; i < N; i++) {
+    const m = M.subarray(i * 7, i * 7 + 7);
+    const p0 = m[1] - 1, p1 = m[2], f0 = m[3] - 1, f1 = m[4];
+    const bb = [Infinity, Infinity, Infinity, -Infinity, -Infinity, -Infinity];
+    for (let v = Math.max(0, p0); v < p1 && v * 3 + 2 < pts.length; v++) for (let k = 0; k < 3; k++) {
+      const c = pts[v * 3 + k]; if (c < bb[k]) bb[k] = c; if (c > bb[k + 3]) bb[k + 3] = c;
+    }
+    const matPath = S.mat[i] || '';
+    parts.push({
+      i, el: S.makattr[i] || S.name[i] || '(unnamed)', desc: S.name[i], art: S.art[i], cat: S.ctype[i], core: S.core[i],
+      mat: matPath, finish: matPath.split(/[\\/]/).pop().replace(/\.[a-z0-9]+$/i, ''),
+      gid: ppg[i] || 0, hidden: !!inv[i], p0, p1, f0, f1, bb: p1 > p0 ? bb : null,
+    });
+    if (groups.has(ppg[i])) groups.get(ppg[i]).parts.push(i);
+  }
+  return { parts, groups, ngo, pts, FV, NV, SA, sections: Object.keys(R.dir).length };
+}
+
+// triangulate every face (outer loop + holes; a negative index closes a loop)
+async function buildMesh(model, progress) {
+  const { parts, pts, FV, NV, SA } = model;
+  const idx = [], v2 = new THREE.Vector2();
+  const P = k => [pts[k * 3], pts[k * 3 + 1], pts[k * 3 + 2]];
+  let t0 = performance.now();
+  for (let pi = 0; pi < parts.length; pi++) {
+    const p = parts[pi];
+    p.s = idx.length / 3;
+    for (let f = Math.max(0, p.f0); f < p.f1 && f < NV.length; f++) {
+      const st = SA[f] - 1, n = NV[f];
+      const loops = []; let cur = [];
+      for (let k = 0; k < n; k++) {
+        const v = FV[st + k];
+        if (v < 0) { if (cur.length) { loops.push(cur); cur = []; } }
+        else cur.push(v - 1);
+      }
+      if (cur.length) loops.push(cur);
+      const L = loops.filter(l => l.length >= 3);
+      if (!L.length) continue;
+      if (L.length === 1 && L[0].length <= 4) { const l = L[0]; for (let k = 1; k < l.length - 1; k++) idx.push(l[0], l[k], l[k + 1]); continue; }
+      // project onto the plane's dominant axes, then ear-clip with holes
+      const o = L[0]; let nx = 0, ny = 0, nz = 0;
+      for (let k = 0; k < o.length; k++) { const a = P(o[k]), b = P(o[(k + 1) % o.length]); nx += (a[1] - b[1]) * (a[2] + b[2]); ny += (a[2] - b[2]) * (a[0] + b[0]); nz += (a[0] - b[0]) * (a[1] + b[1]); }
+      const ax = Math.abs(nx) >= Math.abs(ny) && Math.abs(nx) >= Math.abs(nz) ? 0 : Math.abs(ny) >= Math.abs(nz) ? 1 : 2;
+      const [ua, ub] = ax === 0 ? [1, 2] : ax === 1 ? [0, 2] : [0, 1];
+      const toV = l => l.map(v => new THREE.Vector2(pts[v * 3 + ua], pts[v * 3 + ub]));
+      const contour = toV(L[0]), holes = L.slice(1).map(toV), flat = L.flat();
+      let tris;
+      try { tris = THREE.ShapeUtils.triangulateShape(contour, holes); } catch (e) { tris = []; }
+      for (const t of tris) idx.push(flat[t[0]], flat[t[1]], flat[t[2]]);
+    }
+    p.e = idx.length / 3;
+    if (performance.now() - t0 > 40) { await progress(`Building 3D surfaces… ${Math.round(pi / parts.length * 100)}%`); t0 = performance.now(); }
+  }
+  return new Uint32Array(idx);
+}
+
+// =====================================================================
+//  Automatic classification: what each part is, cabinets, openings, prices
+// =====================================================================
+const RATE_DEFAULTS = [
+  // id, section, label, basis, unit, rate (₹)
+  ['P_PLY', 'Carcass', 'Plywood / BWP panels', 'Area', 'cm²', 0.16],
+  ['P_BACK', 'Carcass', 'Back panels (6–8 mm)', 'Area', 'cm²', 0.07],
+  ['P_MDF', 'Carcass', 'MDF / HDHMR / particle board', 'Area', 'cm²', 0.12],
+  ['P_LAM', 'Shutters & finishes', 'Laminate-faced panels', 'Area', 'cm²', 0.24],
+  ['P_ACR', 'Shutters & finishes', 'Acrylic-faced panels', 'Area', 'cm²', 0.42],
+  ['P_PU', 'Shutters & finishes', 'PU / lacquer panels', 'Area', 'cm²', 0.50],
+  ['P_VEN', 'Shutters & finishes', 'Veneer panels', 'Area', 'cm²', 0.35],
+  ['P_ALU', 'Shutters & finishes', 'Aluminium profile shutters', 'Area', 'cm²', 0.95],
+  ['P_GLS', 'Glass', 'Glass & mirror', 'Area', 'cm²', 0.15],
+  ['P_STN', 'Worktops', 'Stone worktops (granite / quartz / marble)', 'Area', 'cm²', 0.32],
+  ['P_OTH', 'Carcass', 'Other panels', 'Area', 'cm²', 0.18],
+  ['L_SKT', 'Linear items', 'Skirting / plinth', 'Length', 'rft', 180],
+  ['L_HDL', 'Linear items', 'Handle profiles (G-section, gola)', 'Length', 'rft', 450],
+  ['L_LGT', 'Linear items', 'Light profiles', 'Length', 'rft', 700],
+  ['L_OTH', 'Linear items', 'Other linear items', 'Length', 'rft', 200],
+  ['H_HNG', 'Hardware & fittings', 'Hinges', 'Each', 'nos', 380],
+  ['H_LFT', 'Hardware & fittings', 'Lift-up mechanisms', 'Each', 'set', 4500],
+  ['H_DRW', 'Hardware & fittings', 'Drawer systems / runners', 'Each', 'set', 3800],
+  ['H_RSH', 'Hardware & fittings', 'Roller shutters', 'Each', 'nos', 14500],
+  ['H_BSK', 'Accessories', 'Baskets, pull-outs, racks & organisers', 'Each', 'nos', 2800],
+  ['H_BIN', 'Accessories', 'Dustbins', 'Each', 'nos', 2600],
+  ['H_LEG', 'Hardware & fittings', 'Legs', 'Each', 'set', 240],
+  ['H_HDL', 'Hardware & fittings', 'Handles & knobs', 'Each', 'nos', 250],
+  ['H_SML', 'Hardware & fittings', 'Small fittings (bumpers, connectors, brackets…)', 'Each', 'nos', 25],
+  ['H_OTH', 'Hardware & fittings', 'Other hardware', 'Each', 'nos', 300],
+  ['O_CHG', 'Other charges', 'Delivery / transport', 'Each', 'LS', 5000],
+  ['X_APP', 'Not in scope', 'Appliances, sinks & taps (not furniture)', 'Each', 'nos', 0],
+  ['X_ROOM', 'Not in scope', 'Walls, windows & room doors', 'Each', 'nos', 0],
+  ['X_AID', 'Included / not priced', 'Modelling aids & tiny parts', 'Each', 'nos', 0],
+  ['X_OBJ', 'Included / not priced', 'Unrecognised solid objects', 'Each', 'nos', 0],
+];
+const SECTION_ORDER = ['Carcass', 'Shutters & finishes', 'Glass', 'Worktops', 'Linear items', 'Hardware & fittings', 'Accessories', 'Other charges', 'Included / not priced', 'Not in scope'];
+
+const RX = {
+  wall: /^(wall|walls|wand)\b/i,
+  room: /window|widnow|fenster|moulded door|main door|room door|entrance door|door frame|frame door|sliding door|\bsill\b|ceiling|floor tile|flooring/i,
+  appliance: /applian|refrigerat|fridge|\bhob\b|cooktop|\bhood\b|chimney|dishwasher|washing|wasmachine|washer|dryer|\boven\b|microwave|\bsink\b|futura|\btap\b|faucet|mixer|coffee|wine cooler|induction/i,
+  aid: /machine block|\bdummy\b|reference|ref\.? ?plane|helper|hilfs/i,
+  linear: /skirting|plinth|g-section|g section|\bgola\b|handle profile|profile light|led profile|light profile|per rft|\brft\b|cornice|pelmet|\bpro_l\b/i,
+  hardware: /hardware|fitting|accessor|beschlag|hinge|runner|channel|hettich|blum|innotech|tandem|legrabox|aventos|basket|pull ?out|tray|rack|holder|dustbin|\bbin\b|\blegs?\b|bracket|connector|conecter|lift|mechanism|carousel|bumper|screw|push ?to ?open|latch|\bmat\b|insert|organi[sz]er|gtpt|roller shutter/i,
+  charge: /delivery|transport|installation charge|other charges/i,
+};
+function rateForPanel(t, p) {
+  if (/alumin|\balu\b/.test(t) && /profile|shutter/.test(t)) return 'P_ALU';
+  if (/glass|mirror/.test(t)) return 'P_GLS';
+  if (/granite|quartz|marble|\bstone\b|corian|kota/.test(t)) return 'P_STN';
+  if (/acrylic/.test(t)) return 'P_ACR';
+  if (/\bpu\b|lacquer|duco|polyurethane/.test(t)) return 'P_PU';
+  if (/veneer/.test(t)) return 'P_VEN';
+  if (/laminat|\blam\b|\bhpl\b|sunmica/.test(t)) return 'P_LAM';
+  if (/back ?ply|back ?panel|\b[68] ?mm\b/.test(t) || (/^d?back$/i.test(p.el) && p.dims[2] <= 10)) return 'P_BACK';
+  if (/mdf|hdhmr|particle|\bplb\b|chipboard/.test(t)) return 'P_MDF';
+  if (/ply|bwp|bwr|mr ?grade|marine/.test(t)) return 'P_PLY';
+  return 'P_OTH';
+}
+function rateForHardware(t) {
+  if (/hinge/.test(t)) return 'H_HNG';
+  if (/aventos|lift ?(mech|up)|\bhf\b|\bhk\b|\bhs\b|\bhl\b/.test(t)) return 'H_LFT';
+  if (/roller shutter/.test(t)) return 'H_RSH';
+  if (/dustbin|\bbin\b|waste/.test(t)) return 'H_BIN';
+  if (/basket|pull ?out|tray|rack|holder|carousel|magic|ladder|gtpt|organi[sz]er|insert|thali|cutlery|bottle/.test(t)) return 'H_BSK';
+  if (/hettich|blum|innotech|tandem|legrabox|runner|channel|drawer system|telescopic/.test(t)) return 'H_DRW';
+  if (/\blegs?\b/.test(t)) return 'H_LEG';
+  if (/handle|knob/.test(t)) return 'H_HDL';
+  if (/bumper|connector|conecter|bracket|screw|corner|chain|push ?to ?open|latch|stopper|clip|\bcam\b|dowel|minifix/.test(t)) return 'H_SML';
+  return 'H_OTH';
+}
+function rateForLinear(t) {
+  if (/skirting|plinth/.test(t)) return 'L_SKT';
+  if (/light|led/.test(t)) return 'L_LGT';
+  if (/handle|g-section|g section|gola/.test(t)) return 'L_HDL';
+  return 'L_OTH';
+}
+const CABPART = /unit|cabinet|base|shutter|carcass|side|bottom|\btop\b|back|shelf|panel|door|drawer|fascia|skirting|rail/i;
+const cleanName = s => String(s || '').replace(/\s*\[G\d+\]\s*/g, '').trim();
+const unionBB = (a, b) => a ? [Math.min(a[0], b[0]), Math.min(a[1], b[1]), Math.min(a[2], b[2]), Math.max(a[3], b[3]), Math.max(a[4], b[4]), Math.max(a[5], b[5])] : b.slice();
+const ovl = (a0, a1, b0, b1) => Math.min(a1, b1) - Math.max(a0, b0);
+
+function classify(model) {
+  const { parts, groups } = model;
+  // ---- group paths
+  for (const g of groups.values()) {
+    const chain = []; let x = g, guard = 0;
+    while (x && guard++ < 64) { chain.push(x.id); x = groups.get(x.parent); }
+    g.chain = chain;                       // leaf → top
+    g.path = chain.slice().reverse().map(id => cleanName(groups.get(id).name)).join(' > ');
+  }
+  for (const p of parts) {
+    const g = groups.get(p.gid);
+    p.chain = g ? g.chain : [];
+    p.path = g ? g.path : '';
+    p.top = p.chain.length ? p.chain[p.chain.length - 1] : 0;
+    p.dims = p.bb ? [p.bb[3] - p.bb[0], p.bb[4] - p.bb[1], p.bb[5] - p.bb[2]].sort((a, b) => b - a) : [0, 0, 0];
+    p.thinAxis = p.bb ? [0, 1, 2].reduce((m, k) => (p.bb[k + 3] - p.bb[k]) < (p.bb[m + 3] - p.bb[m]) ? k : m, 0) : 2;
+    p.c = p.bb ? [(p.bb[0] + p.bb[3]) / 2, (p.bb[1] + p.bb[4]) / 2, (p.bb[2] + p.bb[5]) / 2] : [0, 0, 0];
+    p.text = `${p.el} ${p.desc} ${p.art} ${p.cat}`.toLowerCase();
+    p.ptext = `${p.text} ${p.path}`.toLowerCase();
+  }
+  // ---- what each part is
+  for (const p of parts) {
+    const d = p.dims;
+    if (!p.bb || p.e === p.s) { p.kind = 'empty'; continue; }
+    if (RX.wall.test(p.el.trim()) || RX.wall.test(p.desc.trim()) || (/\bwall\b/i.test(p.el) && d[0] >= 1500 && p.bb[5] - p.bb[2] >= 1800 && d[2] >= 75)) p.kind = 'wall';
+    else if (d[2] < 0.5 && d[1] > 800) p.kind = 'ref';
+    else if (RX.room.test(p.path) || ((/^door\b|door frame|window/i.test(p.el)) && (p.bb[5] - p.bb[2]) >= 1800 && !/shutter|unit|cabinet|wardrobe|carcass/i.test(p.path))) p.kind = 'room';
+    else if (RX.charge.test(p.text)) p.kind = 'charge';
+    else if (/applian/i.test(p.cat) || ((RX.appliance.test(p.el) || RX.appliance.test(p.desc)) && !CABPART.test(p.el + ' ' + p.desc))) p.kind = 'appliance';
+    else if (RX.aid.test(p.text) || d[0] < 25) p.kind = 'aid';
+    else if (d[2] <= 32 && d[1] >= 150 && /shutter|door|fascia|front|flap|lrft|pull ?out|panel|glass/i.test(p.el) && !/basket|rack|tray|bin\b/i.test(p.el)) p.kind = 'panel';   // fronts are panels, whatever the accessory they belong to
+    else if ((RX.linear.test(p.text) && d[0] >= 4 * d[1]) || (/^linear$/i.test(p.cat.trim()) && d[0] >= 3 * d[1])) p.kind = 'linear';
+    else if (RX.hardware.test(p.text) || /hardware|fitting|accessor/i.test(p.cat)) p.kind = 'hardware';
+    else if (d[2] <= 60 && d[1] >= 50) p.kind = 'panel';
+    else p.kind = 'object';
+  }
+  // appliance parts inside an appliance group → whole group is one appliance
+  for (const p of parts) if (p.kind !== 'appliance' && p.chain.some(id => { const g = groups.get(id); return /applian/i.test(g.ctype) || RX.appliance.test(g.name) && !/shutter|unit|cabinet|carcass|drawer/i.test(g.name); }) && !['wall', 'room'].includes(p.kind)) p.kind = 'appliance';
+  // ---- room box (from walls) and stray objects
+  const walls = parts.filter(p => p.kind === 'wall');
+  const furn = parts.filter(p => p.bb && !['wall', 'room', 'ref', 'empty'].includes(p.kind));
+  const med = k => { const a = furn.map(p => p.c[k]).sort((x, y) => x - y); return a[a.length >> 1] || 0; };
+  const mc = [med(0), med(1), med(2)];
+  let roomOuter = null;
+  for (const w of walls) roomOuter = unionBB(roomOuter, w.bb);
+  let core = null;
+  for (const p of furn) if (Math.hypot(p.c[0] - mc[0], p.c[1] - mc[1]) < 12000) core = unionBB(core, p.bb);
+  const box = roomOuter || core || [0, 0, 0, 1, 1, 1];
+  const wallT = walls.length ? walls.map(w => w.dims[2]).sort((a, b) => a - b)[walls.length >> 1] : 0;
+  const inner = roomOuter ? [box[0] + wallT, box[1] + wallT, box[2], box[3] - wallT, box[4] - wallT, box[5]] : box.slice();
+  const floorZ = furn.length ? Math.min(...furn.filter(p => !(p.bb[5] < box[2] - 500)).map(p => p.bb[2])) : box[2];
+  const OUT = 600;
+  for (const p of parts) {
+    p.stray = false;
+    if (!p.bb || p.kind === 'wall') continue;
+    const far = p.bb[0] > box[3] + OUT || p.bb[3] < box[0] - OUT || p.bb[1] > box[4] + OUT || p.bb[4] < box[1] - OUT;
+    if (p.kind === 'ref' || far) p.stray = true;           // parked catalogue items / reference planes – kept in the bill, hidden in 3D
+  }
+  // ---- price basis
+  for (const p of parts) {
+    const t = p.text;
+    switch (p.kind) {
+      case 'panel': p.rate = rateForPanel(t, p); break;
+      case 'linear': p.rate = rateForLinear(t); break;
+      case 'hardware': p.rate = rateForHardware(t); break;
+      case 'appliance': p.rate = 'X_APP'; break;
+      case 'wall': case 'room': p.rate = 'X_ROOM'; break;
+      case 'charge': p.rate = 'O_CHG'; break;
+      case 'object': p.rate = /handle|knob/.test(t) ? 'H_HDL' : 'X_OBJ'; break;
+      default: p.rate = 'X_AID';
+    }
+  }
+  // ---- cabinets ("modules") from the group tree
+  const gbb = new Map();
+  const isFurn = p => p.bb && !p.stray && !['wall', 'room', 'ref', 'empty', 'charge'].includes(p.kind);
+  for (const p of parts) if (isFurn(p)) for (const id of p.chain) gbb.set(id, unionBB(gbb.get(id), p.bb));
+  const isCab = b => { const dx = b[3] - b[0], dy = b[4] - b[1], dz = b[5] - b[2]; return Math.max(dx, dy) <= 1500 && Math.min(dx, dy) <= 1100 && dz <= 2900 && Math.max(dx, dy) >= 120; };
+  const isAppGroup = g => g && (/applian/i.test(g.ctype) || (RX.appliance.test(g.name) && !CABPART.test(g.name)));
+  let modules = [];
+  const byKey = new Map();
+  const getMod = (key, name, extra) => { if (!byKey.has(key)) { const m = { key, name, parts: [], ...extra }; byKey.set(key, m); modules.push(m); } return byKey.get(key); };
+  const loose = [];
+  for (const p of parts) {
+    if (!isFurn(p)) continue;
+    let mod = null;
+    if (p.kind === 'appliance') {
+      const gid = p.chain.find(id => isAppGroup(groups.get(id)));
+      mod = gid ? getMod('a' + gid, cleanName(groups.get(gid).name), { app: true }) : getMod('ap' + p.i, p.el, { app: true });
+    } else for (let k = p.chain.length - 1; k >= 0; k--) {           // highest cabinet-sized ancestor
+      const id = p.chain[k], b = gbb.get(id);
+      if (b && isCab(b)) { mod = getMod('g' + id, cleanName(groups.get(id).name), {}); break; }
+    }
+    if (mod) mod.parts.push(p.i); else loose.push(p);
+  }
+  const recalc = m => { m.bb = null; for (const i of m.parts) m.bb = unionBB(m.bb, parts[i].bb); return m; };
+  modules.forEach(recalc);
+  const FRONTRX0 = /shutter|door|fascia|front|flap|lrft|lift|drawer|pull ?out|roller/i;
+  const isFrontLike = p => p.dims[2] <= 32 && p.dims[1] >= 120 && p.thinAxis !== 2 && FRONTRX0.test(p.el + ' ' + p.desc) && !/rail|side|back|bottom|shelf/i.test(p.el);
+  const frac = (pb, mb, pad) => { const v = k => Math.max(0, ovl(pb[k], pb[k + 3], mb[k] - pad, mb[k + 3] + pad)) / Math.max(1, pb[k + 3] - pb[k]); return v(0) * v(1) * v(2); };
+  const vol = b => (b[3] - b[0]) * (b[4] - b[1]) * (b[5] - b[2]);
+  // loose parts: inside or fixed onto a cabinet → join it; otherwise cluster touching parts
+  const rest = [];
+  for (const p of loose) {
+    let best = null;
+    for (const m of modules) if (!m.app && frac(p.bb, m.bb, 40) > 0.7 && (!best || vol(m.bb) < vol(best.bb))) best = m;
+    if (best) best.parts.push(p.i); else rest.push(p);
+  }
+  const par = rest.map((_, k) => k), find = k => par[k] === k ? k : (par[k] = find(par[k]));
+  for (let a = 0; a < rest.length; a++) for (let b = a + 1; b < rest.length; b++) {
+    const A = rest[a].bb, Bb = rest[b].bb;
+    if (ovl(A[0], A[3], Bb[0], Bb[3]) > -3 && ovl(A[1], A[4], Bb[1], Bb[4]) > -3 && ovl(A[2], A[5], Bb[2], Bb[5]) > -3) par[find(a)] = find(b);
+  }
+  const clusters = new Map();
+  rest.forEach((p, k) => { const r = find(k); if (!clusters.has(r)) clusters.set(r, []); clusters.get(r).push(p.i); });
+  let cn = 0;
+  for (const ids of clusters.values()) {
+    const big = ids.slice().sort((a, b) => parts[b].dims[0] * parts[b].dims[1] - parts[a].dims[0] * parts[a].dims[1])[0];
+    getMod('c' + (cn++), parts[big].path ? cleanName(parts[big].path.split(' > ').pop()) : 'Unit', {}).parts.push(...ids);
+  }
+  modules.forEach(recalc);
+  // split "sections" that hold a base unit and a wall unit with a clear gap between them
+  for (const m of [...modules]) {
+    if (m.app) continue;
+    const iv = m.parts.map(i => parts[i]).filter(p => p.kind === 'panel' || p.kind === 'hardware' || p.kind === 'object').map(p => [p.bb[2], p.bb[5]]).sort((a, b) => a[0] - b[0]);
+    let reach = -Infinity, cut = null;
+    for (const [z0, z1] of iv) { if (reach > -Infinity && z0 - reach >= 250 && reach > floorZ + 500 && z0 < floorZ + 2200) { cut = (reach + z0) / 2; break; } reach = Math.max(reach, z1); }
+    if (cut === null) continue;
+    const lo = m.parts.filter(i => parts[i].c[2] < cut), hi = m.parts.filter(i => parts[i].c[2] >= cut);
+    if (!lo.length || !hi.length) continue;
+    m.parts = lo; recalc(m);
+    recalc(getMod(m.key + 'w', m.name, {})).parts.push(...hi); recalc(byKey.get(m.key + 'w'));
+  }
+  // merge cabinets that sit inside another (drawer boxes, inner frames…)
+  let changed = true;
+  while (changed) {
+    changed = false;
+    for (const m of modules) {
+      if (m.app || m.gone) continue;
+      let best = null;
+      const noFront = !m.parts.some(i => isFrontLike(parts[i]));
+      for (const o of modules) {
+        if (o === m || o.app || o.gone || vol(o.bb) <= vol(m.bb)) continue;
+        const inside = frac(m.bb, o.bb, 25) > 0.7;
+        const fz = Math.max(0, ovl(m.bb[2], m.bb[5], o.bb[2] - 30, o.bb[5] + 30)) / Math.max(1, m.bb[5] - m.bb[2]);
+        const fx = Math.max(0, ovl(m.bb[0], m.bb[3], o.bb[0] - 30, o.bb[3] + 30)) / Math.max(1, m.bb[3] - m.bb[0]);
+        const fy = Math.max(0, ovl(m.bb[1], m.bb[4], o.bb[1] - 30, o.bb[4] + 30)) / Math.max(1, m.bb[4] - m.bb[1]);
+        const oLong = (o.bb[3] - o.bb[0]) >= (o.bb[4] - o.bb[1]) ? 0 : 1;          // a cabinet's long side is its width
+        const span = (m.bb[oLong + 3] - m.bb[oLong]) >= 0.5 * (o.bb[oLong + 3] - o.bb[oLong]) && Math.min(o.bb[3] - o.bb[0], o.bb[4] - o.bb[1]) > 60 && o.parts.length >= 3;
+        const behind = noFront && span && fz > 0.8 && (oLong === 0 ? (fx > 0.8 && ovl(m.bb[1], m.bb[4], o.bb[1], o.bb[4]) > -45) : (fy > 0.8 && ovl(m.bb[0], m.bb[3], o.bb[0], o.bb[3]) > -45));
+        if ((inside || behind) && (!best || vol(o.bb) < vol(best.bb))) best = o;
+      }
+      if (best) { best.parts.push(...m.parts); recalc(best); m.gone = true; changed = true; }
+    }
+    modules = modules.filter(m => !m.gone);
+  }
+  // worktops, skirting, legs and fronts belong to the cabinet they sit on, under or against
+  for (const m of [...modules]) {
+    if (m.app || m.gone) continue;
+    const b = m.bb, h = b[5] - b[2], thinH = Math.min(b[3] - b[0], b[4] - b[1]);
+    if (h > 160 && thinH > 60) continue;
+    let best = null, bs = 0;
+    for (const o of modules) {
+      if (o === m || o.app || o.gone) continue;
+      const O = o.bb, fx = Math.max(0, ovl(b[0], b[3], O[0], O[3])), fy = Math.max(0, ovl(b[1], b[4], O[1], O[4]));
+      const topsMeet = Math.abs(O[5] - b[5]) < 60;
+      const touchZ = Math.abs(O[2] - b[5]) < 40 || Math.abs(b[2] - O[5]) < 40 || ovl(b[2], b[5], O[2], O[5]) > 0.5 * h || topsMeet;
+      const gap = Math.max(O[0] - b[3], b[0] - O[3], O[1] - b[4], b[1] - O[4], 0);
+      const score = fx * fy + (gap < 45 ? 1 : 0) * Math.max(fx, fy) * 10 + (thinH <= 60 && h > 160 && (O[5] - O[2]) <= 160 && topsMeet ? 1e9 : 0);   // a side panel goes with the counter it holds up
+      const flatH = h <= 160, ownFoot = Math.max(1, (b[3] - b[0]) * (b[4] - b[1]));
+      if (flatH && fx * fy < 0.5 * ownFoot && !(Math.abs(O[2] - b[5]) < 40 || ovl(b[2], b[5], O[2], O[5]) > 0)) continue;
+      if (flatH && fx * fy < 0.3 * ownFoot) continue;
+      if (touchZ && gap < 45 && score > bs) { best = o; bs = score; }
+    }
+    if (best) { best.parts.push(...m.parts); recalc(best); m.gone = true; }
+  }
+  modules = modules.filter(m => !m.gone);
+  // orientation from the fronts; split wide groups at back-to-back side panels
+  const FRONTRX = FRONTRX0;
+  function orient(m) {
+    const b = m.bb, fr = m.parts.map(i => parts[i]).filter(isFrontLike);
+    if (fr.length) {
+      const ax = fr.filter(p => p.thinAxis === 0).length >= fr.filter(p => p.thinAxis === 1).length ? 0 : 1;
+      const fs = fr.filter(p => p.thinAxis === ax), c = fs.reduce((s, p) => s + p.c[ax], 0) / fs.length;
+      m.na = ax; m.f = Math.sign(c - (b[ax] + b[ax + 3]) / 2) || 1;
+    } else {
+      const dist = [b[0] - inner[0], inner[3] - b[3], b[1] - inner[1], inner[4] - b[4]];
+      const k = dist.indexOf(Math.min(...dist)); m.na = k < 2 ? 0 : 1; m.f = k % 2 === 0 ? 1 : -1;
+    }
+    m.wa = 1 - m.na;
+  }
+  for (const m of [...modules]) {
+    if (m.app) continue;
+    recalc(m); orient(m);
+    const b = m.bb, wa = m.wa, width = b[wa + 3] - b[wa], height = b[5] - b[2];
+    if (width < 1000) continue;
+    const sides = m.parts.map(i => parts[i]).filter(p => p.kind === 'panel' && p.thinAxis === wa && (p.bb[5] - p.bb[2]) >= 0.6 * height).map(p => p.c[wa]).sort((x, y) => x - y);
+    const cuts = [];
+    for (let k = 0; k + 1 < sides.length; k++) if (sides[k + 1] - sides[k] < 60) cuts.push((sides[k] + sides[k + 1]) / 2);
+    const edges = [b[wa], ...cuts.filter(c => c - b[wa] > 200 && b[wa + 3] - c > 200), b[wa + 3]];
+    if (edges.length < 3) continue;
+    const seg = edges.slice(1, -1);
+    const buckets = edges.slice(0, -1).map(() => []);
+    for (const i of m.parts) { const c = parts[i].c[wa]; let k = seg.findIndex(x => c < x); if (k < 0) k = seg.length; buckets[k].push(i); }
+    m.parts = buckets[0]; recalc(m);
+    buckets.slice(1).forEach((ids, k) => { if (ids.length) recalc(getMod(m.key + 's' + k, m.name, {})).parts.push(...ids); });
+  }
+  modules = modules.filter(m => m.parts.length);
+  // module geometry and naming
+  const mods = modules;
+  const nameCount = {};
+  for (const m of mods) {
+    recalc(m);
+    const b = m.bb;
+    for (const i of m.parts) parts[i].mod = mods.indexOf(m);
+    orient(m);
+    const dA = m.wa === 0 ? [b[0] - inner[0], inner[3] - b[3]] : [b[1] - inner[1], inner[4] - b[4]];
+    m.grow = dA[0] <= dA[1] ? 1 : -1;                          // widths grow away from the nearer side wall
+    const h = b[5] - b[2], lift = b[2] - floorZ;
+    m.level = m.app ? 'appliance' : h <= 160 && lift > 300 && lift < 1300 ? 'top' : lift < 300 ? (h > 1500 ? 'tall' : 'base') : (b[5] > inner[5] - 80 && lift > 1800 ? 'loft' : 'wall');
+    m.hang = m.level === 'wall' || m.level === 'loft';
+    const lvlName = { base: 'Base unit', tall: 'Tall unit', wall: 'Wall unit', loft: 'Loft', appliance: 'Appliance', top: 'Worktop' }[m.level];
+    const nm = m.app ? (m.name || 'Appliance') : (m.name && !/^group \d+$/i.test(m.name) ? m.name : 'Unit');
+    m.label = m.app ? `Appliance – ${nm}` : `${lvlName} – ${nm} (${Math.round(b[m.wa + 3] - b[m.wa])})`;
+    nameCount[m.label] = (nameCount[m.label] || 0) + 1; m.n = nameCount[m.label];
+  }
+  for (const m of mods) if (nameCount[m.label] > 1) m.label += ` #${m.n}`;
+  mods.forEach((m, k) => m.idx = k);
+  // rigid (fixed-size) parts: appliances, fittings, objects, aids – everything except panels, linear items, drawer runners
+  for (const p of parts) p.rig = ['appliance', 'aid', 'object'].includes(p.kind) || (p.kind === 'hardware' && p.rate !== 'H_DRW' && p.rate !== 'H_RSH');
+  for (const m of mods) {
+    m.minW = 0;
+    if (m.app) { m.locked = true; for (const i of m.parts) parts[i].rb = m.bb; continue; }
+    const mw = m.bb[m.wa + 3] - m.bb[m.wa];
+    for (const i of m.parts) { const p = parts[i], w = p.bb[3 + m.wa] - p.bb[m.wa];
+      if (p.kind === 'appliance') m.minW = Math.max(m.minW, w);
+      else if (p.rig && p.kind === 'hardware' && w > 0.4 * mw && w < mw) m.minW = Math.max(m.minW, w + 36);   // baskets & pull-outs need their width plus two sides
+    }
+  }
+  // built-in appliances set the narrowest width of the cabinet they stand in
+  for (const a of mods.filter(m => m.app)) {
+    for (const m of mods) if (!m.app && frac(a.bb, m.bb, 30) > 0.6) m.minW = Math.max(m.minW, a.bb[3 + m.wa] - a.bb[m.wa]);
+  }
+  const openables = findOpenables(parts, mods, groups, inner);
+  return { mods, inner, box, floorZ, walls, openables, wallT };
+}
+
+// ---------------------------------------------------------------------
+//  Openable fronts: drawers, doors, lift-ups, pull-outs, roller shutters, sliding sashes
+// ---------------------------------------------------------------------
+function findOpenables(parts, mods, groups, inner) {
+  const O = [], taken = new Set();
+  const FRONT = /shutter|door|fascia|front|flap|lrft|lift|drawer|pull ?out|roller|klappe|tür|blende/i;
+  const isFront = p => p.bb && !p.stray && (p.kind === 'panel' || (p.kind === 'hardware' && /roller/i.test(p.text))) && p.dims[2] <= 32 && p.dims[1] >= 120 && FRONT.test(p.el + ' ' + p.desc + ' ' + p.path) && !/worktop|work top|top_?rail|bottom_?rail|side|back|bottom|top$|shelf|rail/i.test(p.el);
+  const fronts = parts.filter(p => isFront(p) && p.mod !== undefined);
+  const near = (a, b, tol) => a[0] - tol <= b[3] && b[0] - tol <= a[3] && a[1] - tol <= b[4] && b[1] - tol <= a[4] && a[2] - tol <= b[5] && b[2] - tol <= a[5];
+  for (const fr of fronts) {
+    if (taken.has(fr.i)) continue;
+    const m = mods[fr.mod], na = fr.thinAxis === 2 ? m.na : fr.thinAxis, wa = na === 0 ? 1 : 0;
+    const mcN = (m.bb[na] + m.bb[na + 3]) / 2, half = (m.bb[na + 3] - m.bb[na]) / 2, off = fr.c[na] - mcN;
+    const f = Math.abs(off) > 0.25 * half ? Math.sign(off) : (na === m.na ? m.f : 1);   // fronts open away from their cabinet
+    const t = (fr.el + ' ' + fr.desc + ' ' + fr.path).toLowerCase();
+    const ids = [fr.i];
+    const fb = fr.bb;
+    // glass or panels set inside the front (profile shutters)
+    for (const i of m.parts) { const q = parts[i]; if (q === fr || taken.has(i)) continue;
+      if (q.kind === 'panel' && /glass/i.test(q.text) && q.thinAxis === fr.thinAxis && ovl(q.bb[wa], q.bb[wa + 3], fb[wa], fb[wa + 3]) > 0.8 * (q.bb[wa + 3] - q.bb[wa]) && ovl(q.bb[2], q.bb[5], fb[2], fb[5]) > 0.8 * (q.bb[5] - q.bb[2]) && Math.abs(q.c[na] - fr.c[na]) < 40) ids.push(i); }
+    // handles fixed to this front (not shared profiles spanning several fronts)
+    for (const q of parts) { if (taken.has(q.i) || ids.includes(q.i) || !q.bb || q.stray) continue;
+      if (!/handle|knob|g-section|g section/i.test(q.text)) continue;
+      const w = q.bb[wa + 3] - q.bb[wa], fw = fb[wa + 3] - fb[wa];
+      if (w > fw * 1.15) continue;
+      if (ovl(q.bb[wa], q.bb[wa + 3], fb[wa], fb[wa + 3]) < 0.6 * Math.min(w, fw)) continue;
+      const hz = Math.max(0, ovl(q.bb[2], q.bb[5], fb[2], fb[5])), onTop = Math.abs(q.bb[2] - fb[5]) < 10;
+      if (!onTop && hz < 0.5 * (q.bb[5] - q.bb[2])) continue;
+      if (Math.abs((f > 0 ? q.bb[na + 3] : q.bb[na]) - (f > 0 ? fb[na + 3] : fb[na])) > 45) continue;
+      ids.push(q.i); }
+    // things that travel behind a drawer / pull-out front
+    const behind = q => q.bb && !q.stray && ovl(q.bb[wa], q.bb[wa + 3], fb[wa], fb[wa + 3]) > 0.5 * (q.bb[wa + 3] - q.bb[wa]) && q.bb[2] >= fb[2] - 25 && q.bb[5] <= fb[5] + 25 && (f > 0 ? q.c[na] < fb[na] : q.c[na] > fb[na + 3]);
+    const box = m.parts.map(i => parts[i]).filter(q => q !== fr && !taken.has(q.i) && !ids.includes(q.i) && behind(q) && (/dback|dbottom|dside|drawer ?box|innotech|tandem|legrabox|hettich|blum|runner|\bmat\b|dummy|drawer/i.test(q.text) || /drawer ?box/i.test(q.path)));
+    let kind;
+    if (/roller/.test(t)) kind = 'roll';
+    else if (/lift|lrft|aventos|flap|bi-?fold|klappe/.test(t)) kind = 'lift';
+    else if (/pull ?out/.test(t)) kind = 'slide';
+    else if (/drawer|fascia|schub/.test(t) && box.length) kind = 'slide';
+    else kind = 'hinge';
+    let travel = 0;
+    if (kind === 'slide') {
+      let contents = box;
+      if (/pull ?out/.test(t)) contents = m.parts.map(i => parts[i]).filter(q => q !== fr && !taken.has(q.i) && !ids.includes(q.i) && behind(q) && q.kind === 'hardware');
+      ids.push(...contents.map(q => q.i));
+      const depth = contents.length ? Math.max(...contents.map(q => q.bb[na + 3] - q.bb[na])) : (m.bb[na + 3] - m.bb[na]);
+      travel = Math.max(250, Math.min(600, depth * 0.78));
+    }
+    let hinge = 'min';
+    if (kind === 'hinge') {
+      const hs = m.parts.map(i => parts[i]).filter(q => /hinge/i.test(q.text) && near(q.bb, fb, 120));
+      if (hs.length) { const hc = hs.reduce((s, q) => s + q.c[wa], 0) / hs.length; hinge = Math.abs(hc - fb[wa]) <= Math.abs(hc - fb[wa + 3]) ? 'min' : 'max'; }
+      else {
+        const twin = fronts.find(o => o !== fr && o.mod === fr.mod && o.thinAxis === fr.thinAxis && ovl(o.bb[2], o.bb[5], fb[2], fb[5]) > 0.6 * (fb[5] - fb[2]) && (Math.abs(o.bb[wa] - fb[wa + 3]) < 30 || Math.abs(o.bb[wa + 3] - fb[wa]) < 30));
+        if (twin) hinge = twin.c[wa] > fr.c[wa] ? 'min' : 'max';
+        else if (/\b(rh|rhs|right)\b/.test(t)) hinge = 'max';
+        else { const mc = (m.bb[wa] + m.bb[wa + 3]) / 2; hinge = fr.c[wa] <= mc ? 'min' : 'max'; }
+      }
+    }
+    for (const i of ids) taken.add(i);
+    const ceil = m.bb[5] > inner[5] - 60;
+    O.push({ name: `${m.label.replace(/^.*? – /, '')} – ${kind === 'slide' ? (/pull ?out/.test(t) ? 'pull-out' : 'drawer') : kind === 'lift' ? 'lift-up' : kind === 'roll' ? 'roller shutter' : 'door'}`, kind, parts: ids, na, wa, f, hinge, travel, angle: kind === 'lift' ? (ceil ? 80 : 95) : 95, mod: fr.mod });
+  }
+  // number the duplicates (e.g. three drawers in one unit)
+  const cnt = {}; for (const o of O) cnt[o.name] = (cnt[o.name] || 0) + 1;
+  const seen = {};
+  for (const o of O) if (cnt[o.name] > 1) { seen[o.name] = (seen[o.name] || 0) + 1; o.name += ' ' + seen[o.name]; }
+  // ---- room doors: tall door leaves in a door group, hinged away from their handle
+  const doorGroups = new Map();
+  for (const p of parts) if (p.kind === 'room' && /door/i.test(p.path) && !/frame|sill|window|widnow/i.test(p.el) && p.bb) {
+    const key = p.top; if (!doorGroups.has(key)) doorGroups.set(key, []); doorGroups.get(key).push(p);
+  }
+  for (const list of doorGroups.values()) {
+    const leaves = list.filter(p => /door|leaf|panel/i.test(p.el) && p.bb[5] - p.bb[2] > 1700);
+    if (!leaves.length) continue;
+    let lb = null; for (const p of leaves) lb = unionBB(lb, p.bb);
+    const thin = (lb[3] - lb[0]) < (lb[4] - lb[1]) ? 0 : 1, wa = 1 - thin;
+    const handles = list.filter(p => !leaves.includes(p) && !/frame/i.test(p.el) && p.bb[5] - p.bb[2] < 600);
+    const hc = handles.length ? handles.reduce((s, q) => s + q.c[wa], 0) / handles.length : lb[wa];
+    const f = Math.sign(((inner[thin] + inner[thin + 3]) / 2) - (lb[thin] + lb[thin + 3]) / 2) || 1;
+    const ids = [...leaves, ...handles].map(p => p.i); ids.forEach(i => taken.add(i));
+    O.push({ name: 'Room door', kind: 'hinge', parts: ids, na: thin, wa, f, hinge: Math.abs(hc - lb[wa]) < Math.abs(hc - lb[wa + 3]) ? 'max' : 'min', angle: 95, room: true });
+  }
+  // ---- sliding windows: move the inner sash behind the outer one
+  const winGroups = new Map();
+  for (const p of parts) if (p.kind === 'room' && /slid/i.test(p.path) && p.bb) { const key = p.top; if (!winGroups.has(key)) winGroups.set(key, []); winGroups.get(key).push(p); }
+  for (const list of winGroups.values()) {
+    const glass = list.filter(p => /glass/i.test(p.text));
+    if (glass.length < 2) continue;
+    const thin = glass[0].thinAxis, wa = thin === 0 ? 1 : 0;
+    const rc = (inner[thin] + inner[thin + 3]) / 2;
+    glass.sort((a, b) => Math.abs(a.c[thin] - rc) - Math.abs(b.c[thin] - rc));
+    const g = glass[0], other = glass[1];
+    const sash = [g, ...list.filter(p => p !== g && !glass.includes(p) && /frame|handle/i.test(p.el) && Math.abs(p.c[thin] - g.c[thin]) < 25 && ovl(p.bb[wa], p.bb[wa + 3], g.bb[wa], g.bb[wa + 3]) > 0.7 * (g.bb[wa + 3] - g.bb[wa]) && (p.bb[wa + 3] - p.bb[wa]) < 1.3 * (g.bb[wa + 3] - g.bb[wa]))];
+    const handles = list.filter(p => /handle/i.test(p.el) && !sash.includes(p) && Math.abs(p.c[wa] - g.c[wa]) < (g.bb[wa + 3] - g.bb[wa]) * 0.7);
+    const ids = [...sash, ...handles].map(p => p.i); ids.forEach(i => taken.add(i));
+    O.push({ name: 'Window – sliding sash', kind: 'window', parts: ids, na: wa, wa, f: Math.sign(other.c[wa] - g.c[wa]) || 1, travel: (g.bb[wa + 3] - g.bb[wa]) * 0.95, room: true });
+  }
+  return O;
+}
+
+// =====================================================================
+//  Loading
+// =====================================================================
+const $ = id => document.getElementById(id);
+const logEl = $('log'), progEl = $('prog');
+const say = async (msg, frac) => {
+  logEl.className = ''; logEl.textContent = msg;
+  if (frac !== undefined) { progEl.style.display = 'block'; progEl.firstElementChild.style.width = Math.round(frac * 100) + '%'; }
+  await new Promise(r => setTimeout(r, 0));
+};
+const drop = $('drop'), fileIn = $('fileIn');
+['dragenter', 'dragover'].forEach(ev => addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));
+['dragleave', 'drop'].forEach(ev => addEventListener(ev, e => { e.preventDefault(); if (ev === 'dragleave' && e.target !== drop) return; drop.classList.remove('over'); }));
+addEventListener('drop', e => { const f = e.dataTransfer?.files?.[0]; if (f) start(f); });
+fileIn.addEventListener('change', () => { if (fileIn.files[0]) start(fileIn.files[0]); });
+$('bNew').onclick = () => { if (confirmLeave()) location.reload(); };
+function confirmLeave() { return true; }
+let started = false;
+async function start(file) {
+  if (started) { location.reload(); return; }
+  started = true;
+  try {
+    await say(`Reading ${file.name} (${(file.size / 1048576).toFixed(1)} MB)…`, 0.05);
+    const buf = await file.arrayBuffer();
+    await say('Decoding the PYTHA tables…', 0.12);
+    const model = extractModel(buf);
+    await say(`Found ${model.parts.length} parts and ${model.groups.size} assemblies. Building 3D surfaces…`, 0.2);
+    const idx = await buildMesh(model, m => say(m, 0.2 + 0.4 * (Number((m.match(/(\d+)%/) || [0, 0])[1]) / 100)));
+    await say('Recognising cabinets, materials, doors and drawers…', 0.65);
+    const cls = classify(model);
+    await say('Preparing the render…', 0.75);
+    await launch(file.name.replace(/\.pyo$/i, ''), model, cls, idx);
+  } catch (err) {
+    console.error(err);
+    started = false;
+    progEl.style.display = 'none';
+    logEl.className = 'err'; logEl.textContent = 'Could not open this file: ' + (err.message || err);
+  }
+}
+
+// =====================================================================
+//  The app (built once a file is loaded)
+// =====================================================================
+async function launch(title, model, cls, idx) {
+  const parts = model.parts, groups = model.groups, mods = cls.mods, OPEN = cls.openables;
+  const IN = 25.4, STEP = IN / 4, LIM = 6 * IN;
+  // ---------- centre the model ----------
+  const B = cls.box, C = [(B[0] + B[3]) / 2, (B[1] + B[4]) / 2, cls.floorZ];
+  const shiftBB = b => b && [b[0] - C[0], b[1] - C[1], b[2] - C[2], b[3] - C[0], b[4] - C[1], b[5] - C[2]];
+  for (const p of parts) { p.bb = shiftBB(p.bb); if (p.rb && !p.rb._s) { const r = shiftBB(p.rb); p.rb = r; } if (p.c) p.c = [p.c[0] - C[0], p.c[1] - C[1], p.c[2] - C[2]]; }
+  for (const m of mods) { m.bb = shiftBB(m.bb); for (const i of m.parts) if (parts[i].rb) parts[i].rb = m.bb; }
+  const inner = shiftBB(cls.inner), box = shiftBB(cls.box), FLOOR = 0, TOP = inner[5];
+  const pts = model.pts, nPts = pts.length / 3, pos = new Float32Array(nPts * 3);
+  for (let k = 0; k < nPts; k++) { pos[k * 3] = pts[k * 3] - C[0]; pos[k * 3 + 1] = pts[k * 3 + 1] - C[1]; pos[k * 3 + 2] = pts[k * 3 + 2] - C[2]; }
+  let geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  geo.setIndex(new THREE.BufferAttribute(idx, 1));
+  await say('Smoothing curved surfaces…', 0.8);
+  geo = toCreasedNormals(geo, Math.PI / 5);
+  const NTRI = idx.length / 3;
+
+  // ---------- renderer ----------
+  const canvas = $('c');
+  const MOBILE = matchMedia('(pointer: coarse)').matches || innerWidth < 760;
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, MOBILE ? 1.5 : 2));
+  renderer.xr.enabled = true; renderer.xr.setReferenceSpaceType('local-floor');
+  renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 0.82;
+  renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  const scene = new THREE.Scene();
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  scene.environment = pmrem.fromScene(new RoomEnvironment(renderer), 0.04).texture;
+  {
+    const cv = document.createElement('canvas'); cv.width = 2; cv.height = 512;
+    const g = cv.getContext('2d'), gr = g.createLinearGradient(0, 0, 0, 512);
+    gr.addColorStop(0, '#7fa7cf'); gr.addColorStop(0.55, '#c9dbe9'); gr.addColorStop(1, '#eef1ec');
+    g.fillStyle = gr; g.fillRect(0, 0, 2, 512);
+    const t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace; scene.background = t;
+  }
+  const camera = new THREE.PerspectiveCamera(38, 1, 20, 400000); camera.up.set(0, 0, 1);
+  const controls = new OrbitControls(camera, canvas); controls.enableDamping = true; controls.maxPolarAngle = Math.PI * 0.495;
+
+  // ---------- procedural textures ----------
+  const rnd = (() => { let s = 12345; return () => (s = (s * 16807) % 2147483647) / 2147483647; })();
+  function canvasTex(size, draw) {
+    const cv = document.createElement('canvas'); cv.width = cv.height = size; draw(cv.getContext('2d'), size);
+    const t = new THREE.CanvasTexture(cv); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.anisotropy = 8; t.colorSpace = THREE.SRGBColorSpace; return t;
+  }
+  const graniteTex = canvasTex(512, (g, n) => { g.fillStyle = '#2c2a29'; g.fillRect(0, 0, n, n);
+    for (let i = 0; i < 9000; i++) { const c = rnd(); g.fillStyle = c < .55 ? '#1a1918' : c < .85 ? '#4a4643' : c < .97 ? '#77706a' : '#b9b2a8'; g.beginPath(); g.arc(rnd() * n, rnd() * n, rnd() * 2.6 + .4, 0, 7); g.fill(); } });
+  const woodTex = canvasTex(512, (g, n) => { g.fillStyle = '#b98a5a'; g.fillRect(0, 0, n, n);
+    for (let y = 0; y < n; y++) { const v = Math.sin(y * 0.09 + Math.sin(y * 0.013) * 4) * 0.5 + 0.5; g.fillStyle = `rgba(${90 + v * 40},${55 + v * 25},${30 + v * 10},${0.18 + v * 0.22})`; g.fillRect(0, y, n, 1); }
+    for (let i = 0; i < 400; i++) { g.fillStyle = 'rgba(60,35,15,.12)'; g.fillRect(rnd() * n, rnd() * n, rnd() * 120 + 20, 1); } });
+  const tileTex = canvasTex(1024, (g, n) => {
+    for (let ty = 0; ty < 2; ty++) for (let tx = 0; tx < 2; tx++) { const x0 = tx * n / 2, y0 = ty * n / 2, b = 214 - rnd() * 8; g.fillStyle = `rgb(${b},${b - 4},${b - 12})`; g.fillRect(x0, y0, n / 2, n / 2);
+      for (let i = 0; i < 26; i++) { g.strokeStyle = `rgba(150,140,130,${0.05 + rnd() * 0.08})`; g.lineWidth = rnd() * 2 + .5; g.beginPath(); let x = x0 + rnd() * n / 2, y = y0 + rnd() * n / 2; g.moveTo(x, y); for (let k = 0; k < 6; k++) { x += (rnd() - .5) * 90; y += (rnd() - .3) * 60; g.lineTo(x, y); } g.stroke(); } }
+    g.fillStyle = '#b8b2a8'; g.fillRect(0, 0, n, 3); g.fillRect(0, n / 2 - 1, n, 3); g.fillRect(0, 0, 3, n); g.fillRect(n / 2 - 1, 0, 3, n); });
+  const grassTex = canvasTex(512, (g, n) => { g.fillStyle = '#5f7a43'; g.fillRect(0, 0, n, n);
+    for (let i = 0; i < 26000; i++) { const v = rnd(); g.fillStyle = v < .5 ? 'rgba(80,110,50,.5)' : v < .85 ? 'rgba(130,155,85,.45)' : 'rgba(60,80,35,.5)'; g.fillRect(rnd() * n, rnd() * n, 1.5, 3); } });
+  const pavTex = canvasTex(512, (g, n) => { g.fillStyle = '#b9b1a5'; g.fillRect(0, 0, n, n);
+    for (let y = 0; y < 4; y++) for (let x = 0; x < 4; x++) { const s = 175 + rnd() * 25; g.fillStyle = `rgb(${s},${s - 6},${s - 14})`; g.fillRect(x * 128 + 2, y * 128 + 2, 124, 124); } });
+  function triplanar(mat, tex, mm) {
+    mat.onBeforeCompile = sh => {
+      sh.uniforms.tpMap = { value: tex }; sh.uniforms.tpScale = { value: 1 / mm };
+      sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nvarying vec3 vTpPos;').replace('#include <project_vertex>', '#include <project_vertex>\nvTpPos = (modelMatrix * vec4(transformed, 1.0)).xyz;');
+      sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nvarying vec3 vTpPos;\nuniform sampler2D tpMap;\nuniform float tpScale;')
+        .replace('#include <map_fragment>', `vec3 tpN = abs(normalize(cross(dFdx(vTpPos), dFdy(vTpPos)))); tpN = pow(tpN, vec3(6.0)); tpN /= (tpN.x + tpN.y + tpN.z);
+          vec3 tp = vTpPos * tpScale; vec4 tpC = texture2D(tpMap, tp.yz) * tpN.x + texture2D(tpMap, tp.xz) * tpN.y + texture2D(tpMap, tp.xy) * tpN.z; diffuseColor.rgb *= tpC.rgb;`);
+    };
+    mat.customProgramCacheKey = () => 'tp' + tex.uuid; return mat;
+  }
+  // ---------- materials (from material names, falling back to what the part is) ----------
+  const NAMED = [[/glass|mirror/, 'glass'], [/chrom|steel|\bss\b|inox|nickel/, 'chrome'], [/\balu|aluminium|aluminum/, 'alu'], [/granite|quartz|marble|stone/, 'granite'],
+    [/parquet|oak|walnut|teak|maple|wood|veneer|eiche|holz/, 'wood'], [/black|schwarz|anthrac/, '#262626'], [/white|weiss|weiß|frosty/, '#f2f0ec'], [/grey-?1|grau-?1|light ?gr[ae]y/, '#d4d4d4'],
+    [/grey-?2|grau-?2/, '#b0b0b0'], [/grey|gray|grau/, '#8c8c8c'], [/orange/, '#d9824a'], [/yellow|gelb/, '#e8c547'], [/pink|rose/, '#e2a3b5'], [/blue|blau/, '#5a7fb5'], [/red|rot\b/, '#b5483f'],
+    [/green|grün|sage|olive/, '#6f8379'], [/copper|kupfer/, '#b87333'], [/beige|cream|ivory/, '#e9e1d0'], [/brown|braun/, '#7a5a40']];
+  function lookFor(p) {
+    const t = (p.finish + ' ' + p.mat).toLowerCase();
+    for (const [rx, v] of NAMED) if (rx.test(t)) return v;
+    const t2 = (p.art + ' ' + p.el).toLowerCase();
+    if (p.kind === 'wall') return 'plaster';
+    if (p.kind === 'room') return /glass/.test(t2) ? 'glass' : /door|leaf/.test(t2) && !/frame/.test(t2) ? 'wood' : '#3b3f44';
+    if (p.kind === 'appliance') return /glass|display|led/.test(t2) ? '#202020' : 'chrome';
+    if (p.kind === 'hardware' || p.kind === 'aid') return 'metal';
+    if (p.kind === 'linear') return '#2b2b2b';
+    for (const [rx, v] of NAMED) if (rx.test(t2)) return v;
+    switch (p.rate) {
+      case 'P_STN': return 'granite'; case 'P_GLS': return 'glass'; case 'P_ALU': return '#3b3f44';
+      case 'P_ACR': case 'P_PU': return 'gloss'; case 'P_LAM': case 'P_VEN': return '#d6cfc2';
+      case 'P_BACK': return '#d9d2c4';
+    }
+    return '#e8e2d6';
+  }
+  const matCache = {};
+  function material(key) {
+    if (matCache[key]) return matCache[key];
+    let m;
+    switch (key) {
+      case 'glass': m = new THREE.MeshPhysicalMaterial({ color: 0xdfeff4, roughness: 0.05, transparent: true, opacity: 0.28, envMapIntensity: 1.5, depthWrite: false }); break;
+      case 'chrome': m = new THREE.MeshStandardMaterial({ color: 0xd8dbde, metalness: 1, roughness: 0.22 }); break;
+      case 'alu': m = new THREE.MeshStandardMaterial({ color: 0xc4c7ca, metalness: 0.9, roughness: 0.35 }); break;
+      case 'metal': m = new THREE.MeshStandardMaterial({ color: 0xa9aeb3, metalness: 0.8, roughness: 0.35 }); break;
+      case 'granite': m = triplanar(new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.18, envMapIntensity: 1.2 }), graniteTex, 450); break;
+      case 'wood': m = triplanar(new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.55 }), woodTex, 700); break;
+      case 'plaster': m = new THREE.MeshStandardMaterial({ color: 0xf1ede6, roughness: 0.92 }); break;
+      case 'gloss': m = new THREE.MeshPhysicalMaterial({ color: 0xe9e6df, roughness: 0.12, clearcoat: 1, clearcoatRoughness: 0.08 }); break;
+      default: m = new THREE.MeshStandardMaterial({ color: key, roughness: /^#(26|2b|20|3b)/.test(key) ? 0.4 : 0.6, metalness: /^#(26|2b|20|3b)/.test(key) ? 0.3 : 0 });
+    }
+    m.side = THREE.DoubleSide; m.shadowSide = THREE.DoubleSide;
+    if (m.envMapIntensity === 1) m.envMapIntensity = 0.45;
+    return matCache[key] = m;
+  }
+  const hiMat = new THREE.MeshStandardMaterial({ color: 0x2f6fde, emissive: 0x1d4fb0, emissiveIntensity: 0.6, side: THREE.DoubleSide });
+  const materials = parts.map(p => material(lookFor(p))); materials.push(hiMat);
+  const HI = materials.length - 1;
+
+  // ---------- context: floor, plinth, lawn, trees ----------
+  const ctx = new THREE.Group(); scene.add(ctx);
+  const W = box[3] - box[0], D = box[4] - box[1], SZ = Math.max(W, D, 3000);
+  function plane(x0, y0, x1, y1, z, tex, rep, rough) {
+    const t = tex.clone(); t.needsUpdate = true; t.repeat.set((x1 - x0) / rep, (y1 - y0) / rep);
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(x1 - x0, y1 - y0), new THREE.MeshStandardMaterial({ map: t, roughness: rough, envMapIntensity: 0.6 }));
+    m.position.set((x0 + x1) / 2, (y0 + y1) / 2, z); m.receiveShadow = true; ctx.add(m); return m;
+  }
+  const PL = -300;
+  { const slab = new THREE.Mesh(new THREE.BoxGeometry(W + 120, D + 120, -PL - 1), new THREE.MeshStandardMaterial({ color: 0x9c968d, roughness: 0.95 }));
+    slab.position.set((box[0] + box[3]) / 2, (box[1] + box[4]) / 2, PL / 2 - 0.5); slab.receiveShadow = slab.castShadow = true; ctx.add(slab); }
+  plane(inner[0], inner[1], inner[3], inner[4], 0.5, tileTex, 1200, 0.25);
+  plane(box[0] - 1300, box[1] - 1300, box[3] + 1300, box[4] + 1300, PL + 2, pavTex, 1200, 0.9);
+  const ground = plane(-80000, -80000, 80000, 80000, PL, grassTex, 1500, 1); ground.material.envMapIntensity = 0.2;
+  const leafMat = new THREE.MeshStandardMaterial({ color: 0x3f6230, roughness: 0.95, flatShading: true }), trunkMat = new THREE.MeshStandardMaterial({ color: 0x6b4c33, roughness: 1 });
+  function tree(x, y, s) { const g = new THREE.Group(); g.position.set(x, y, PL);
+    const tr = new THREE.Mesh(new THREE.CylinderGeometry(90 * s, 130 * s, 2200 * s, 8), trunkMat); tr.rotation.x = Math.PI / 2; tr.position.z = 1100 * s; g.add(tr);
+    for (const [dx, dy, dz, r] of [[0, 0, 2900, 1200], [500, 300, 2500, 850], [-450, -250, 2600, 900], [100, -400, 3400, 800]]) { const l = new THREE.Mesh(new THREE.IcosahedronGeometry(r * s, 2), leafMat); l.position.set(dx * s, dy * s, dz * s); g.add(l); }
+    g.traverse(o => { if (o.isMesh) o.castShadow = o.receiveShadow = true; }); ctx.add(g); }
+  tree(box[3] + 3500, box[1] - 2500, 1.1); tree(box[3] + 4200, box[4] + 2500, 0.9); tree(box[0] - 3800, box[4] + 2800, 1.2); tree(box[0] - 4300, box[1] - 1500, 1.0);
+
+  // ---------- the model ----------
+  const wallParts = parts.map((p, i) => [p, i]).filter(([p]) => p.kind === 'wall' && p.bb).map(([p, i]) => {
+    const k = (p.bb[3] - p.bb[0]) < (p.bb[4] - p.bb[1]) ? 0 : 1, n = [0, 0]; n[k] = Math.sign(p.c[k]) || 1; return { i, n };
+  });
+  let wallMode = 'cut', selected = -1;
+  const hiddenWall = new Set(), focusHidden = new Set();
+  function rebuildGroups() {
+    geo.clearGroups();
+    parts.forEach((p, i) => {
+      if (p.stray || p.e === p.s || p.kind === 'empty') return;
+      if (p.kind === 'wall' && (wallMode === 'none' || hiddenWall.has(i))) return;
+      if (focusHidden.has(i)) return;
+      geo.addGroup(p.s * 3, (p.e - p.s) * 3, i === selected ? HI : i);
+    });
+  }
+  rebuildGroups();
+  const mesh = new THREE.Mesh(geo, materials); mesh.castShadow = mesh.receiveShadow = true; scene.add(mesh);
+
+  // ---------- lights ----------
+  scene.add(new THREE.HemisphereLight(0xdfeaf5, 0x7d7462, 0.35));
+  const sun = new THREE.DirectionalLight(0xfff1dc, 2.6);
+  sun.position.set(SZ * 1.2, -SZ * 0.9, SZ * 1.5); sun.castShadow = true; sun.shadow.mapSize.set(MOBILE ? 2048 : 4096, MOBILE ? 2048 : 4096);
+  const sh = SZ * 1.3; Object.assign(sun.shadow.camera, { left: -sh, right: sh, top: sh, bottom: -sh, near: 100, far: SZ * 6 });
+  sun.shadow.bias = -0.0004; sun.shadow.normalBias = 6; sun.shadow.radius = 4; scene.add(sun);
+  { const nx = Math.max(1, Math.round((inner[3] - inner[0]) / 2500)), ny = Math.max(1, Math.round((inner[4] - inner[1]) / 2500));
+    for (let a = 0; a < nx; a++) for (let b = 0; b < ny; b++) { const l = new THREE.PointLight(0xffe2b8, 0.9, 5200, 0); l.position.set(inner[0] + (a + 0.5) * (inner[3] - inner[0]) / nx, inner[1] + (b + 0.5) * (inner[4] - inner[1]) / ny, TOP - 150); scene.add(l); } }
+
+  // ---------- post-processing (AO + focus blur) ----------
+  const rt = new THREE.WebGLRenderTarget(1, 1, { samples: MOBILE ? 2 : 4, type: THREE.HalfFloatType });
+  const composer = new EffectComposer(renderer, rt);
+  composer.addPass(new RenderPass(scene, camera));
+  const gtao = new GTAOPass(scene, camera, 1, 1);
+  gtao.updateGtaoMaterial({ radius: 320, distanceExponent: 1.6, thickness: 260, distanceFallOff: 1, scale: 1.25, samples: 16 });
+  gtao.updatePdMaterial({ lumaPhi: 10, depthPhi: 2, normalPhi: 3, radius: 6, rings: 2, samples: 16 });
+  gtao.normalMaterial.side = THREE.DoubleSide; composer.addPass(gtao);
+  const VS = 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }';
+  const blurMat = new THREE.ShaderMaterial({ uniforms: { tDiffuse: { value: null }, dir: { value: new THREE.Vector2() } }, vertexShader: VS, depthTest: false, depthWrite: false,
+    fragmentShader: `uniform sampler2D tDiffuse; uniform vec2 dir; varying vec2 vUv; void main(){ vec4 c = texture2D(tDiffuse, vUv) * 0.2270270270;
+      c += (texture2D(tDiffuse, vUv + dir * 1.3846153846) + texture2D(tDiffuse, vUv - dir * 1.3846153846)) * 0.3162162162;
+      c += (texture2D(tDiffuse, vUv + dir * 3.2307692308) + texture2D(tDiffuse, vUv - dir * 3.2307692308)) * 0.0702702703; gl_FragColor = c; }` });
+  const compMat = new THREE.ShaderMaterial({ uniforms: { tDiffuse: { value: null }, tBlur: { value: null }, tMask: { value: null }, amount: { value: 0 }, px: { value: new THREE.Vector2() } }, vertexShader: VS, depthTest: false, depthWrite: false,
+    fragmentShader: `uniform sampler2D tDiffuse, tBlur, tMask; uniform float amount; uniform vec2 px; varying vec2 vUv;
+      void main(){ float m = texture2D(tMask, vUv).r * 0.4 + (texture2D(tMask, vUv + vec2(px.x, 0.)).r + texture2D(tMask, vUv - vec2(px.x, 0.)).r + texture2D(tMask, vUv + vec2(0., px.y)).r + texture2D(tMask, vUv - vec2(0., px.y)).r) * 0.15;
+        vec4 sharp = texture2D(tDiffuse, vUv); vec3 bg = texture2D(tBlur, vUv).rgb; float lum = dot(bg, vec3(0.2126, 0.7152, 0.0722)); bg = mix(bg, vec3(lum), 0.35) * 0.62;
+        vec3 col = mix(sharp.rgb, bg, (1.0 - m) * amount); float rim = smoothstep(0.05, 0.5, m) * (1.0 - smoothstep(0.5, 0.95, m)); col += vec3(0.18, 0.42, 1.0) * rim * 0.9 * amount;
+        gl_FragColor = vec4(col, sharp.a); }` });
+  const maskRT = new THREE.WebGLRenderTarget(1, 1);
+  class FocusBlurPass extends Pass {
+    constructor() { super(); this.a = new THREE.WebGLRenderTarget(1, 1, { type: THREE.HalfFloatType }); this.b = this.a.clone(); this.q = new FullScreenQuad(); this.enabled = false; }
+    setSize(w, h) { this.w = Math.max(1, w >> 1); this.h = Math.max(1, h >> 1); this.a.setSize(this.w, this.h); this.b.setSize(this.w, this.h); compMat.uniforms.px.value.set(1 / w, 1 / h); }
+    blur(src, dst, dx, dy) { blurMat.uniforms.tDiffuse.value = src; blurMat.uniforms.dir.value.set(dx / this.w, dy / this.h); this.q.material = blurMat; renderer.setRenderTarget(dst); this.q.render(renderer); }
+    render(r, writeBuffer, readBuffer) {
+      this.blur(readBuffer.texture, this.a, 1.6, 0); this.blur(this.a.texture, this.b, 0, 1.6); this.blur(this.b.texture, this.a, 3.2, 0); this.blur(this.a.texture, this.b, 0, 3.2); this.blur(this.b.texture, this.a, 5, 0); this.blur(this.a.texture, this.b, 0, 5);
+      compMat.uniforms.tDiffuse.value = readBuffer.texture; compMat.uniforms.tBlur.value = this.b.texture; compMat.uniforms.tMask.value = maskRT.texture;
+      this.q.material = compMat; renderer.setRenderTarget(this.renderToScreen ? null : writeBuffer); this.q.render(renderer);
+    }
+  }
+  const focusPass = new FocusBlurPass(); composer.addPass(focusPass); composer.addPass(new OutputPass());
+  const focusGeo = new THREE.BufferGeometry(); focusGeo.setAttribute('position', geo.attributes.position);
+  const whiteMat = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide });
+  const maskMesh = new THREE.Mesh(focusGeo, parts.map(() => whiteMat)); maskMesh.frustumCulled = false;
+  const maskScene = new THREE.Scene(); maskScene.add(maskMesh);
+  let hq = !MOBILE;                       // phones start without ambient occlusion
+  gtao.enabled = hq; $('bHQ').setAttribute('aria-pressed', hq);
+
+  // =====================================================================
+  //  Parametric engine: stretch planes with bands (PYTHA-style), rigid fittings
+  // =====================================================================
+  const posAttr = geo.attributes.position, P0 = posAttr.array.slice(), PA = posAttr.array;
+  const NAt = geo.attributes.normal, N0 = NAt.array.slice(), NA = NAt.array;
+  const canRange = typeof posAttr.addUpdateRange === 'function';
+  const movable = p => p.bb && !p.stray && !['wall', 'room', 'ref', 'empty', 'charge'].includes(p.kind);
+  for (const m of mods) { m.dW = 0; m.dD = 0; m.dH = 0; }
+  let runMode = true;
+  try { const sv = JSON.parse(localStorage.getItem('pyo-cfg:' + title) || 'null'); if (sv && sv.n === mods.length) { sv.m.forEach((d, k) => Object.assign(mods[k], d)); runMode = sv.run !== false; } } catch (e) {}
+  const save = () => { try { localStorage.setItem('pyo-cfg:' + title, JSON.stringify({ n: mods.length, run: runMode, m: mods.map(m => ({ dW: m.dW, dD: m.dD, dH: m.dH, wsg: m.wsg })) })); } catch (e) {} };
+  const memberCache = new Map();
+  function band(m, kind) {                         // which parts an edit of this cabinet moves (original geometry)
+    const key = m.idx + kind + runMode;
+    if (memberCache.has(key)) return memberCache.get(key);
+    const S = new Uint8Array(parts.length), b = m.bb, na = m.na, wa = m.wa, inM = new Set(m.parts);
+    for (const p of parts) {
+      if (!movable(p)) continue;
+      const q = p.rb || p.bb, inDepth = ovl(q[na], q[na + 3], b[na], b[na + 3]) >= Math.min(20, 0.5 * (q[na + 3] - q[na])), inWidth = ovl(q[wa], q[wa + 3], b[wa], b[wa + 3]) >= Math.min(20, 0.5 * (q[wa + 3] - q[wa]));
+      const freeApp = p.kind === 'appliance' && !inM.has(p.i) && q[2] < 150;
+      if (kind === 'W') { if (inDepth) S[p.i] = 1; continue; }
+      if (freeApp) continue;
+      const area = runMode ? inDepth : inDepth && inWidth;
+      if (!area) continue;
+      if (!m.hang) {
+        const mid = (b[2] + b[5]) / 2;
+        if (q[2] < b[2] - 60 || q[2] > b[5] + 60) continue;
+        if (q[5] > b[5] + 400 && q[2] < mid && !inM.has(p.i)) continue;   // tall neighbours keep their height
+      } else if (q[5] < b[5] - 60 || q[2] < b[2] - 60) continue;
+      S[p.i] = 1;
+    }
+    memberCache.set(key, S); return S;
+  }
+  let edits = [];
+  function rebuildEdits() {    edits = [];
+    for (const m of mods) {
+      const b = m.bb;
+      if (Math.abs(m.dW) > 0.01) edits.push({ m, kind: 'W', axis: m.wa, mid: (b[m.wa] + b[m.wa + 3]) / 2, sg: m.wsg || m.grow, d: m.dW, S: band(m, 'W') });
+      if (Math.abs(m.dD) > 0.01) edits.push({ m, kind: 'D', axis: m.na, mid: (b[m.na] + b[m.na + 3]) / 2, sg: m.f, d: m.dD, S: band(m, 'D') });
+      if (Math.abs(m.dH) > 0.01) edits.push({ m, kind: 'H', axis: 2, mid: (b[2] + b[5]) / 2, sg: m.hang ? -1 : 1, d: m.dH, S: band(m, 'H') });
+    }
+  }
+  const stepOff = (e, v) => e.sg > 0 ? (v > e.mid ? e.d : 0) : (v < e.mid ? -e.d : 0);
+  function rigidT(p) {
+    const t = [0, 0, 0], b = p.rb || p.bb, c = [(b[0] + b[3]) / 2, (b[1] + b[4]) / 2, (b[2] + b[5]) / 2];
+    for (const e of edits) {
+      if (!e.S[p.i]) continue;
+      const mb = e.m.bb, a = e.axis;
+      if (a === 2) { t[2] += e.sg > 0 ? (b[2] > e.mid ? e.d : 0) : (b[2] < e.mid ? -e.d : 0); continue; }
+      const within = c[a] > mb[a] && c[a] < mb[a + 3] && (p.kind === 'appliance' || (b[a + 3] - b[a]) > 0.25 * (mb[a + 3] - mb[a]));
+      if (within) { const u = Math.min(1, Math.max(0, (c[a] - mb[a]) / (mb[a + 3] - mb[a]))); t[a] += e.sg > 0 ? e.d * u : -e.d * (1 - u); }
+      else t[a] += stepOff(e, c[a]);
+    }
+    return t;
+  }
+  function partBox(p) {
+    const b = p.bb; if (!b) return null;
+    if (!edits.length || !movable(p)) return b.slice();
+    if (p.rig) { const t = rigidT(p); return [b[0] + t[0], b[1] + t[1], b[2] + t[2], b[3] + t[0], b[4] + t[1], b[5] + t[2]]; }
+    const o = b.slice();
+    for (const e of edits) if (e.S[p.i]) { o[e.axis] += stepOff(e, b[e.axis]); o[e.axis + 3] += stepOff(e, b[e.axis + 3]); }
+    return o;
+  }
+  // ---------- openables ----------
+  const partOpen = new Int16Array(parts.length).fill(-1);
+  OPEN.forEach((o, k) => { o.k = 0; o.tgt = 0; o.T = null; o.delay = 0; for (const i of o.parts) partOpen[i] = k; });
+  const easeIO = t => t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2;
+  function openBox(o) { let bx = null; for (const i of o.parts) { const q = partBox(parts[i]); if (q) bx = unionBB(bx, q); } return bx; }
+  function openFrame(o) {
+    const k = easeIO(o.k); if (k <= 1e-4) return null;
+    const bx = openBox(o), na = o.na, wa = o.wa, f = o.f, outer = f > 0 ? bx[3 + na] : bx[na];
+    const rad = THREE.MathUtils.degToRad(o.angle || 90) * k;
+    const rot = (A, Bx, pa, pb, ang) => ({ rot: true, A, B: Bx, pa, pb, c: Math.cos(ang), s: Math.sin(ang) });
+    switch (o.kind) {
+      case 'slide': { const t = [0, 0, 0]; t[na] = f * o.travel * k; return { t }; }
+      case 'window': { const t = [0, 0, 0]; t[na] = f * o.travel * k; return { t }; }
+      case 'roll': return { roll: true, z1: bx[5], k };
+      case 'hinge': {
+        const h = o.hinge === 'min' ? bx[wa] : bx[3 + wa], free = o.hinge === 'min' ? bx[3 + wa] : bx[wa];
+        const P = [0, 0], F = [0, 0], Dd = [0, 0]; P[wa] = h; P[na] = outer; F[wa] = free; F[na] = outer; Dd[na] = f;
+        const v = [F[0] - P[0], F[1] - P[1]], sg = Math.sign(-v[1] * Dd[0] + v[0] * Dd[1]) || 1;
+        return rot(0, 1, P[0], P[1], sg * rad);
+      }
+      case 'lift': return rot(na, 2, outer, bx[5], f * rad);
+      case 'drop': return rot(na, 2, outer, bx[2], -f * rad);
+    }
+    return null;
+  }
+  function writePart(i) {
+    const p = parts[i]; if (p.e === p.s) return;
+    const v0 = p.s * 9, v1 = p.e * 9;
+    if (!movable(p) || !edits.length) PA.set(P0.subarray(v0, v1), v0);
+    else if (p.rig) { const [tx, ty, tz] = rigidT(p); for (let j = v0; j < v1; j += 3) { PA[j] = P0[j] + tx; PA[j + 1] = P0[j + 1] + ty; PA[j + 2] = P0[j + 2] + tz; } }
+    else {
+      const E = edits.filter(e => e.S[i]);
+      if (!E.length) PA.set(P0.subarray(v0, v1), v0);
+      else for (let j = v0; j < v1; j += 3) {
+        let x = P0[j], y = P0[j + 1], z = P0[j + 2]; const ox = x, oy = y, oz = z;
+        for (const e of E) { const v = e.axis === 0 ? ox : e.axis === 1 ? oy : oz, d = stepOff(e, v); if (e.axis === 0) x += d; else if (e.axis === 1) y += d; else z += d; }
+        PA[j] = x; PA[j + 1] = y; PA[j + 2] = z;
+      }
+    }
+    const oi = partOpen[i]; if (oi < 0) return;
+    const T = OPEN[oi].T; NA.set(N0.subarray(v0, v1), v0); if (!T) return;
+    if (T.t) { for (let j = v0; j < v1; j += 3) { PA[j] += T.t[0]; PA[j + 1] += T.t[1]; PA[j + 2] += T.t[2]; } }
+    else if (T.roll) { const sc = 1 - 0.93 * T.k; for (let j = v0 + 2; j < v1; j += 3) PA[j] = T.z1 - (T.z1 - PA[j]) * sc; }
+    else if (T.rot) { const { A, B: Bx, pa, pb, c, s } = T;
+      for (let j = v0; j < v1; j += 3) { const a = PA[j + A] - pa, b = PA[j + Bx] - pb; PA[j + A] = pa + a * c - b * s; PA[j + Bx] = pb + a * s + b * c; const n1 = N0[j + A], n2 = N0[j + Bx]; NA[j + A] = n1 * c - n2 * s; NA[j + Bx] = n1 * s + n2 * c; } }
+  }
+  function applyGeometry() {
+    rebuildEdits();
+    for (const o of OPEN) o.T = openFrame(o);
+    for (let i = 0; i < parts.length; i++) writePart(i);
+    if (canRange) { posAttr.clearUpdateRanges(); NAt.clearUpdateRanges(); }
+    posAttr.needsUpdate = true; NAt.needsUpdate = true; geo.computeBoundingSphere(); geo.computeBoundingBox();
+  }
+  let openAnimating = false, lastOpenT = performance.now();
+  function stepOpen() {
+    const now = performance.now(), dt = Math.min(0.1, (now - lastOpenT) / 1000); lastOpenT = now;
+    let any = false;
+    for (const o of OPEN) {
+      if (o.delay > 0) { o.delay -= dt; any = true; continue; }
+      if (o.k === o.tgt) continue;
+      any = true;
+      o.k = o.tgt > o.k ? Math.min(o.tgt, o.k + dt / 0.6) : Math.max(o.tgt, o.k - dt / 0.6);
+      o.T = openFrame(o);
+      for (const i of o.parts) { writePart(i); const p = parts[i]; if (canRange) { posAttr.addUpdateRange(p.s * 9, (p.e - p.s) * 9); NAt.addUpdateRange(p.s * 9, (p.e - p.s) * 9); } }
+    }
+    if (any) { posAttr.needsUpdate = true; NAt.needsUpdate = true; }
+    if (openAnimating && !any) geo.computeBoundingSphere();
+    openAnimating = any;
+  }
+  function toggleOpen(k, force) { const o = OPEN[k]; o.tgt = force === undefined ? (o.tgt ? 0 : 1) : force; o.delay = 0; refreshOpenUI(); }
+
+  // ---------- collision guard ----------
+  const blocks = [];
+  for (const m of mods) {
+    const w = m.bb[m.wa + 3] - m.bb[m.wa];
+    const ps = m.parts.map(i => parts[i]).filter(p => movable(p) && p.kind !== 'linear' && (p.bb[m.wa + 3] - p.bb[m.wa]) <= w + 30 - (m.parts.length > 1 ? 0 : -1e9));
+    if (ps.length) blocks.push({ name: m.label, ps, mod: m });
+  }
+  for (const p of parts) if ((p.kind === 'wall' || p.kind === 'room') && p.bb && !p.stray) blocks.push({ name: p.kind === 'wall' ? 'a wall' : 'the ' + (p.el || 'room fitting').toLowerCase(), ps: [p], fixed: true });
+  const ROOM = [inner[0] - 2, inner[1] - 2, -2, inner[3] + 2, inner[4] + 2, TOP + 2];
+  function blockBoxes() { return blocks.map(b => { let x = null; for (const p of b.ps) x = unionBB(x, partBox(p)); return x; }); }
+  const pen = (a, b) => Math.min(Math.min(a[3], b[3]) - Math.max(a[0], b[0]), Math.min(a[4], b[4]) - Math.max(a[1], b[1]), Math.min(a[5], b[5]) - Math.max(a[2], b[2]));
+  const excess = bx => Math.max(ROOM[0] - bx[0], ROOM[1] - bx[1], ROOM[2] - bx[2], bx[3] - ROOM[3], bx[4] - ROOM[4], bx[5] - ROOM[5]);
+  const saved0 = mods.map(m => [m.dW, m.dD, m.dH]); mods.forEach(m => { m.dW = m.dD = m.dH = 0; }); rebuildEdits();
+  const B0 = blockBoxes(), basePen = new Map(), baseEx = B0.map(bx => Math.max(0, excess(bx)));
+  for (let i = 0; i < blocks.length; i++) for (let j = i + 1; j < blocks.length; j++) { const v = pen(B0[i], B0[j]); if (v > 0) basePen.set(i * 100000 + j, v); }
+  mods.forEach((m, k) => { [m.dW, m.dD, m.dH] = saved0[k]; });
+  const b0Pen = k => [...basePen.entries()].filter(([key]) => Math.floor(key / 100000) === k || key % 100000 === k).map(([key, v]) => [blocks[Math.floor(key / 100000)].name.slice(0, 30), blocks[key % 100000].name.slice(0, 30), Math.round(v)]);
+  function findClash() {
+    rebuildEdits();
+    const Bx = blockBoxes();
+    for (let i = 0; i < blocks.length; i++) {
+      if (!blocks[i].fixed && cls.walls.length && excess(Bx[i]) > baseEx[i] + 3) return `${blocks[i].name} would go into the wall or ceiling`;
+      for (let j = i + 1; j < blocks.length; j++) {
+        if (blocks[i].fixed && blocks[j].fixed) continue;
+        const v = pen(Bx[i], Bx[j]); if (v <= 0) continue;
+        if (v > (basePen.get(i * 100000 + j) || 0) + 3) return `${blocks[i].fixed ? blocks[j].name : blocks[i].name} would hit ${blocks[i].fixed ? blocks[i].name : blocks[j].name}`;
+      }
+    }
+    return null;
+  }
+  const snapS = () => mods.map(m => [m.dW, m.dD, m.dH, m.wsg]);
+  const restore = s => mods.forEach((m, k) => { [m.dW, m.dD, m.dH, m.wsg] = s[k]; });
+  function guarded(apply, from, to) {
+    const sv = snapS(); apply(to); const clash = findClash(); if (!clash) return null;
+    let lo = 0, hi = 1;
+    for (let k = 0; k < 14; k++) { const mid = (lo + hi) / 2; restore(sv); apply(from + (to - from) * mid); if (findClash()) hi = mid; else lo = mid; }
+    restore(sv); const v = from + (to - from) * lo; apply(Math.abs(v - from) < STEP ? from : from + Math.trunc((v - from) / STEP) * STEP);
+    if (findClash()) restore(sv);
+    return clash;
+  }
+  if (findClash()) { mods.forEach(m => { m.dW = m.dD = m.dH = 0; }); }
+
+  // =====================================================================
+  //  Bill of quantities (live)
+  // =====================================================================
+  const RATES = {}; for (const [id, sec, label, basis, unit, rate] of RATE_DEFAULTS) RATES[id] = { id, sec, label, basis, unit, rate };
+  let INSTALL = 0.08, GST = 0.18;
+  try { const sv = JSON.parse(localStorage.getItem('pyo-rates') || 'null'); if (sv) { for (const k in sv.r) if (RATES[k]) RATES[k].rate = sv.r[k]; INSTALL = sv.i ?? INSTALL; GST = sv.g ?? GST; } } catch (e) {}
+  const saveRates = () => { try { localStorage.setItem('pyo-rates', JSON.stringify({ r: Object.fromEntries(Object.values(RATES).map(r => [r.id, r.rate])), i: INSTALL, g: GST })); } catch (e) {} };
+  const LINES = [];
+  for (const p of parts) if (p.bb && p.kind !== 'empty' && !(p.kind === 'ref')) LINES.push({ src: 'P', i: p.i, el: p.el, c: p.rate });
+  model.ngo.forEach((n, k) => LINES.push({ src: 'H', i: k, el: n.name, c: RX.charge.test(n.name + ' ' + n.cat) ? 'O_CHG' : rateForHardware((n.name + ' ' + n.art + ' ' + n.cat).toLowerCase()) }));
+  function lineNow(l) {
+    const r = RATES[l.c];
+    if (l.src !== 'P' || r.basis === 'Each') return { ...l, q: 1, amt: r.rate, L: 0, W: 0 };
+    const b = partBox(parts[l.i]), d = [b[3] - b[0], b[4] - b[1], b[5] - b[2]].sort((x, y) => y - x);
+    const L = Math.round(d[0]), Wd = Math.round(d[1]), q = r.basis === 'Area' ? L * Wd / 100 : L / 304.8;
+    return { ...l, L, W: Wd, q, amt: q * r.rate };
+  }
+  function totals(lines) {
+    const secTot = {}, matTot = {};
+    for (const l of lines) { const r = RATES[l.c]; secTot[r.sec] = (secTot[r.sec] || 0) + l.amt; (matTot[l.c] ??= { q: 0, amt: 0, n: 0 }); matTot[l.c].q += l.q; matTot[l.c].amt += l.amt; matTot[l.c].n++; }
+    const priced = SECTION_ORDER.filter(s => secTot[s] > 0), sub = priced.reduce((a, s) => a + secTot[s], 0), inst = sub * INSTALL, gst = (sub + inst) * GST;
+    return { secTot, matTot, priced, sub, inst, gst, grand: sub + inst + gst };
+  }
+  const zeroEdits = () => { const sv = snapS(); mods.forEach(m => { m.dW = m.dD = m.dH = 0; }); rebuildEdits(); const L0 = LINES.map(lineNow); restore(sv); rebuildEdits(); return L0; };
+  let L0 = zeroEdits(), T0 = totals(L0), LL = L0, TT = T0;
+  const lineByPart = {};
+  const inr = v => '₹' + Math.round(v).toLocaleString('en-IN');
+  const fmtQ = v => v.toLocaleString('en-IN', { maximumFractionDigits: 2 });
+  const esc = t => String(t ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  function fmtIn(mm) { const neg = mm < 0; let x = Math.abs(mm) / IN, w = Math.floor(x), f = Math.round((x - w) * 8); if (f === 8) { w++; f = 0; } const fr = ['', '⅛', '¼', '⅜', '½', '⅝', '¾', '⅞'][f]; return (neg ? '−' : '') + (w || !fr ? w : '') + fr + '″'; }
+  const fmtDelta = mm => Math.abs(mm) < 0.5 ? 'as designed' : (mm > 0 ? '+' : '') + fmtIn(mm) + ' (' + (mm > 0 ? '+' : '−') + Math.round(Math.abs(mm)) + ' mm)';
+  const billEl = $('bill'), billBody = $('billBody'), pTot = $('pTot'), pDel = $('pDel');
+  const totRows = t => `<tr class="tot"><td>Subtotal</td><td class="n">${inr(t.sub)}</td></tr><tr><td>Installation & labour (${Math.round(INSTALL * 100)}%)</td><td class="n">${inr(t.inst)}</td></tr><tr><td>GST (${Math.round(GST * 100)}%)</td><td class="n">${inr(t.gst)}</td></tr><tr class="grand"><td>Grand total</td><td class="n">${inr(t.grand)}</td></tr>`;
+  let billTab = 'sum';
+  const billViews = {
+    sum: () => `<table><tr><th>Section</th><th class="n">As designed</th><th class="n">Now</th></tr>${TT.priced.map(s => `<tr><td>${esc(s)}</td><td class="n muted">${inr(T0.secTot[s] || 0)}</td><td class="n">${inr(TT.secTot[s])}</td></tr>`).join('')}</table><table>${totRows(TT)}</table>
+      <p class="note">Rates are defaults in INR – change them on the Rates tab. Panels are priced per cm² of face area (two largest dimensions), linear items per running foot, fittings per piece. Appliances, sinks, taps and room items are listed under “Not in scope”.</p>`,
+    mat: () => `<table><tr><th>Item</th><th class="n">Qty</th><th class="n">Rate</th><th class="n">Amount</th></tr>${Object.entries(TT.matTot).filter(([, m]) => m.amt > 0).sort((a, b) => b[1].amt - a[1].amt).map(([c, m]) => { const r = RATES[c]; return `<tr><td>${esc(r.label)}<div class="muted">${esc(r.sec)} · ${m.n} item${m.n > 1 ? 's' : ''}</div></td><td class="n">${fmtQ(m.q)} ${esc(r.unit)}</td><td class="n">₹${r.rate}</td><td class="n">${inr(m.amt)}</td></tr>`; }).join('')}</table><table>${totRows(TT)}</table>`,
+    obj: () => SECTION_ORDER.filter(s => LL.some(l => RATES[l.c].sec === s)).map(s => { const ls = LL.filter(l => RATES[l.c].sec === s);
+      return `<h3 class="sh"><span>${esc(s)} (${ls.length})</span><span>${TT.secTot[s] > 0 ? inr(TT.secTot[s]) : '₹0'}</span></h3><table><tr><th>Object</th><th class="n">Size / qty</th><th class="n">Amount</th></tr>${ls.map(l => { const r = RATES[l.c];
+        const size = r.basis === 'Area' ? `${l.L}×${l.W} mm` : r.basis === 'Length' ? `${fmtQ(l.q)} rft` : `1 ${esc(r.unit)}`, ok = l.src === 'P' && !parts[l.i].stray;
+        return `<tr${ok ? ` class="click" data-p="${l.i}"` : ''}><td>${esc(l.el)}<div class="muted">${esc(r.label)}</div></td><td class="n">${size}</td><td class="n">${l.amt ? inr(l.amt) : '—'}</td></tr>`; }).join('')}</table>`; }).join('') + `<table>${totRows(TT)}</table>`,
+    rates: () => `<table><tr><th>Rate item</th><th class="n">Used</th><th class="n">Rate (₹)</th></tr>${Object.values(RATES).filter(r => !r.id.startsWith('X_')).map(r => `<tr><td>${esc(r.label)}<div class="muted">${esc(r.sec)} · per ${esc(r.unit)}</div></td><td class="n">${TT.matTot[r.id]?.n || 0}</td><td class="n"><input class="rate" type="number" step="${r.basis === 'Area' ? 0.01 : 10}" min="0" data-rate="${r.id}" value="${r.rate}"></td></tr>`).join('')}
+      <tr><td>Installation & labour (%)</td><td></td><td class="n"><input class="rate" type="number" step="1" min="0" data-pct="i" value="${Math.round(INSTALL * 100)}"></td></tr><tr><td>GST (%)</td><td></td><td class="n"><input class="rate" type="number" step="1" min="0" data-pct="g" value="${Math.round(GST * 100)}"></td></tr></table>
+      <p class="note">Rates are saved in this browser and apply to every file you open here.</p>`,
+  };
+  function showTab(t) {
+    billTab = t; const sc = billBody.scrollTop; billBody.innerHTML = billViews[t](); billBody.scrollTop = sc;
+    billEl.querySelectorAll('.tabs button').forEach(b => b.setAttribute('aria-pressed', b.dataset.t === t));
+    if (selected >= 0) billBody.querySelector(`tr[data-p="${selected}"]`)?.classList.add('sel');
+  }
+  billEl.querySelectorAll('.tabs button').forEach(b => b.onclick = () => showTab(b.dataset.t));
+  billBody.addEventListener('click', e => { const tr = e.target.closest('tr.click'); if (tr) select(+tr.dataset.p); });
+  billBody.addEventListener('change', e => {
+    const el = e.target; if (!el.classList.contains('rate')) return;
+    const v = Math.max(0, +el.value || 0);
+    if (el.dataset.rate) RATES[el.dataset.rate].rate = v; else if (el.dataset.pct === 'i') INSTALL = v / 100; else GST = v / 100;
+    saveRates(); L0 = zeroEdits(); T0 = totals(L0); refreshPrice();
+  });
+  function refreshPrice() {
+    rebuildEdits(); LL = LINES.map(lineNow); TT = totals(LL);
+    for (const l of LL) if (l.src === 'P') lineByPart[l.i] = l;
+    pTot.textContent = inr(TT.grand); const d = TT.grand - T0.grand;
+    if (renderer.xr.isPresenting) drawHud();
+    pDel.textContent = Math.abs(d) < 1 ? 'as designed' : (d > 0 ? '+' : '−') + inr(Math.abs(d)); pDel.className = 'd' + (Math.abs(d) < 1 ? '' : d > 0 ? ' up' : ' down');
+    $('billSub').textContent = `Grand total ${inr(TT.grand)} (as designed ${inr(T0.grand)}) · ${LINES.length} lines · assumed rates in INR`;
+    if (billEl.classList.contains('open') && !(billTab === 'rates' && billBody.contains(document.activeElement))) showTab(billTab);
+  }
+
+  // =====================================================================
+  //  Elements list
+  // =====================================================================
+  const elsEl = $('els'), elBody = $('elBody'), elSearch = $('elSearch');
+  let elTab = 'parts';
+  const KIND = { panel: 'Panel', linear: 'Linear', hardware: 'Hardware', appliance: 'Appliance', wall: 'Wall', room: 'Room item', aid: 'Modelling aid', object: 'Object', ref: 'Reference plane', charge: 'Charge', empty: 'No geometry' };
+  function elRows() {
+    if (elTab === 'parts') return [['#', 'Element', 'Kind', 'Category', 'Article / spec', 'Description', 'Finish', 'Core', 'Size (mm)', 'Cabinet', 'Assembly'],
+      ...parts.map(p => { const b = p.bb ? partBox(p) : null; return [p.i + 1, p.el, KIND[p.kind] + (p.stray ? ' (outside room)' : ''), p.cat, p.art, p.desc, p.finish, p.core, b ? `${Math.round(b[3] - b[0])} × ${Math.round(b[4] - b[1])} × ${Math.round(b[5] - b[2])}` : '', p.mod !== undefined ? mods[p.mod].label : '', p.path]; })];
+    if (elTab === 'groups') return [['ID', 'Assembly', 'Brand', 'Article', 'Type', 'Path', 'Parts'], ...[...groups.values()].map(g => [g.id, cleanName(g.name), g.bez, g.art, g.ctype, g.path, g.parts.length])];
+    return [['#', 'Item', 'Article', 'Category', 'Assembly'], ...model.ngo.map((n, k) => [k + 1, n.name, n.art, n.cat, groups.get(n.group) ? groups.get(n.group).path : ''])];
+  }
+  function renderEls() {
+    const rows = elRows(), q = elSearch.value.trim().toLowerCase(), head = rows[0];
+    const body = rows.slice(1).filter(r => !q || r.join(' ').toLowerCase().includes(q));
+    $('elSub').textContent = `${parts.length} parts · ${groups.size} assemblies · ${model.ngo.length} loose hardware items · ${mods.length} cabinets · ${OPEN.length} doors, drawers & openings`;
+    elBody.innerHTML = `<div class="muted" style="margin:6px 0">${body.length} shown · scroll sideways for more columns</div><table class="wide"><tr>${head.map(h => `<th>${esc(h)}</th>`).join('')}</tr>${body.map(r => `<tr${elTab === 'parts' && !parts[r[0] - 1].stray ? ` class="click" data-p="${r[0] - 1}"` : ''}>${r.map(c => `<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</table>`;
+    elsEl.querySelectorAll('.tabs button[data-e]').forEach(b => b.setAttribute('aria-pressed', b.dataset.e === elTab));
+  }
+  elsEl.querySelectorAll('.tabs button[data-e]').forEach(b => b.onclick = () => { elTab = b.dataset.e; renderEls(); });
+  elSearch.oninput = renderEls;
+  elBody.addEventListener('click', e => { const tr = e.target.closest('tr.click'); if (tr) select(+tr.dataset.p); });
+  const csv = () => elRows().map(r => r.map(c => { const s = String(c ?? ''); return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; }).join(',')).join('\n');
+  $('elCopy').onclick = e => navigator.clipboard.writeText(csv()).then(() => e.target.textContent = 'Copied ✓', () => e.target.textContent = 'Copy blocked');
+  $('elDl').onclick = () => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv()], { type: 'text/csv' })); a.download = `${title}-${elTab}.csv`; a.click(); };
+
+  // =====================================================================
+  //  Views, cutaway, picking
+  // =====================================================================
+  const RC = new THREE.Vector3(0, 0, 1000), RS = Math.max(inner[3] - inner[0], inner[4] - inner[1], 2500);
+  function setView(p, t) { const k = Math.max(1, 1.15 / Math.max(0.3, camera.aspect)); camera.position.copy(t).addScaledVector(p.clone().sub(t), Math.min(k, 2.2)); controls.target.copy(t); controls.update(); updateCutaway(true); }   // portrait screens: step back so the room fits
+  const views = {
+    doll: () => setView(new THREE.Vector3(-RS * 0.45, -RS * 1.9, RS * 1.45), new THREE.Vector3(0, 0, 500)),
+    inside: () => { const lx = inner[3] - inner[0] >= inner[4] - inner[1]; setView(lx ? new THREE.Vector3(inner[0] + 500, 0, 1600) : new THREE.Vector3(0, inner[1] + 500, 1600), lx ? new THREE.Vector3(inner[3], 0, 1050) : new THREE.Vector3(0, inner[4], 1050)); },
+    front: () => setView(new THREE.Vector3(0, -RS * 2.2, 1900), RC.clone()),
+    plan: () => setView(new THREE.Vector3(0, -10, RS * 3.2), new THREE.Vector3(0, 0, 0)),
+  };
+  for (const [id, k] of [['vDoll', 'doll'], ['vInside', 'inside'], ['vFront', 'front'], ['vPlan', 'plan']]) $(id).onclick = () => { if (focus) exitFocus(false); views[k](); };
+  function updateCutaway(force) {
+    const c = camera.position, inside = c.x > inner[0] && c.x < inner[3] && c.y > inner[1] && c.y < inner[4] && c.z < TOP;
+    const len = Math.hypot(c.x, c.y) || 1, steep = (c.z - 1100) / Math.max(1, len) > 3.5;
+    let changed = false;
+    for (const w of wallParts) { const h = wallMode === 'cut' && !inside && !steep && (w.n[0] * c.x + w.n[1] * c.y) / len > 0.2; if (h !== hiddenWall.has(w.i)) { h ? hiddenWall.add(w.i) : hiddenWall.delete(w.i); changed = true; } }
+    if (changed || force) rebuildGroups();
+  }
+  controls.addEventListener('change', () => updateCutaway(false));
+  $('bWalls').onclick = e => { wallMode = wallMode === 'cut' ? 'all' : wallMode === 'all' ? 'none' : 'cut'; e.currentTarget.textContent = { cut: 'Cutaway', all: 'All walls', none: 'No walls' }[wallMode]; updateCutaway(true); };
+  $('bHQ').onclick = e => { hq = !hq; e.currentTarget.setAttribute('aria-pressed', hq); gtao.enabled = hq; renderer.shadowMap.enabled = hq; scene.traverse(o => { if (o.material) [].concat(o.material).forEach(m => m.needsUpdate = true); }); };
+  const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
+  const triPart = new Uint16Array(NTRI); parts.forEach((p, i) => { if (p.e > p.s) triPart.fill(i, p.s, p.e); });
+  function pick(cx, cy) { const r = canvas.getBoundingClientRect(); ndc.set((cx - r.left) / r.width * 2 - 1, -(cy - r.top) / r.height * 2 + 1); ray.setFromCamera(ndc, camera); const h = ray.intersectObject(mesh); return h.length ? triPart[h[0].faceIndex] : -1; }
+  const info = $('info');
+  function select(i) {
+    selected = i; rebuildGroups();
+    billBody.querySelectorAll('tr.sel').forEach(t => t.classList.remove('sel'));
+    if (i < 0) { info.style.display = 'none'; return; }
+    const p = parts[i]; $('iName').textContent = p.el;
+    const dl = $('iDl'); dl.replaceChildren();
+    const b = partBox(p), l = lineByPart[i];
+    for (const [k, v] of [['Part #', i + 1], ['Kind', KIND[p.kind]], ['Category', p.cat], ['Article', p.art], ['Finish', p.finish], ['Size', b ? `${Math.round(b[3] - b[0])} × ${Math.round(b[4] - b[1])} × ${Math.round(b[5] - b[2])} mm` : ''], ['Cabinet', p.mod !== undefined ? mods[p.mod].label : ''], ['Assembly', p.path], ['Cost', l ? (l.amt ? `${inr(l.amt)} (${RATES[l.c].label})` : RATES[l.c].sec) : '']]) {
+      if (!v && v !== 0) continue; const dt = document.createElement('dt'); dt.textContent = k; const dd = document.createElement('dd'); dd.textContent = v; dl.append(dt, dd);
+    }
+    info.style.display = cfgEl.classList.contains('open') ? 'none' : 'block';
+    const row = billBody.querySelector(`tr[data-p="${i}"]`); if (row) { row.classList.add('sel'); row.scrollIntoView({ block: 'nearest' }); }
+    if (cfgEl.classList.contains('open') && p.mod !== undefined) selectMod(mods[p.mod]);
+  }
+
+  // =====================================================================
+  //  Customize panel
+  // =====================================================================
+  const cfgEl = $('cfg'), cfgBody = $('cfgBody'), secSel = $('secSel'), dimLabel = $('dimLabel');
+  let selMod = null, lastMsg = '';
+  const lvlOrder = { base: 0, tall: 1, wall: 2, loft: 3, appliance: 4 };
+  const editable = mods.filter(m => !m.app).sort((a, b) => lvlOrder[a.level] - lvlOrder[b.level] || a.label.localeCompare(b.label));
+  secSel.innerHTML = '<option value="">Choose a cabinet…</option>' + ['base', 'tall', 'wall', 'loft'].map(l => { const ms = editable.filter(m => m.level === l); return ms.length ? `<optgroup label="${{ base: 'Base units', tall: 'Tall units', wall: 'Wall units', loft: 'Lofts' }[l]}">${ms.map(m => `<option value="${m.idx}">${esc(m.label.replace(/^.*? – /, ''))}</option>`).join('')}</optgroup>` : ''; }).join('');
+  secSel.onchange = () => selectMod(secSel.value === '' ? null : mods[+secSel.value]);
+  const dims = m => [m.bb[m.wa + 3] - m.bb[m.wa], m.bb[m.na + 3] - m.bb[m.na], m.bb[5] - m.bb[2]];
+  function ctlHTML(id, label, sub, base, delta, mn, mx, lock) {
+    const now = base + delta;
+    return `<div class="ctl${Math.abs(delta) > 0.4 ? ' changed' : ''}" data-id="${id}"><div class="top"><div><div class="lab">${esc(label)}</div>${sub ? `<div class="sub">${esc(sub)}</div>` : ''}</div><div class="val">${Math.round(now)} mm · ${fmtIn(now)}<small>${fmtDelta(delta)}</small></div></div>
+      ${lock ? `<div class="lock">🔒 ${esc(lock)}</div>` : `<div class="row"><button data-step="-1" aria-label="Smaller">−</button><input type="range" min="${(mn / IN).toFixed(2)}" max="${(mx / IN).toFixed(2)}" step="0.25" value="${(delta / IN).toFixed(2)}" aria-label="${esc(label)} change in inches"><button data-step="1" aria-label="Larger">+</button><input type="number" value="${Math.round(now)}" min="${Math.round(base + mn)}" max="${Math.round(base + mx)}" step="1" aria-label="${esc(label)} in mm"></div>`}</div>`;
+  }
+  const limits = (m, k) => {
+    if (k === 'W') return [Math.max(-LIM, m.minW ? m.minW - dims(m)[0] : -LIM, -0.45 * dims(m)[0]), LIM];
+    if (k === 'H' && m.level === 'loft') return [-LIM, 0];
+    return [Math.max(-LIM, -0.45 * dims(m)[k === 'D' ? 1 : 2]), LIM];
+  };
+  function renderCfg() {
+    if (!selMod) { cfgBody.innerHTML = `<div class="note" style="margin-top:12px">Nothing selected. Tap a cabinet, or choose one above. Triple-click a cabinet to focus on it.</div>${changesHTML()}`; return; }
+    const m = selMod, [w, d, h] = dims(m);
+    let s = `<div class="sec"><h3>${esc(m.label)}</h3>`;
+    if (m.locked) s += `<div class="lock">🔒 Appliances keep their size. Resize the cabinet around them instead.</div>`;
+    else {
+      const [a0, a1] = limits(m, 'W'), [d0, d1] = limits(m, 'D'), [h0, h1] = limits(m, 'H');
+      s += ctlHTML('W', 'Width', fitRun ? 'neighbours in this run give up the space' : 'neighbours along this wall move with it', w, m.dW, Math.min(0, a0), a1);
+      s += ctlHTML('D', 'Depth', runMode ? `all ${m.level} units on this wall` : 'this cabinet only', d, m.dD, d0, d1);
+      s += ctlHTML('H', 'Height', m.hang ? 'grows downward – top line stays' : (runMode ? `all ${m.level} units on this wall` : 'this cabinet only'), h, m.dH, h0, h1, m.level === 'tall' ? '' : '');
+      if (m.minW) s += `<div class="note">Can't go narrower than the ${Math.round(m.minW)} mm appliance inside.</div>`;
+      s += `<label class="chk"><input type="checkbox" id="fitChk" ${fitRun ? 'checked' : ''}> Keep the run fitted – neighbours give up or take the width</label>`;
+      s += `<label class="chk"><input type="checkbox" id="runChk" ${runMode ? 'checked' : ''}> Height &amp; depth changes apply to the whole run on this wall</label>`;
+    }
+    if (lastMsg) s += `<div class="${lastMsg.startsWith('⛔') ? 'status bad' : 'note'}">${esc(lastMsg)}</div>`;
+    const ops = OPEN.map((o, k) => [o, k]).filter(([o]) => o.mod === m.idx);
+    if (ops.length) { const all = ops.every(([o]) => o.tgt); s += `<h3>Doors &amp; drawers</h3><div class="opens">${ops.map(([o, k]) => `<button data-open="${k}" aria-pressed="${!!o.tgt}">${o.tgt ? '✓ ' : ''}${esc(o.name.replace(/^.* – /, ''))}</button>`).join('')}<button data-openall="${all ? 0 : 1}">${all ? 'Close all' : 'Open all'}</button></div>`; }
+    s += `</div>` + changesHTML();
+    cfgBody.innerHTML = s;
+    const fc = $('fitChk'); if (fc) fc.onchange = () => { fitRun = fc.checked; renderCfg(); };
+    const rc = $('runChk'); if (rc) rc.onchange = () => { runMode = rc.checked; memberCache.clear(); save(); scheduleUpdate(true); };
+  }
+  function changesHTML() {
+    const ch = [];
+    for (const m of mods) { for (const [k, lab] of [['dW', 'width'], ['dD', 'depth'], ['dH', 'height']]) if (Math.abs(m[k]) > 0.4) ch.push(`${m.label}: ${lab} ${fmtDelta(m[k])}`); }
+    return `<div class="sec"><h3>Your changes (${ch.length})</h3>${ch.length ? '<ul style="margin:0;padding-left:18px;font-size:12.5px">' + ch.map(c => `<li>${esc(c)}</li>`).join('') + '</ul>' : '<div class="note">None yet – this is the original design.</div>'}
+      <div class="acts">${selMod ? '<button id="rSec">Reset this cabinet</button>' : ''}<button id="rAll">Reset everything</button><button id="cpy">Copy summary</button></div><div class="note" id="cpyMsg"></div></div>`;
+  }
+  const snap = v => Math.round(v / STEP) * STEP;
+  let fitRun = true;
+  const sameRow = (o, m) => o !== m && !o.app && !o.locked && o.wa === m.wa && (o.hang === m.hang) && o.level !== 'top'
+    && ovl(o.bb[m.na], o.bb[m.na + 3], m.bb[m.na], m.bb[m.na + 3]) > 50;
+  function setWidth(m, v) {             // when the run is fitted, neighbours in the same row give up / take the space
+    const adj = [];
+    const [mn, mx] = limits(m, 'W'); v = Math.min(mx, Math.max(Math.min(0, mn), v));
+    const dir = m.wsg || m.grow;
+    if (Math.abs(m.dW) < 0.01) m.wsg = m.grow;
+    if (fitRun) {
+      let need = -(v - m.dW);
+      const mc = (m.bb[m.wa] + m.bb[m.wa + 3]) / 2;
+      // only the cabinets on the side being pushed give up space; they keep their far side against the wall
+      const row = mods.filter(o => sameRow(o, m) && Math.sign((o.bb[m.wa] + o.bb[m.wa + 3]) / 2 - mc) === dir && (Math.abs(o.dW) < 0.01 || (o.wsg || o.grow) === dir)).sort((a, b) => Math.abs((a.bb[m.wa] + a.bb[m.wa + 3]) / 2 - mc) - Math.abs((b.bb[m.wa] + b.bb[m.wa + 3]) / 2 - mc));
+      for (const o of row) {
+        if (Math.abs(need) < 0.01) break;
+        const [omn, omx] = limits(o, 'W'), cur = o.dW, nv = Math.min(omx, Math.max(Math.min(0, omn), cur + need));
+        if (Math.abs(nv - cur) > 0.01) { if (Math.abs(cur) < 0.01) o.wsg = dir; o.dW = nv; adj.push(o); need -= nv - cur; }
+      }
+      v += need; v = Math.min(mx, Math.max(Math.min(0, mn), v));
+    }
+    m.dW = v;
+    return adj;
+  }
+  let stopTimer = 0;
+  function setValue(k, mm) {
+    const m = selMod; if (!m || m.locked) return;
+    const key = 'd' + k, [mn, mx] = limits(m, k), want = Math.min(mx, Math.max(Math.min(0, mn), snap(mm)));
+    lastMsg = '';
+    const sv = snapS();
+    const clash = k === 'W' ? guarded(v => { restore(sv); setWidth(m, v); }, m.dW, want) : guarded(v => { m[key] = v; }, m[key], want);
+    if (k === 'W') { const adj = mods.filter((o, j) => o !== m && Math.abs(o.dW - sv[j][0]) > 0.01); if (adj.length) lastMsg = 'To keep the run fitted: ' + adj.map(o => `${o.label} ${fmtDelta(o.dW)}`).join(', ') + '.'; }
+    if (clash) { lastMsg = '⛔ Stopped: ' + clash + '.' + (lastMsg ? ' ' + lastMsg : ''); cfgEl.classList.add('stop'); clearTimeout(stopTimer); stopTimer = setTimeout(() => cfgEl.classList.remove('stop'), 600); }
+    else if (Math.abs(want - snap(mm)) > 0.5) lastMsg = 'That is the limit for this size (±6 in, or the appliance inside).';
+    save(); scheduleUpdate(true);
+  }
+  cfgBody.addEventListener('input', e => { const c = e.target.closest('.ctl'); if (c && e.target.type === 'range') setValue(c.dataset.id, +e.target.value * IN); });
+  cfgBody.addEventListener('change', e => { const c = e.target.closest('.ctl'); if (c && e.target.type === 'number' && selMod) { const k = c.dataset.id, base = dims(selMod)[{ W: 0, D: 1, H: 2 }[k]]; setValue(k, +e.target.value - base); } });
+  cfgBody.addEventListener('click', e => {
+    const btn = e.target.closest('button'); if (!btn) return;
+    if (btn.dataset.open !== undefined) { toggleOpen(+btn.dataset.open); return; }
+    if (btn.dataset.openall !== undefined && selMod) { const v = +btn.dataset.openall; let dd = 0; OPEN.forEach(o => { if (o.mod === selMod.idx) { o.tgt = v; o.delay = (dd++) * 0.08; } }); refreshOpenUI(); return; }
+    const c = btn.closest('.ctl');
+    if (c && btn.dataset.step && selMod) { const k = c.dataset.id; setValue(k, selMod['d' + k] + (+btn.dataset.step) * STEP); }
+    else if (btn.id === 'rSec' && selMod) { selMod.dW = selMod.dD = selMod.dH = 0; lastMsg = ''; if (findClash()) mods.forEach(m => { m.dW = m.dD = m.dH = 0; }); save(); scheduleUpdate(true); }
+    else if (btn.id === 'rAll') { mods.forEach(m => { m.dW = m.dD = m.dH = 0; }); lastMsg = ''; save(); scheduleUpdate(true); }
+    else if (btn.id === 'cpy') {
+      const lines = [`${title} – size changes`];
+      for (const m of mods) for (const [k, lab, ix] of [['dW', 'width', 0], ['dD', 'depth', 1], ['dH', 'height', 2]]) if (Math.abs(m[k]) > 0.4) lines.push(`- ${m.label}: ${lab} ${Math.round(dims(m)[ix] + m[k])} mm (${fmtDelta(m[k])})`);
+      if (lines.length === 1) lines.push('- No changes (original design)');
+      lines.push(`Furniture total: ${inr(TT.grand)} incl. installation & GST (original ${inr(T0.grand)})`);
+      const msg = $('cpyMsg'); navigator.clipboard.writeText(lines.join('\n')).then(() => msg.textContent = 'Copied – paste it into a message to your designer.', () => msg.textContent = lines.join(' · '));
+    }
+  });
+  function refreshOpenUI() { const all = OPEN.length && OPEN.every(o => o.tgt), b = $('bOpen'); b.textContent = all ? 'Close all' : 'Open all'; b.setAttribute('aria-pressed', all); if (selMod && document.activeElement?.type !== 'range') renderCfg(); }
+  $('bOpen').onclick = () => { const v = OPEN.every(o => o.tgt) ? 0 : 1; OPEN.forEach((o, k) => { o.tgt = v; o.delay = k * 0.05; }); refreshOpenUI(); };
+  if (!OPEN.length) $('bOpen').style.display = 'none';
+  // selection outline + width label
+  const selBox = new THREE.Box3(), selHelper = new THREE.Box3Helper(selBox, 0x2f6fde); selHelper.visible = false; scene.add(selHelper);
+  const selFill = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshBasicMaterial({ color: 0x2f6fde, transparent: true, opacity: 0.08, depthWrite: false })); selFill.visible = false; scene.add(selFill);
+  const modBox = m => { let x = null; for (const i of m.parts) { const q = partBox(parts[i]); if (q) x = unionBB(x, q); } return x; };
+  function updateSelVisual() {
+    if (!selMod) { selHelper.visible = selFill.visible = false; dimLabel.style.display = 'none'; return; }
+    const bx = modBox(selMod); selBox.min.set(bx[0] - 8, bx[1] - 8, bx[2] - 8); selBox.max.set(bx[3] + 8, bx[4] + 8, bx[5] + 8);
+    selFill.position.set((bx[0] + bx[3]) / 2, (bx[1] + bx[4]) / 2, (bx[2] + bx[5]) / 2); selFill.scale.set(bx[3] - bx[0] + 16, bx[4] - bx[1] + 16, bx[5] - bx[2] + 16);
+    selHelper.visible = selFill.visible = !focus;
+  }
+  function placeLabel() {
+    if (!selMod) return;
+    const w = dims(selMod)[0] + selMod.dW;
+    let p = new THREE.Vector3().addVectors(selBox.min, selBox.max).multiplyScalar(0.5); p.z = selBox.max.z;
+    if (focus) { const fb = unionIds(focus.ids); p = new THREE.Vector3((fb[0] + fb[3]) / 2, (fb[1] + fb[4]) / 2, fb[5]); }
+    p.project(camera); if (p.z > 1) { dimLabel.style.display = 'none'; return; }
+    dimLabel.style.display = 'block'; dimLabel.style.left = ((p.x + 1) / 2 * innerWidth) + 'px'; dimLabel.style.top = ((1 - p.y) / 2 * innerHeight) + 'px';
+    dimLabel.textContent = `W ${Math.round(w)} mm · ${fmtIn(w)}`;
+  }
+  function selectMod(m) { selMod = m; lastMsg = ''; secSel.value = m ? m.idx : ''; updateSelVisual(); renderCfg(); }
+  let pending = false, needGeo = false, refitT = 0;
+  function scheduleUpdate(g) {
+    needGeo = needGeo || g; if (pending) return; pending = true;
+    requestAnimationFrame(() => {
+      pending = false; if (needGeo) { applyGeometry(); needGeo = false; }
+      refreshPrice(); updateSelVisual();
+      if (elsEl.classList.contains('open')) renderEls();
+      const act = document.activeElement;
+      if (!(act && act.type === 'range' && cfgEl.contains(act))) renderCfg(); else refreshCtls();
+      if (focus) { clearTimeout(refitT); refitT = setTimeout(() => { if (focus && !tween && document.activeElement?.type !== 'range') { const ps = focusPose(focus); startTween(ps.pos, ps.tgt, FOCUS_FOV, 1, afterFocus); } }, 650); }
+    });
+  }
+  function refreshCtls() {
+    if (!selMod) return;
+    cfgBody.querySelectorAll('.ctl').forEach(c => { const k = c.dataset.id, base = dims(selMod)[{ W: 0, D: 1, H: 2 }[k]], d = selMod['d' + k];
+      c.querySelector('.val').innerHTML = `${Math.round(base + d)} mm · ${fmtIn(base + d)}<small>${fmtDelta(d)}</small>`;
+      const r = c.querySelector('input[type=range]'); if (r && r !== document.activeElement) r.value = (d / IN).toFixed(2);
+      const n = c.querySelector('input[type=number]'); if (n) n.value = Math.round(base + d); c.classList.toggle('changed', Math.abs(d) > 0.4); });
+  }
+  cfgBody.addEventListener('pointerup', () => setTimeout(() => { if (document.activeElement?.type === 'range') document.activeElement.blur(); renderCfg(); }, 0));
+  const PANELS = () => [[cfgEl, $('bCfg')], [billEl, $('bBill')], [elsEl, $('bEl')]];
+  function togglePanel(el, btn, others) {
+    const open = el.classList.toggle('open'); btn.setAttribute('aria-pressed', open);
+    if (open) for (const [o, b] of (MOBILE || innerWidth < 760 ? PANELS().filter(([o]) => o !== el) : others)) { o.classList.remove('open'); b.setAttribute('aria-pressed', false); }
+    resize(); return open;
+  }
+  document.querySelectorAll('.panel .x').forEach(x => x.onclick = () => { const id = x.closest('.panel').id; $({ cfg: 'bCfg', bill: 'bBill', els: 'bEl' }[id]).click(); });
+  $('bCfg').onclick = e => { const open = togglePanel(cfgEl, e.currentTarget, []); if (!open) { if (focus) exitFocus(true); selectMod(null); } };
+  $('bBill').onclick = e => { if (togglePanel(billEl, e.currentTarget, [[elsEl, $('bEl')]])) showTab(billTab); };
+  $('bEl').onclick = e => { if (togglePanel(elsEl, e.currentTarget, [[billEl, $('bBill')]])) renderEls(); };
+
+  // =====================================================================
+  //  Focus mode + gestures
+  // =====================================================================
+  let focus = null, tween = null;
+  const focusBar = $('focusBar'), FOCUS_FOV = 50;
+  function unionIds(ids) { let x = null; for (const j of ids) { const q = partBox(parts[j]); if (q) x = unionBB(x, q); } return x; }
+  function focusParts(i) {
+    const p = parts[i]; if (p.mod === undefined) return [i];
+    return mods[p.mod].parts.filter(j => !parts[j].stray && parts[j].e > parts[j].s);
+  }
+  function focusPose(f) {
+    const bx = unionIds(f.ids), c = new THREE.Vector3((bx[0] + bx[3]) / 2, (bx[1] + bx[4]) / 2, (bx[2] + bx[5]) / 2), p = parts[f.ids[0]];
+    const front = new THREE.Vector3(), side = new THREE.Vector3(); let w, d;
+    if (p.mod !== undefined) { const m = mods[p.mod]; front.setComponent(m.na, m.f); side.setComponent(m.wa, 1); w = bx[3 + m.wa] - bx[m.wa]; d = bx[3 + m.na] - bx[m.na]; }
+    else { front.set(camera.position.x - c.x, camera.position.y - c.y, 0).normalize(); side.set(-front.y, front.x, 0); w = Math.max(bx[3] - bx[0], bx[4] - bx[1]); d = Math.min(bx[3] - bx[0], bx[4] - bx[1]); }
+    const h = bx[5] - bx[2], t = Math.tan(THREE.MathUtils.degToRad(FOCUS_FOV / 2));
+    const aspect = (innerWidth - (cfgEl.classList.contains('open') && innerWidth > 900 ? 400 : 0) - ((billEl.classList.contains('open') || elsEl.classList.contains('open')) && innerWidth > 900 ? 440 : 0)) / innerHeight;
+    const dist = Math.max((h / 2) / t, (w / 2) / (t * Math.max(0.5, aspect))) * 1.75 + d / 2;
+    return { pos: c.clone().addScaledVector(front, dist).addScaledVector(side, dist * 0.16).add(new THREE.Vector3(0, 0, dist * 0.18)), tgt: c };
+  }
+  function computeOccluders() {
+    if (!focus) return;
+    const cam = camera.position, bx = unionIds(focus.ids), q = [];
+    for (const fx of [0.12, 0.5, 0.88]) for (const fz of [0.12, 0.5, 0.88]) q.push([bx[0] + (bx[3] - bx[0]) * fx, (bx[1] + bx[4]) / 2, bx[2] + (bx[5] - bx[2]) * fz], [(bx[0] + bx[3]) / 2, bx[1] + (bx[4] - bx[1]) * fx, bx[2] + (bx[5] - bx[2]) * fz]);
+    const next = new Set();
+    parts.forEach((p, i) => {
+      if (focus.set.has(i) || p.stray || p.e === p.s || !p.bb) return;
+      const b = partBox(p);
+      for (const pt of q) { let t0 = 0, t1 = 0.97, ok = true;
+        for (let k = 0; k < 3 && ok; k++) { const o = [cam.x, cam.y, cam.z][k], dd = pt[k] - o; if (Math.abs(dd) < 1e-6) { if (o < b[k] || o > b[k + 3]) ok = false; continue; } let a = (b[k] - o) / dd, c2 = (b[k + 3] - o) / dd; if (a > c2) [a, c2] = [c2, a]; t0 = Math.max(t0, a); t1 = Math.min(t1, c2); if (t0 > t1) ok = false; }
+        if (ok) { next.add(i); break; } }
+    });
+    let ch = next.size !== focusHidden.size; if (!ch) for (const i of next) if (!focusHidden.has(i)) { ch = true; break; }
+    if (ch) { focusHidden.clear(); next.forEach(i => focusHidden.add(i)); rebuildGroups(); }
+  }
+  let occT = 0;
+  controls.addEventListener('change', () => {
+    if (!focus || tween) return;
+    if (performance.now() - occT > 120) { occT = performance.now(); computeOccluders(); }
+    if (focus.dist && camera.position.distanceTo(controls.target) > focus.dist * 1.8) exitFocus(true);   // pinch / scroll out → leave focus
+  });
+  function setMaskGroups() { focusGeo.clearGroups(); if (focus) for (const j of focus.ids) focusGeo.addGroup(parts[j].s * 3, (parts[j].e - parts[j].s) * 3, j); }
+  function startTween(p, t, fov, amt, done) { tween = { start: performance.now(), p0: camera.position.clone(), q0: controls.target.clone(), f0: camera.fov, a0: focusPass.enabled ? compMat.uniforms.amount.value : 0, p, t, fov, amt, done }; focusPass.enabled = true; controls.enableDamping = false; }
+  function stepFocus() {
+    if (!tween) return;
+    const u = Math.min(1, (performance.now() - tween.start) / 750), k = u < 0.5 ? 4 * u ** 3 : 1 - (-2 * u + 2) ** 3 / 2;
+    camera.position.lerpVectors(tween.p0, tween.p, k); controls.target.lerpVectors(tween.q0, tween.t, k);
+    camera.fov = tween.f0 + (tween.fov - tween.f0) * k; camera.updateProjectionMatrix();
+    compMat.uniforms.amount.value = tween.a0 + (tween.amt - tween.a0) * k; updateCutaway(false);
+    if (u >= 1) { const d = tween.done; tween = null; controls.enableDamping = true; d && d(); }
+  }
+  const afterFocus = () => { computeOccluders(); if (focus) focus.dist = camera.position.distanceTo(controls.target); };
+  function focusOn(i) {
+    const ids = focusParts(i), p = parts[i];
+    const prev = focus ? focus.prev : { pos: camera.position.clone(), tgt: controls.target.clone(), fov: camera.fov };
+    if (!cfgEl.classList.contains('open') && p.mod !== undefined) $('bCfg').click();
+    const name = p.mod !== undefined ? mods[p.mod].label : p.el;
+    focus = { ids, prev, name, set: new Set(ids) };
+    focusHidden.clear(); rebuildGroups(); setMaskGroups();
+    if (p.mod !== undefined) selectMod(mods[p.mod]); info.style.display = 'none';
+    $('focusName').textContent = name; focusBar.classList.add('on');
+    const ps = focusPose(focus); startTween(ps.pos, ps.tgt, FOCUS_FOV, 1, afterFocus);
+  }
+  function exitFocus(restoreCam = true) {
+    if (!focus) return;
+    const prev = focus.prev; focus = null; focusBar.classList.remove('on'); focusHidden.clear(); rebuildGroups(); updateSelVisual();
+    const fin = () => { focusPass.enabled = false; focusGeo.clearGroups(); };
+    if (restoreCam) startTween(prev.pos, prev.tgt, prev.fov, 0, fin);
+    else { tween = null; camera.fov = prev.fov; camera.updateProjectionMatrix(); compMat.uniforms.amount.value = 0; fin(); controls.enableDamping = true; }
+  }
+  $('focusExit').onclick = () => exitFocus(true);
+  $('focusRefit').onclick = () => { if (focus) { const ps = focusPose(focus); startTween(ps.pos, ps.tgt, FOCUS_FOV, 1, afterFocus); } };
+  addEventListener('keydown', e => { if (e.key === 'Escape' && focus) exitFocus(true); });
+  // clicks: 1 = open/close + select · 2 on background in focus = leave · 3 = focus
+  let down = null, trail = [], clickTimer = 0, dragging = false, hoverT = 0;
+  canvas.addEventListener('pointerdown', e => { down = [e.clientX, e.clientY]; dragging = true; $('tip').style.display = 'none'; });
+  addEventListener('pointerup', () => { dragging = false; });
+  canvas.addEventListener('pointerup', e => {
+    if (!down || Math.hypot(e.clientX - down[0], e.clientY - down[1]) > 5) return;
+    const now = e.timeStamp; trail = trail.filter(c => now - c.t < 650 && Math.hypot(c.x - e.clientX, c.y - e.clientY) < 24); trail.push({ t: now, x: e.clientX, y: e.clientY });
+    clearTimeout(clickTimer);
+    if (trail.length >= 3) { trail = []; const h = pick(e.clientX, e.clientY); if (h >= 0) focusOn(h); return; }
+    clickTimer = setTimeout(() => { const n = trail.length, c = trail[0]; trail = []; if (!c) return; const h = pick(c.x, c.y); if (n === 1) singleTap(h); else if (n === 2) doubleTap(h); }, 300);
+  });
+  function singleTap(h) {
+    const oi = h >= 0 ? partOpen[h] : -1;
+    if (focus) { if (oi >= 0 && focus.set.has(h)) toggleOpen(oi); return; }
+    if (oi >= 0) toggleOpen(oi);
+    if (cfgEl.classList.contains('open')) { info.style.display = 'none'; if (h >= 0 && parts[h].mod !== undefined) selectMod(mods[parts[h].mod]); else if (h < 0) selectMod(null); }
+    else if (oi < 0) select(h);
+  }
+  function doubleTap(h) { if (focus && (h < 0 || !focus.set.has(h))) exitFocus(true); }
+  const tip = $('tip');
+  canvas.addEventListener('pointermove', e => {
+    if (dragging || e.pointerType === 'touch') return;
+    const now = performance.now(); if (now - hoverT < 110) return; hoverT = now;
+    const h = pick(e.clientX, e.clientY), oi = h >= 0 ? partOpen[h] : -1, ok = oi >= 0 && (!focus || focus.set.has(h));
+    canvas.style.cursor = ok ? 'pointer' : '';
+    if (ok) { tip.textContent = (OPEN[oi].tgt ? 'Close ' : 'Open ') + OPEN[oi].name.replace(/^.* – /, ''); tip.style.left = e.clientX + 14 + 'px'; tip.style.top = e.clientY + 14 + 'px'; tip.style.display = 'block'; } else tip.style.display = 'none';
+  });
+  canvas.addEventListener('pointerleave', () => { tip.style.display = 'none'; canvas.style.cursor = ''; });
+
+  // =====================================================================
+  //  Go
+  // =====================================================================
+  function resize() {
+    const w = innerWidth, h = innerHeight; renderer.setSize(w, h, false); composer.setSize(w, h); camera.aspect = w / h;
+    const shift = (cfgEl.classList.contains('open') && w > 900 ? 190 : 0) - ((billEl.classList.contains('open') || elsEl.classList.contains('open')) && w > 900 ? 215 : 0);
+    const sheet = w <= 760 || (MOBILE && w <= 1024);                   // phones: panels are bottom sheets → lift the view above them
+    const lift = sheet && [cfgEl, billEl, elsEl].some(e => e.classList.contains('open')) ? Math.min(h * 0.29, 260) : 0;
+    if (shift && !sheet) camera.setViewOffset(w, h, -shift, 0, w, h); else if (lift) camera.setViewOffset(w, h, 0, lift, w, h); else camera.clearViewOffset(); camera.updateProjectionMatrix();
+  }
+  addEventListener('resize', resize);
+  $('title').textContent = title; document.title = title + ' – 3D configurator';
+  $('start').style.display = 'none'; $('bar').style.display = 'flex'; if (!MOBILE) $('hint').style.display = 'block';
+  if (MOBILE) { $('bCfg').setAttribute('aria-pressed', false); } else cfgEl.classList.add('open');
+  resize(); views.doll(); applyGeometry(); refreshPrice(); renderCfg();
+  window.__pyo = { xr: { head: () => { const c = renderer.xr.getCamera(); return [new THREE.Vector3().setFromMatrixPosition(c.matrixWorld).toArray().map(Math.round), new THREE.Vector3().setFromMatrixPosition(xrCam.matrixWorld).toArray().map(Math.round), c.cameras.length, c.cameras[0] ? new THREE.Vector3().setFromMatrixPosition(c.cameras[0].matrixWorld).toArray().map(Math.round) : null]; }, present: () => renderer.xr.isPresenting, rig: () => xrRig.position.toArray(), heading: () => xrRig.rotation.z, inner }, partBox: i => partBox(parts[i]), dbg: () => { rebuildEdits(); const bx = blockBoxes(); return blocks.map((b, k) => [b.name, bx[k].map(Math.round), b0Pen(k)]); }, model, cls, mods, OPEN, parts, totals: () => ({ now: TT.grand, orig: T0.grand, sub: TT.sub }), lines: () => LL, setValue: (m, k, v) => { selectMod(mods[m]); setValue(k, v); }, findClash, focusOn, exitFocus, isFocus: () => !!focus, openAll: v => OPEN.forEach(o => { o.tgt = v; o.delay = 0; }), RATES, lastMsg: () => lastMsg };
+  // =====================================================================
+  //  VR (WebXR): walk the kitchen at true scale, teleport, snap-turn, open doors & drawers
+  // =====================================================================
+  // The model is in millimetres with Z up; WebXR works in metres with Y up.
+  // A rig scaled ×1000 and turned 90° maps one onto the other, so 1 m in the headset = 1000 mm in the model.
+  const xrRig = new THREE.Group(); scene.add(xrRig);
+  const xrInner = new THREE.Group(); xrInner.rotation.x = Math.PI / 2; xrInner.scale.setScalar(1000); xrRig.add(xrInner);
+  const xrCam = new THREE.PerspectiveCamera(70, 1, 0.05, 200); xrInner.add(xrCam);
+  const xrRay = new THREE.Raycaster(), tmpM = new THREE.Matrix4(), tmpV = new THREE.Vector3();
+  const ring = new THREE.Mesh(new THREE.RingGeometry(180, 240, 40), new THREE.MeshBasicMaterial({ color: 0x5b8dff, transparent: true, opacity: 0.85, depthTest: false }));
+  ring.visible = false; ring.renderOrder = 10; scene.add(ring);
+  const ctrls = [];
+  for (let k = 0; k < 2; k++) {
+    const c = renderer.xr.getController(k); xrInner.add(c);
+    const line = new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, -1)]), new THREE.LineBasicMaterial({ color: 0x9fbaff }));
+    line.scale.z = 6; c.add(line);
+    const tipM = new THREE.Mesh(new THREE.SphereGeometry(0.012, 12, 8), new THREE.MeshBasicMaterial({ color: 0xffffff })); c.add(tipM);
+    const g = renderer.xr.getControllerGrip(k); xrInner.add(g);
+    const body = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.024, 0.12, 12), new THREE.MeshStandardMaterial({ color: 0x30343a, roughness: 0.5 })); body.rotation.x = Math.PI / 2; g.add(body);
+    const st = { c, line, hit: null, floor: null };
+    c.addEventListener('connected', e => { st.source = e.data; });
+    c.addEventListener('disconnected', () => { st.source = null; });
+    c.addEventListener('selectstart', () => vrSelect(st));
+    ctrls.push(st);
+  }
+  function aim(st) {                                    // what a controller points at: a part, or a spot on the floor
+    tmpM.identity().extractRotation(st.c.matrixWorld);
+    xrRay.ray.origin.setFromMatrixPosition(st.c.matrixWorld);
+    xrRay.ray.direction.set(0, 0, -1).applyMatrix4(tmpM).normalize();
+    const h = xrRay.intersectObject(mesh, false)[0];
+    st.hit = h ? triPart[h.faceIndex] : -1;
+    const d = xrRay.ray.direction, o = xrRay.ray.origin; st.floor = null;
+    if (d.z < -0.05) {
+      const t = -o.z / d.z, x = o.x + d.x * t, y = o.y + d.y * t;
+      const inside = x > inner[0] + 150 && x < inner[3] - 150 && y > inner[1] + 150 && y < inner[4] - 150;
+      if (inside && (!h || h.distance > t - 1)) st.floor = new THREE.Vector3(x, y, 0);
+    }
+    st.line.scale.z = h ? h.distance / 1000 : st.floor ? xrRay.ray.origin.distanceTo(st.floor) / 1000 : 6;
+    return st;
+  }
+  function headPos() { return tmpV.setFromMatrixPosition(xrCam.matrixWorld).clone(); }
+  function vrSelect(st) {
+    aim(st);
+    const oi = st.hit >= 0 ? partOpen[st.hit] : -1;
+    if (oi >= 0) { toggleOpen(oi); hudMsg((OPEN[oi].tgt ? 'Opened ' : 'Closed ') + OPEN[oi].name); return; }
+    if (st.floor) { const hp = headPos(); xrRig.position.x += st.floor.x - hp.x; xrRig.position.y += st.floor.y - hp.y; return; }
+    if (st.hit >= 0) hudMsg(parts[st.hit].el + (lineByPart[st.hit] && lineByPart[st.hit].amt ? ' · ' + inr(lineByPart[st.hit].amt) : ''));
+  }
+  let turnCool = 0;
+  function snapTurn(dir) {
+    const h0 = headPos(); xrRig.rotation.z += dir * Math.PI / 6; xrRig.updateMatrixWorld(true);
+    const h1 = headPos(); xrRig.position.x += h0.x - h1.x; xrRig.position.y += h0.y - h1.y;
+  }
+  // small heads-up panel: total price + last action
+  const hudCv = document.createElement('canvas'); hudCv.width = 768; hudCv.height = 192;
+  const hudTex = new THREE.CanvasTexture(hudCv); hudTex.colorSpace = THREE.SRGBColorSpace;
+  const hud = new THREE.Mesh(new THREE.PlaneGeometry(0.36, 0.09), new THREE.MeshBasicMaterial({ map: hudTex, transparent: true, depthTest: false }));
+  hud.position.set(0, -0.26, -0.7); hud.rotation.x = -0.35; hud.renderOrder = 11; xrCam.add(hud); hud.visible = false;
+  let hudText = '', hudT = 0;
+  function drawHud() {
+    const g = hudCv.getContext('2d'); g.clearRect(0, 0, 768, 192);
+    g.fillStyle = 'rgba(20,24,28,0.82)'; g.beginPath(); g.roundRect(4, 4, 760, 184, 28); g.fill();
+    g.fillStyle = '#fff'; g.font = '600 44px system-ui, sans-serif'; g.fillText(`Total ${inr(TT.grand)}`, 32, 72);
+    g.fillStyle = '#b9c6d6'; g.font = '30px system-ui, sans-serif';
+    g.fillText(hudText && performance.now() - hudT < 4000 ? hudText.slice(0, 44) : 'Trigger: open / teleport · Stick: turn', 32, 140);
+    hudTex.needsUpdate = true;
+  }
+  function hudMsg(t) { hudText = t; hudT = performance.now(); drawHud(); }
+  let saved = null;
+  renderer.xr.addEventListener('sessionstart', () => {
+    if (focus) exitFocus(false);
+    saved = { shadows: renderer.shadowMap.enabled, walls: wallMode, culled: [] };
+    scene.traverse(o => { if (o.frustumCulled) { o.frustumCulled = false; saved.culled.push(o); } });   // the scaled rig confuses three's stereo culling → draw everything
+    renderer.shadowMap.enabled = false; scene.traverse(o => { if (o.material) [].concat(o.material).forEach(m => m.needsUpdate = true); });
+    wallMode = 'all'; hiddenWall.clear(); focusHidden.clear(); rebuildGroups(); selHelper.visible = selFill.visible = false;
+    xrRig.position.set((inner[0] + inner[3]) / 2, (inner[1] + inner[4]) / 2, 0); xrRig.rotation.set(0, 0, 0);
+    hud.visible = true; drawHud(); $('bVR').textContent = 'Exit VR';
+  });
+  renderer.xr.addEventListener('sessionend', () => {
+    renderer.shadowMap.enabled = saved ? saved.shadows : hq; wallMode = saved ? saved.walls : 'cut';
+    if (saved) saved.culled.forEach(o => o.frustumCulled = true);
+    scene.traverse(o => { if (o.material) [].concat(o.material).forEach(m => m.needsUpdate = true); });
+    ring.visible = false; hud.visible = false; updateCutaway(true); updateSelVisual(); resize(); $('bVR').textContent = 'VR';
+  });
+  (async () => {                                       // show the VR button only where a headset / phone VR is available
+    const b = $('bVR');
+    try { if (!navigator.xr || !(await navigator.xr.isSessionSupported('immersive-vr'))) return; } catch (e) { return; }
+    b.style.display = '';
+    b.onclick = async () => {
+      const cur = renderer.xr.getSession(); if (cur) { cur.end(); return; }
+      try { const ses = await navigator.xr.requestSession('immersive-vr', { optionalFeatures: ['local-floor', 'bounded-floor', 'hand-tracking'] }); await renderer.xr.setSession(ses); }
+      catch (e) { b.textContent = 'VR unavailable'; b.title = String(e.message || e); }
+    };
+  })();
+  renderer.setAnimationLoop((t, frame) => {
+    stepOpen();
+    if (renderer.xr.isPresenting) {
+      let ringAt = null;
+      for (const st of ctrls) {
+        aim(st);
+        if (!ringAt && st.floor) ringAt = st.floor;
+        const ax = st.source && st.source.gamepad ? st.source.gamepad.axes : null;
+        if (ax && ax.length >= 4) {                              // one 30° turn per flick of the stick
+          if (!st.turned && Math.abs(ax[2]) > 0.7 && performance.now() > turnCool) { snapTurn(ax[2] > 0 ? -1 : 1); st.turned = true; turnCool = performance.now() + 250; }
+          else if (Math.abs(ax[2]) < 0.3) st.turned = false;
+        }
+      }
+      ring.visible = !!ringAt; if (ringAt) ring.position.set(ringAt.x, ringAt.y, 6);
+      if (hudText && performance.now() - hudT > 4000) { hudText = ''; drawHud(); }
+      renderer.render(scene, xrCam);
+      return;
+    }
+    controls.update(); stepFocus();
+    if (focus || focusPass.enabled) {
+      const sz = renderer.getDrawingBufferSize(new THREE.Vector2()); if (maskRT.width !== sz.x || maskRT.height !== sz.y) maskRT.setSize(sz.x, sz.y);
+      const cc = renderer.getClearColor(new THREE.Color()), ca = renderer.getClearAlpha();
+      renderer.setRenderTarget(maskRT); renderer.setClearColor(0x000000, 1); renderer.clear(); renderer.render(maskScene, camera); renderer.setRenderTarget(null); renderer.setClearColor(cc, ca);
+    }
+    composer.render(); placeLabel();
+  });
+}
+
+</script>
+</body>
+</html>
