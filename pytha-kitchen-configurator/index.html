@@ -88,7 +88,33 @@
   #focusBar button { background:#2d3236; color:#fff; border:1px solid #444b52; border-radius:999px; padding:5px 11px; font-size:12.5px; backdrop-filter:none; }
   #focusBar .fx { font-size:11.5px; opacity:.6; padding-right:6px; }
   #focusBar kbd { font:inherit; font-size:11px; opacity:.7; border:1px solid #59616a; border-radius:4px; padding:0 4px; margin-left:4px; }
+  #bMenu { display:none; }
+  #menu { position:fixed; left:8px; right:8px; bottom:max(8px, env(safe-area-inset-bottom)); max-height:80%; overflow:auto; background:#fff; border-radius:18px; box-shadow:0 -8px 40px rgba(20,30,50,.25); padding:10px 14px 16px; z-index:30; transform:translateY(120%); transition:transform .25s; }
+  #menu.open { transform:none; }
+  #menu .mh { display:flex; justify-content:space-between; align-items:center; padding:4px 2px 8px; font-size:16px; }
+  #menu .x { padding:4px 11px; }
+  #menu .mg { display:flex; flex-wrap:wrap; gap:8px; padding:8px 0; border-top:1px solid var(--line); }
+  #menu .ml { width:100%; font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.04em; }
+  #menu .mg button { flex:1 1 calc(50% - 8px); min-height:46px; font-size:15px; text-align:left; padding:10px 12px; border-radius:12px; }
+  #menu .mg button[aria-pressed="true"] { background:#e8effd; }
+  #menu .mg button:disabled { opacity:.45; }
+  body.cbOn .bar, body.cbOn .panel, body.cbOn #focusBar, body.cbOn #info, body.cbOn #hint, body.cbOn #dimLabel, body.cbOn #tip, body.cbOn #menu { display:none !important; }
+  #cb { position:fixed; inset:0; z-index:40; display:none; pointer-events:none; }
+  #cb.on { display:block; }
+  #cb .dot { position:absolute; top:50%; width:10px; height:10px; margin:-5px 0 0 -5px; border-radius:50%; background:#fff; box-shadow:0 0 0 2px rgba(0,0,0,.45); }
+  #cb .dot.l { left:25%; } #cb .dot.r { left:75%; }
+  #cb .div { position:absolute; top:0; bottom:0; left:50%; width:2px; margin-left:-1px; background:#000; }
+  #cbExit { position:absolute; top:max(10px, env(safe-area-inset-top)); left:max(10px, env(safe-area-inset-left)); pointer-events:auto; background:rgba(20,24,28,.7); color:#fff; border:none; font-size:14px; padding:8px 12px; }
+  #cbHint { position:absolute; left:50%; bottom:max(14px, env(safe-area-inset-bottom)); transform:translateX(-50%); width:min(520px, 90%); background:rgba(20,24,28,.78); color:#fff; font-size:13px; padding:10px 14px; border-radius:12px; text-align:center; transition:opacity .6s; }
+  #cbMsg { position:absolute; left:50%; top:max(12px, env(safe-area-inset-top)); transform:translateX(-50%); background:rgba(20,24,28,.78); color:#fff; font-size:13px; padding:6px 12px; border-radius:10px; display:none; white-space:nowrap; }
   #busy { position:fixed; inset:0; display:none; place-items:center; z-index:10; background:rgba(207,219,230,.6); font-size:15px; }
+  @media (pointer:coarse), (max-width:760px) {
+    .bar { pointer-events:auto; overflow:visible; flex-wrap:nowrap; }
+    .bar > button, .bar .sep { display:none !important; }
+    #bMenu { display:inline-flex !important; align-items:center; margin-left:auto; padding:8px 14px; font-weight:600; }
+    .bar h1 { order:-2; max-width:40vw; } #price { order:-1; }
+    #hint { display:none !important; }
+  }
   .panel header { position:relative; } .panel .x { position:absolute; top:8px; right:8px; padding:2px 9px; font-size:14px; border-radius:8px; }
   .bar { top:max(12px, env(safe-area-inset-top)); left:max(12px, env(safe-area-inset-left)); right:max(12px, env(safe-area-inset-right)); }
   @media (max-width:760px), (pointer:coarse) and (max-width:1024px) {
@@ -137,6 +163,7 @@
   <button id="bCfg" aria-pressed="true">Customize</button><button id="bBill" aria-pressed="false">Bill</button><button id="bEl" aria-pressed="false">Elements</button>
   <div id="price" title="Furniture total incl. installation & GST"><span class="muted">Total</span> <b id="pTot">–</b> <span class="d" id="pDel">as designed</span></div>
   <button id="bVR" style="display:none" title="View in a VR headset">VR</button>
+  <button id="bMenu" aria-haspopup="true" aria-expanded="false">☰ Menu</button>
   <button id="bNew" title="Open another .pyo file">Open…</button>
 </div>
 
@@ -164,6 +191,24 @@
 <div id="dimLabel"></div><div id="tip"></div>
 <div id="focusBar" role="status"><span class="dot"></span><span>Focus: <b id="focusName"></b></span><button id="focusRefit">Re-centre</button><button id="focusExit">Exit focus <kbd>Esc</kbd></button><span class="fx">or double-click outside · pinch out</span></div>
 <div id="busy">Working…</div>
+<div id="menu" role="dialog" aria-label="Menu">
+  <div class="mh"><b>Menu</b><button class="x" id="menuX" aria-label="Close">✕</button></div>
+  <div class="mg"><span class="ml">View</span>
+    <button data-for="vDoll">🏠 Dollhouse</button><button data-for="vInside">🚶 Inside</button><button data-for="vFront">▭ Front</button><button data-for="vPlan">▦ Plan</button></div>
+  <div class="mg"><span class="ml">Show</span>
+    <button data-for="bWalls">🧱 Walls</button><button data-for="bOpen">🚪 Open all</button><button data-for="bHQ">✨ High quality</button></div>
+  <div class="mg"><span class="ml">Panels</span>
+    <button data-for="bCfg">📐 Customize</button><button data-for="bBill">₹ Bill</button><button data-for="bEl">☷ Elements</button></div>
+  <div class="mg"><span class="ml">Virtual reality</span>
+    <button id="mCardboard">🥽 Phone VR (viewer / Cardboard)</button><button data-for="bVR" id="mHeadset">🕶 VR headset</button></div>
+  <div class="mg"><button data-for="bNew">📂 Open another .pyo file</button></div>
+</div>
+<div id="cb" aria-hidden="true">
+  <i class="dot l"></i><i class="dot r"></i><div class="div"></div>
+  <button id="cbExit">✕ Exit VR</button>
+  <div id="cbHint">Turn the phone sideways and put it in a VR viewer (or just hold it up).<br>Look around to move your view · <b>tap</b> to teleport to the dot or open the door it is on.</div>
+  <div id="cbMsg"></div>
+</div>
 
 <script type="module">
 import * as THREE from 'three';
@@ -175,6 +220,7 @@ import { GTAOPass } from 'three/addons/postprocessing/GTAOPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { Pass, FullScreenQuad } from 'three/addons/postprocessing/Pass.js';
 import { toCreasedNormals } from 'three/addons/utils/BufferGeometryUtils.js';
+import { StereoEffect } from 'three/addons/effects/StereoEffect.js';
 // =====================================================================
 //  PYTHA .pyo reader (runs entirely in the browser)
 // =====================================================================
@@ -951,8 +997,7 @@ async function launch(title, model, cls, idx) {
     blur(src, dst, dx, dy) { blurMat.uniforms.tDiffuse.value = src; blurMat.uniforms.dir.value.set(dx / this.w, dy / this.h); this.q.material = blurMat; renderer.setRenderTarget(dst); this.q.render(renderer); }
     render(r, writeBuffer, readBuffer) {
       this.blur(readBuffer.texture, this.a, 1.6, 0); this.blur(this.a.texture, this.b, 0, 1.6); this.blur(this.b.texture, this.a, 3.2, 0); this.blur(this.a.texture, this.b, 0, 3.2); this.blur(this.b.texture, this.a, 5, 0); this.blur(this.a.texture, this.b, 0, 5);
-      compMat.uniforms.tDiffuse.value = readBuffer.texture; compMat.uniforms.tBlur.value = this.b.texture; compMat.uniforms.tMask.value = maskRT.texture;
-      this.q.material = compMat; renderer.setRenderTarget(this.renderToScreen ? null : writeBuffer); this.q.render(renderer);
+      compMat.uniforms.tDiffuse.value = readBuffer.texture; compMat.uniforms.tBlur.value = this.b.texture; compMat.uniforms.tMask.value = maskRT.texture;      this.q.material = compMat; renderer.setRenderTarget(this.renderToScreen ? null : writeBuffer); this.q.render(renderer);
     }
   }
   const focusPass = new FocusBlurPass(); composer.addPass(focusPass); composer.addPass(new OutputPass());
@@ -997,7 +1042,8 @@ async function launch(title, model, cls, idx) {
     memberCache.set(key, S); return S;
   }
   let edits = [];
-  function rebuildEdits() {    edits = [];
+  function rebuildEdits() {
+    edits = [];
     for (const m of mods) {
       const b = m.bb;
       if (Math.abs(m.dW) > 0.01) edits.push({ m, kind: 'W', axis: m.wa, mid: (b[m.wa] + b[m.wa + 3]) / 2, sg: m.wsg || m.grow, d: m.dW, S: band(m, 'W') });
@@ -1509,6 +1555,7 @@ async function launch(title, model, cls, idx) {
   canvas.addEventListener('pointerdown', e => { down = [e.clientX, e.clientY]; dragging = true; $('tip').style.display = 'none'; });
   addEventListener('pointerup', () => { dragging = false; });
   canvas.addEventListener('pointerup', e => {
+    if (cardboard) return;
     if (!down || Math.hypot(e.clientX - down[0], e.clientY - down[1]) > 5) return;
     const now = e.timeStamp; trail = trail.filter(c => now - c.t < 650 && Math.hypot(c.x - e.clientX, c.y - e.clientY) < 24); trail.push({ t: now, x: e.clientX, y: e.clientY });
     clearTimeout(clickTimer);
@@ -1548,7 +1595,7 @@ async function launch(title, model, cls, idx) {
   $('start').style.display = 'none'; $('bar').style.display = 'flex'; if (!MOBILE) $('hint').style.display = 'block';
   if (MOBILE) { $('bCfg').setAttribute('aria-pressed', false); } else cfgEl.classList.add('open');
   resize(); views.doll(); applyGeometry(); refreshPrice(); renderCfg();
-  window.__pyo = { xr: { head: () => { const c = renderer.xr.getCamera(); return [new THREE.Vector3().setFromMatrixPosition(c.matrixWorld).toArray().map(Math.round), new THREE.Vector3().setFromMatrixPosition(xrCam.matrixWorld).toArray().map(Math.round), c.cameras.length, c.cameras[0] ? new THREE.Vector3().setFromMatrixPosition(c.cameras[0].matrixWorld).toArray().map(Math.round) : null]; }, present: () => renderer.xr.isPresenting, rig: () => xrRig.position.toArray(), heading: () => xrRig.rotation.z, inner }, partBox: i => partBox(parts[i]), dbg: () => { rebuildEdits(); const bx = blockBoxes(); return blocks.map((b, k) => [b.name, bx[k].map(Math.round), b0Pen(k)]); }, model, cls, mods, OPEN, parts, totals: () => ({ now: TT.grand, orig: T0.grand, sub: TT.sub }), lines: () => LL, setValue: (m, k, v) => { selectMod(mods[m]); setValue(k, v); }, findClash, focusOn, exitFocus, isFocus: () => !!focus, openAll: v => OPEN.forEach(o => { o.tgt = v; o.delay = 0; }), RATES, lastMsg: () => lastMsg };
+  window.__pyo = { cb: { enter: () => enterCardboard(), exit: () => exitCardboard(), on: () => cardboard, pos: () => cbYaw.position.toArray().map(Math.round), tap: () => cbTap(), dbg: () => { cbYaw.updateMatrixWorld(true);  const q = cbCam.getWorldQuaternion(new THREE.Quaternion()); return { gotOrient, orient: orient && [orient.alpha, orient.beta, orient.gamma], fwd: new THREE.Vector3(0,0,-1).applyQuaternion(q).toArray().map(v => +v.toFixed(2)), up: new THREE.Vector3(0,1,0).applyQuaternion(q).toArray().map(v => +v.toFixed(2)) }; }, look: (y, p) => { dragLook.yaw = y; dragLook.pitch = p; } }, xr: { head: () => { const c = renderer.xr.getCamera(); return [new THREE.Vector3().setFromMatrixPosition(c.matrixWorld).toArray().map(Math.round), new THREE.Vector3().setFromMatrixPosition(xrCam.matrixWorld).toArray().map(Math.round), c.cameras.length, c.cameras[0] ? new THREE.Vector3().setFromMatrixPosition(c.cameras[0].matrixWorld).toArray().map(Math.round) : null]; }, present: () => renderer.xr.isPresenting, rig: () => xrRig.position.toArray(), heading: () => xrRig.rotation.z, inner }, partBox: i => partBox(parts[i]), dbg: () => { rebuildEdits(); const bx = blockBoxes(); return blocks.map((b, k) => [b.name, bx[k].map(Math.round), b0Pen(k)]); }, model, cls, mods, OPEN, parts, totals: () => ({ now: TT.grand, orig: T0.grand, sub: TT.sub }), lines: () => LL, setValue: (m, k, v) => { selectMod(mods[m]); setValue(k, v); }, findClash, focusOn, exitFocus, isFocus: () => !!focus, openAll: v => OPEN.forEach(o => { o.tgt = v; o.delay = 0; }), RATES, lastMsg: () => lastMsg };
   // =====================================================================
   //  VR (WebXR): walk the kitchen at true scale, teleport, snap-turn, open doors & drawers
   // =====================================================================
@@ -1643,8 +1690,107 @@ async function launch(title, model, cls, idx) {
       catch (e) { b.textContent = 'VR unavailable'; b.title = String(e.message || e); }
     };
   })();
+  // =====================================================================
+  //  Touch menu (phones & tablets): every toolbar action in one sheet
+  // =====================================================================
+  const menu = $('menu'), bMenu = $('bMenu');
+  function syncMenu() {
+    menu.querySelectorAll('[data-for]').forEach(m => {
+      const src = $(m.dataset.for); if (!src) return;
+      if (src.getAttribute('aria-pressed') !== null) m.setAttribute('aria-pressed', src.getAttribute('aria-pressed'));
+      if (m.dataset.for === 'bWalls') m.textContent = '🧱 ' + src.textContent;
+      if (m.dataset.for === 'bOpen') m.textContent = '🚪 ' + src.textContent;
+    });
+    const hs = $('mHeadset'); hs.disabled = $('bVR').style.display === 'none';
+    hs.textContent = hs.disabled ? '🕶 VR headset (not supported in this browser)' : '🕶 VR headset';
+  }
+  function setMenu(open) { menu.classList.toggle('open', open); bMenu.setAttribute('aria-expanded', open); if (open) syncMenu(); }
+  bMenu.onclick = () => setMenu(!menu.classList.contains('open'));
+  $('menuX').onclick = () => setMenu(false);
+  menu.querySelectorAll('[data-for]').forEach(m => m.onclick = () => { const src = $(m.dataset.for); setMenu(false); if (src && !m.disabled) src.click(); });
+  canvas.addEventListener('pointerdown', () => setMenu(false));
+
+  // =====================================================================
+  //  Phone VR (works on iPhone too): side-by-side stereo + motion sensors
+  // =====================================================================
+  const stereo = new StereoEffect(renderer); stereo.setEyeSeparation(64);
+  const cbYaw = new THREE.Group(); scene.add(cbYaw);
+  const cbFrame = new THREE.Group(); cbFrame.rotation.x = Math.PI / 2; cbYaw.add(cbFrame);   // device frame is Y-up, the model is Z-up
+  const cbCam = new THREE.PerspectiveCamera(75, 1, 20, 300000); cbCam.focus = 2000; cbFrame.add(cbCam);   // focus = convergence distance in mm (default 10 would cross the eyes)
+  const cbEl = $('cb'), cbMsgEl = $('cbMsg');
+  let cardboard = false, orient = null, gotOrient = false, aligned = false, dragLook = { yaw: 0, pitch: 0 }, cbSaved = null, cbMsgT = 0;
+  const zee = new THREE.Vector3(0, 0, 1), qScreen = new THREE.Quaternion(), qBack = new THREE.Quaternion(-Math.sqrt(0.5), 0, 0, Math.sqrt(0.5)), eul = new THREE.Euler();
+  const onOrient = e => { if (e.alpha === null) return; orient = e; gotOrient = true; };
+  function screenAngle() { return THREE.MathUtils.degToRad((screen.orientation && screen.orientation.angle) || window.orientation || 0); }
+  function cbLook() {
+    if (gotOrient && orient) {
+      const a = THREE.MathUtils.degToRad(orient.alpha || 0), b = THREE.MathUtils.degToRad(orient.beta || 0), g = THREE.MathUtils.degToRad(orient.gamma || 0);
+      eul.set(b, a, -g, 'YXZ'); cbCam.quaternion.setFromEuler(eul); cbCam.quaternion.multiply(qBack); cbCam.quaternion.multiply(qScreen.setFromAxisAngle(zee, -screenAngle()));
+    } else { eul.set(dragLook.pitch, dragLook.yaw, 0, 'YXZ'); cbCam.quaternion.setFromEuler(eul); }
+    if (!aligned && (gotOrient || performance.now() - cbStart > 1200)) {       // first reading: turn the world so you face along the room
+      cbYaw.updateMatrixWorld(true); const f = new THREE.Vector3(0, 0, -1).applyQuaternion(cbCam.getWorldQuaternion(new THREE.Quaternion()));
+      const want = (inner[3] - inner[0]) >= (inner[4] - inner[1]) ? Math.PI / 2 : 0;   // look along the longer side
+      cbYaw.rotation.z += want - Math.atan2(-f.x, f.y); aligned = true;
+    }
+  }
+  let cbStart = 0;
+  function cbSay(t) { cbMsgEl.textContent = t; cbMsgEl.style.display = 'block'; cbMsgT = performance.now(); }
+  async function enterCardboard() {
+    try { if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') await DeviceOrientationEvent.requestPermission(); } catch (e) {}
+    addEventListener('deviceorientation', onOrient);
+    if (focus) exitFocus(false);
+    [cfgEl, billEl, elsEl].forEach(p => p.classList.remove('open')); ['bCfg', 'bBill', 'bEl'].forEach(id => $(id).setAttribute('aria-pressed', false));
+    cbSaved = { walls: wallMode, shadows: renderer.shadowMap.enabled };
+    wallMode = 'all'; hiddenWall.clear(); focusHidden.clear(); rebuildGroups(); selHelper.visible = selFill.visible = false; dimLabel.style.display = 'none';
+    renderer.shadowMap.enabled = false; scene.traverse(o => { if (o.material) [].concat(o.material).forEach(m => m.needsUpdate = true); });
+    cbYaw.position.set((inner[0] + inner[3]) / 2, (inner[1] + inner[4]) / 2, 1600); cbYaw.rotation.set(0, 0, 0);
+    cardboard = true; aligned = false; gotOrient = false; cbStart = performance.now(); controls.enabled = false; tip.style.display = 'none';
+    document.body.classList.add('cbOn'); cbEl.classList.add('on'); $('cbHint').style.opacity = 1; setTimeout(() => $('cbHint').style.opacity = 0, 7000);
+    try { await document.documentElement.requestFullscreen?.(); } catch (e) {}
+    try { await screen.orientation?.lock?.('landscape'); } catch (e) {}
+    resize();
+  }
+  function exitCardboard() {
+    cardboard = false; removeEventListener('deviceorientation', onOrient); controls.enabled = true;
+    document.body.classList.remove('cbOn'); cbEl.classList.remove('on');
+    if (document.fullscreenElement) document.exitFullscreen?.().catch(() => {});
+    try { screen.orientation?.unlock?.(); } catch (e) {}
+    wallMode = cbSaved ? cbSaved.walls : 'cut'; renderer.shadowMap.enabled = cbSaved ? cbSaved.shadows : hq;
+    scene.traverse(o => { if (o.material) [].concat(o.material).forEach(m => m.needsUpdate = true); });
+    renderer.setScissorTest(false); resize(); updateCutaway(true); updateSelVisual();
+  }
+  $('mCardboard').onclick = () => { setMenu(false); enterCardboard(); };
+  $('cbExit').onclick = exitCardboard;
+  // tap = act on what the centre dot points at; drag = look around when the phone has no motion sensor
+  let cbDown = null;
+  canvas.addEventListener('pointerdown', e => { if (cardboard) cbDown = { x: e.clientX, y: e.clientY, yaw: dragLook.yaw, pitch: dragLook.pitch, moved: false }; });
+  canvas.addEventListener('pointermove', e => { if (!cardboard || !cbDown || gotOrient) return; const dx = e.clientX - cbDown.x, dy = e.clientY - cbDown.y; if (Math.hypot(dx, dy) > 6) cbDown.moved = true; dragLook.yaw = cbDown.yaw + dx * 0.005; dragLook.pitch = Math.max(-1.4, Math.min(1.4, cbDown.pitch + dy * 0.005)); });
+  canvas.addEventListener('pointerup', () => { if (!cardboard || !cbDown) return; const moved = cbDown.moved; cbDown = null; if (!moved) cbTap(); });
+  function cbTap() {
+    cbYaw.updateMatrixWorld(true);
+    ray.setFromCamera(new THREE.Vector2(0, 0), cbCam);
+    const h = ray.intersectObject(mesh, false)[0], hit = h ? triPart[h.faceIndex] : -1, oi = hit >= 0 ? partOpen[hit] : -1;
+    if (oi >= 0) { toggleOpen(oi); cbSay((OPEN[oi].tgt ? 'Opened ' : 'Closed ') + OPEN[oi].name); return; }
+    const o = ray.ray.origin, d = ray.ray.direction;
+    if (d.z < -0.05) {
+      const t = -o.z / d.z, x = o.x + d.x * t, y = o.y + d.y * t;
+      if ((!h || h.distance > t - 1) && x > inner[0] + 200 && x < inner[3] - 200 && y > inner[1] + 200 && y < inner[4] - 200) {
+        cbYaw.position.x = x; cbYaw.position.y = y; cbSay('Moved'); return;
+      }
+    }
+    if (hit >= 0) cbSay(parts[hit].el + (lineByPart[hit] && lineByPart[hit].amt ? ' · ' + inr(lineByPart[hit].amt) : ''));
+    else cbSay('Look at the floor and tap to move there');
+  }
+
   renderer.setAnimationLoop((t, frame) => {
     stepOpen();
+    if (cardboard) {
+      cbLook();
+      cbCam.aspect = innerWidth / innerHeight; cbCam.updateProjectionMatrix();
+      if (cbMsgT && performance.now() - cbMsgT > 2500) { cbMsgEl.style.display = 'none'; cbMsgT = 0; }
+      stereo.render(scene, cbCam);
+      return;
+    }
     if (renderer.xr.isPresenting) {
       let ringAt = null;
       for (const st of ctrls) {
